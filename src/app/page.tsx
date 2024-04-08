@@ -63,9 +63,9 @@ const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
             <h3>User Accounts</h3>
             <p className="text-small text-default-500">List of user customer accounts.</p>
             <Spacer y={4} />
-            <Suspense fallback={<Loading />}>
+            {/* <Suspense fallback={<Loading />}>
               <AccountTable />
-            </Suspense>
+            </Suspense> */}
             {/* <Spacer y={6} /> */}
             {/* <UserForm heading={"CREATE NEW USER"} /> */}
           </Card>

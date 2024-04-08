@@ -1,95 +1,82 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import { Divider, Spacer, Card } from "@nextui-org/react";
+import AccountTable from "@/components/AccountTable";
+import UserForm from "@/components/UserForm";
+import styles from "./page.module.css"
+import EmployeeTable from "@/components/EmployeeTable";
+import { Suspense } from "react";
+import Loading from "@/components/AccountTable/loading";
+import { AccountHttpResponse } from "@/types/Account";
+import { EmployeeHttpResponse } from "@/types/Employee";
 
-export default function Home() {
+interface HomeProps {
+
+};
+
+const getData = async <T,>(): Promise<T> => {
+  // await new Promise(resolve => setTimeout(resolve, 30000));
+
+  const res = await fetch(`http://localhost:3000/api`, {
+    method: "GET",
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // throw new Error('Failed to fetch data');
+  };
+
+  return res.json() as Promise<T>;
+};
+
+const getEmployeeData = async <T,>(): Promise<T> => {
+  const res = await fetch("http://localhost:3000/api/employee", {
+    method: "GET",
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // throw new Error('Failed to fetch data');
+  };
+
+  return res.json() as Promise<T>;
+};
+
+const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
+  const { accounts } = await getData<AccountHttpResponse>();
+  const { employees } = await getEmployeeData<EmployeeHttpResponse>();
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div>
+      <div className={styles.row}>
+        <div className={styles.column}>
+          <Card
+            isBlurred
+            className="border-none bg-background/60 dark:bg-default-100/50"
+            shadow="sm"
+            style={{ padding: "12px 12px 12px 12px", width: "100%" }}
+          > 
+            <h3>User Accounts</h3>
+            <p className="text-small text-default-500">List of user customer accounts.</p>
+            <Spacer y={4} />
+            <Suspense fallback={<Loading />}>
+              <AccountTable />
+            </Suspense>
+            {/* <Spacer y={6} /> */}
+            {/* <UserForm heading={"CREATE NEW USER"} /> */}
+          </Card>
+          {/* <Spacer y={10} /> */}
+          {/* <Divider /> */}
+          {/* <Spacer y={4} /> */}
+          {/* <EmployeeTable accounts={accounts} employees={employees} /> */}
         </div>
-      </div>
+      </div> 
+    </div>
+  );
+};
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+export default Home;

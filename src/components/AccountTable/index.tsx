@@ -42,32 +42,25 @@ const columns: {
 
 interface AccountTableProps {};
 
-const AccountTable = async (props: AccountTableProps): Promise<React.ReactElement> => {
-  const getData = async <T,>(): Promise<T> => {
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    const res = await fetch(`http://localhost:3000/api`, {
-      method: "GET",
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
-      }
-    });
-  
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      // throw new Error('Failed to fetch data');
-    };
-  
-    return res.json() as Promise<T>;
-  };
-  
-  const { accounts } = await getData<AccountHttpResponse>();
-
-  const onClickEditHandler = (item: Account) => {
-    return (): void => {
-      // setAccount(item);
-      // onOpen();
+const getData = async <T,>(): Promise<T> => {
+  await new Promise(resolve => setTimeout(resolve, 5000));
+  const res = await fetch(`http://localhost:3000/api`, {
+    method: "GET",
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
     }
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    // throw new Error('Failed to fetch data');
   };
+
+  return res.json() as Promise<T>;
+};
+const AccountTable = async (props: AccountTableProps): Promise<React.ReactElement> => {
+
+  const { accounts } = await getData<AccountHttpResponse>();
 
   return (
     <>

@@ -12,43 +12,43 @@ interface HomeProps {
 
 };
 
-const getData = async <T,>(): Promise<T> => {
-  // await new Promise(resolve => setTimeout(resolve, 30000));
+// const getData = async <T,>(): Promise<T> => {
+//   // await new Promise(resolve => setTimeout(resolve, 30000));
 
-  const res = await fetch(`http://localhost:3000/api`, {
-    method: "GET",
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8'
-    }
-  });
+//   const res = await fetch(`http://localhost:3000/api`, {
+//     method: "GET",
+//     headers: {
+//       'Content-type': 'application/json; charset=UTF-8'
+//     }
+//   });
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    // throw new Error('Failed to fetch data');
-  };
+//   if (!res.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     // throw new Error('Failed to fetch data');
+//   };
 
-  return res.json() as Promise<T>;
-};
+//   return res.json() as Promise<T>;
+// };
 
-const getEmployeeData = async <T,>(): Promise<T> => {
-  const res = await fetch("http://localhost:3000/api/employee", {
-    method: "GET",
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8'
-    }
-  });
+// const getEmployeeData = async <T,>(): Promise<T> => {
+//   const res = await fetch("http://localhost:3000/api/employee", {
+//     method: "GET",
+//     headers: {
+//       'Content-type': 'application/json; charset=UTF-8'
+//     }
+//   });
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    // throw new Error('Failed to fetch data');
-  };
+//   if (!res.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     // throw new Error('Failed to fetch data');
+//   };
 
-  return res.json() as Promise<T>;
-};
+//   return res.json() as Promise<T>;
+// };
 
 const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
-  const { accounts } = await getData<AccountHttpResponse>();
-  const { employees } = await getEmployeeData<EmployeeHttpResponse>();
+  // const { accounts } = await getData<AccountHttpResponse>();
+  // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 
   return (
     <div>

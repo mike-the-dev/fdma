@@ -59,6 +59,7 @@ const AccountTable = async (props: AccountTableProps): Promise<React.ReactElemen
   
     return res.json() as Promise<T>;
   };
+  
   const { accounts } = await getData<AccountHttpResponse>();
 
   const onClickEditHandler = (item: Account) => {

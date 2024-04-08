@@ -30,7 +30,7 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 
   const updateAccount = async <T,>(createUpdateInput: AccountUpdateInputForm): Promise<T> => {
-    const res = await fetch("http://localhost:3000/api/updateAccount", {
+    const res = await fetch(process.env.URL + "/api/updateAccount", {
       method: "POST",
       body: JSON.stringify({
         ...createUpdateInput

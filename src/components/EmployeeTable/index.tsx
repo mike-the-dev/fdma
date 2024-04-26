@@ -13,7 +13,7 @@ interface EmployeeTableProps {
 };
 
 const getCustomersByEmployeeData = async <T,>(ID: string): Promise<T> => {
-  const res = await fetch(`http://localhost:3000/api/customersByEmployee`, {
+  const res = await fetch(process.env.URL + "/api/customersByEmployee", {
     method: "POST",
     body: JSON.stringify({
       ID: ID

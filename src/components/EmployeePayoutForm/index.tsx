@@ -18,7 +18,7 @@ const EmployeePayoutForm = (): React.ReactElement => {
   });
 
   const payoutEmployees = async <T,>(payoutEmployeesInput: { amount: number }): Promise<T> => {
-    const res = await fetch(`http://localhost:3000/api/payoutEmployees`, {
+    const res = await fetch(process.env.URL + "/api/payoutEmployees", {
       method: "POST",
       body: JSON.stringify({
         ...payoutEmployeesInput

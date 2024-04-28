@@ -43,7 +43,7 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
 
     if (!res.ok) {
       // This will activate the closest `error.js` Error Boundary
-      // throw new Error('Failed to fetch data');
+      throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
     };
 
     return res.json() as Promise<T>;
@@ -67,7 +67,6 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
 
   const onSubmitFormData = async (): Promise<void> => {
     try {
-
       setIsSubmitting(true);
 
       // Update a user.
@@ -80,7 +79,7 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
       props.onClose();
     } catch (error) {
       setIsSubmitting(false);
-      console.error("Error creating user: ", error);
+      console.error("Error creating use r: ", error);
     };
   };
 

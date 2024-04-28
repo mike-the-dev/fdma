@@ -41,6 +41,7 @@ const getEmployeeData = async <T,>(): Promise<T> => {
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
     // throw new Error('Failed to fetch data');
+    throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
   };
 
   return res.json() as Promise<T>;
@@ -64,7 +65,7 @@ const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
             <p className="text-small text-default-500">List of user customer accounts.</p>
             <Spacer y={4} />
             <Suspense fallback={<Loading />}>
-              <AccountTable />
+              <AccountTable accounts={accounts} />
             </Suspense>
             <Spacer y={6} />
             {/* <UserForm heading={"CREATE NEW USER"} /> */}

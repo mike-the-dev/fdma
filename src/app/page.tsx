@@ -49,7 +49,7 @@ const getEmployeeData = async <T,>(): Promise<T> => {
 
 const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
   const { accounts } = await getData<AccountHttpResponse>();
-  const { employees } = await getEmployeeData<EmployeeHttpResponse>();
+  // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 
   return (
     <div>

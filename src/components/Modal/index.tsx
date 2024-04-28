@@ -103,9 +103,11 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
     props.setInitialState();
     props.onClose();
   };
+
+  console.log("Modal index.tsx props: ", props);
+  console.log("Modal index.tsx props: ", state);
   
   React.useEffect(() => {
-    console.log("Modal index.tsx props: ", props);
     setState({ 
       PK: props.account.PK,
       SK: props.account.SK,

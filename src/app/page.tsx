@@ -15,7 +15,7 @@ interface HomeProps {
 const getData = async <T,>(): Promise<T> => {
   // await new Promise(resolve => setTimeout(resolve, 30000));
 
-  const res = await fetch(process.env.URL + "/api", {
+  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
     method: "GET",
     headers: {
       'Content-type': 'application/json; charset=UTF-8'
@@ -31,7 +31,7 @@ const getData = async <T,>(): Promise<T> => {
 };
 
 const getEmployeeData = async <T,>(): Promise<T> => {
-  const res = await fetch(process.env.URL + "/api/employee", {
+  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/employee", {
     method: "GET",
     headers: {
       'Content-type': 'application/json; charset=UTF-8'

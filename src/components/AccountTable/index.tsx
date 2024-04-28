@@ -44,7 +44,7 @@ interface AccountTableProps {};
 
 const getData = async <T,>(): Promise<T> => {
   await new Promise(resolve => setTimeout(resolve, 5000));
-  const res = await fetch(process.env.URL + "/api", {
+  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
     method: "GET",
     headers: {
       'Content-type': 'application/json; charset=UTF-8'

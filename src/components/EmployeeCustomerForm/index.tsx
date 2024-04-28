@@ -19,7 +19,7 @@ const EmployeeCustomerForm: React.FC<EmployeeCustomerFormProps> = (props): React
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const createCustomer = async <T,>(createCustomerInput: CustomerInputForm): Promise<T> => {
-    const res = await fetch(process.env.URL + "/api/createCustomer", {
+    const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/createCustomer", {
       method: "POST",
       body: JSON.stringify({
         ...createCustomerInput

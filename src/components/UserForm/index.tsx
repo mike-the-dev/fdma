@@ -17,7 +17,7 @@ const UserForm: React.FC<UserFormProps> = (props): React.ReactElement => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const createUser = async <T,>(createUserInput: AccountInputForm): Promise<T> => {
-    const res = await fetch(process.env.URL + "/api/createUser", {
+    const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/createUser", {
       method: "POST",
       body: JSON.stringify({
         ...createUserInput

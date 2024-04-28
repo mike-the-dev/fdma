@@ -79,7 +79,7 @@ const Table = (props: TableProps): React.ReactElement => {
     ecwidSecretKey: ""
   });
 
-  console.log("account props: ", props);
+  console.log("account in state: ", account);
 
   return (
     <>

@@ -51,6 +51,8 @@ const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
   const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 
+  console.log("accounts: ", accounts);
+
   return (
     <div>
       <div className={styles.row}>

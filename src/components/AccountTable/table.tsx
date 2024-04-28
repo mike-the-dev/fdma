@@ -79,6 +79,8 @@ const Table = (props: TableProps): React.ReactElement => {
     ecwidSecretKey: ""
   });
 
+  console.log("account props: ", props);
+
   return (
     <>
       <ModalApp

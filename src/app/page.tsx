@@ -6,7 +6,6 @@ import EmployeeTable from "@/components/EmployeeTable";
 import { Suspense } from "react";
 import Loading from "@/components/AccountTable/loading";
 import { AccountHttpResponse } from "@/types/Account";
-import { EmployeeHttpResponse } from "@/types/Employee";
 
 interface HomeProps {
 

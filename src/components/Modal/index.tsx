@@ -4,6 +4,7 @@ import React from "react";
 import { Account, AccountUpdateInputForm } from "@/types/Account";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, Checkbox } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 interface ModalProps {
   isOpen: any;
@@ -74,8 +75,9 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
       setIsSubmitting(false);
       // Router.refresh();
       console.log("Thank you for everything! Router.refresh() did not run");
-
+      
       // setState(resetState);
+      toast.success(`✅ ${state.name} has been updated successfully!`, { duration: 4000 });
       props.onClose();
     } catch (error) {
       setIsSubmitting(false);

@@ -71,10 +71,10 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
 
       // Update a user.
       await updateAccount(state);
-      Router.refresh();
-      console.log("Thank you for everything!");
-
       setIsSubmitting(false);
+      // Router.refresh();
+      console.log("Thank you for everything! Router.refresh() did not run");
+
       // setState(resetState);
       props.onClose();
     } catch (error) {

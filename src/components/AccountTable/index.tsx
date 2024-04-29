@@ -61,8 +61,6 @@ interface AccountTableProps {accounts: any};
 
 const AccountTable = (props: AccountTableProps): React.ReactElement => {
 
-  // const { accounts } = await getData<AccountHttpResponse>();
-
   return (
     <>
       <Table 

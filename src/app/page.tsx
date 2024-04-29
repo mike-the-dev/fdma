@@ -16,6 +16,7 @@ const getData = async <T,>(): Promise<T> => {
   // await new Promise(resolve => setTimeout(resolve, 30000));
 
   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
+    cache: "no-cache",
     method: "GET",
     headers: {
       'Content-type': 'application/json; charset=UTF-8'
@@ -50,8 +51,6 @@ const getEmployeeData = async <T,>(): Promise<T> => {
 const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
   const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
-
-  console.log("accounts: ", accounts);
 
   return (
     <div>

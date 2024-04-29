@@ -61,9 +61,8 @@ const Table = (props: TableProps): React.ReactElement => {
 
   const onClickEditHandler = (item: Account) => {
     return (): void => {
-      console.log("account to be updated!", item);
       setAccount(item);
-      // onOpen();
+      onOpen();
     }
   };
 
@@ -79,12 +78,6 @@ const Table = (props: TableProps): React.ReactElement => {
     ecwidPublicKey: "",
     ecwidSecretKey: ""
   });
-
-  console.log("account in state: ", account);
-
-  React.useEffect(() => {
-    if (account.PK) onOpen();
-  }, [account.PK]);
 
   return (
     <>

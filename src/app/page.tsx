@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import { Divider, Spacer, Card } from "@nextui-org/react";
 import AccountTable from "@/components/AccountTable";
 import UserForm from "@/components/UserForm";
@@ -47,9 +49,25 @@ const getEmployeeData = async <T,>(): Promise<T> => {
   return res.json() as Promise<T>;
 };
 
-const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
-  const { accounts } = await getData<AccountHttpResponse>();
+const Home: React.FC<HomeProps> = (): React.ReactElement => {
+  // const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
+
+  // console.log("accounts: ", accounts);
+
+  const [accounts, setAccounts] = React.useState<any>([]);
+
+  const onMount = async () => {
+    const { accounts } = await getData<AccountHttpResponse>();
+
+    setAccounts(accounts);
+  };
+
+  React.useEffect(() => {
+    onMount(); 
+  }, []);
+
+  if (accounts.length !== 0) console.log("accounts available: ", accounts);
 
   return (
     <div>

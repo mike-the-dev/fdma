@@ -8,7 +8,7 @@ interface ProviderMaxHeightProps {
 
 const ProviderMaxHeight: React.FC<ProviderMaxHeightProps> = (props): React.ReactElement => {
   return (
-    <div >
+    <div>
       { props.children }   
     </div>
   );

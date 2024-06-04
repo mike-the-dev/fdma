@@ -130,21 +130,21 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
               <ModalBody>
               <p>{state.name}</p>
               {/* Build Form */}
-              {/* <Input 
+              <Input 
                 type="text" 
                 label="Company Name" 
                 onChange={onUpdateFormData} 
                 name={"name"} 
                 value={state.name} 
-              /> */}
-              {/* <Input 
+              />
+              <Input 
                 type="text" 
                 label="Currency" 
                 onChange={onUpdateFormData} 
                 name={"currency"} 
                 value={state.currency} 
-              /> */}
-              {/* <Input 
+              />
+              <Input 
                 type="number" 
                 label="Take" 
                 placeholder="0" 
@@ -152,14 +152,14 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
                 onChange={onUpdateFormData} 
                 name={"take"} 
                 value={state.take.toString()} 
-              /> */}
-              {/* <Input
+              />
+              <Input
                 type="text"
                 label="Stripe ID"
                 onChange={onUpdateFormData}
                 name={"stripeID"}
                 value={state.stripeID}
-              /> */}
+              />
               <Input
                 type="text"
                 label="Ecwid Public Key"
@@ -174,12 +174,12 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
                 name={"ecwidSecretKey"}
                 value={state.ecwidSecretKey}
               />
-              {/* <Checkbox 
+              <Checkbox 
                 isSelected={state.instantPayoutEnabled}
                 onValueChange={onUpdateCheckboxData}
               >
                 Enable instant checkout.
-              </Checkbox> */}
+              </Checkbox>
               </ModalBody>
               <ModalFooter>
                 <Button 

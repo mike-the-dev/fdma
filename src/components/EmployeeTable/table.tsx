@@ -29,6 +29,8 @@ const EmployeeTable: React.FC<EmployeeTableProps> = (props): React.ReactElement 
     props.updateSelectedID(obj.anchorKey, event.size);
   };
 
+  if (!props.employees || props.employees.length === 0) return <div>OHHHH</div>;
+
   return (
     <>
       <h3>{props.heading}</h3>

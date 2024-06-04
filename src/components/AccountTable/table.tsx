@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { Table as NextUITable, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Button, useDisclosure } from "@nextui-org/react";
 import { Account } from "@/types/Account";
@@ -20,10 +21,10 @@ const columns: {
       key: "currency",
       label: "CURRENCY"
     },
-    // {
-    //   key: "take",
-    //   label: "TAKE"
-    // },
+    {
+      key: "take",
+      label: "TAKE"
+    },
     {
       key: "instantPayoutEnabled",
       label: "INSTANT PAYOUT ENABLED"
@@ -44,7 +45,8 @@ interface TableProps {
 };
 
 
-const Table = (props: TableProps): React.ReactElement => {
+const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [account, setAccount] = React.useState<Account>({
     PK: "",
     SK: "",
@@ -57,7 +59,6 @@ const Table = (props: TableProps): React.ReactElement => {
     ecwidPublicKey: "",
     ecwidSecretKey: ""
   });
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const onClickEditHandler = (item: Account) => {
     return (): void => {
@@ -66,18 +67,22 @@ const Table = (props: TableProps): React.ReactElement => {
     }
   };
 
-  const setInitialState = (): void => setAccount({
-    PK: "",
-    SK: "",
-    name: "",
-    currency: "",
-    take: 0,
-    totalPayoutAmount: 0,
-    instantPayoutEnabled: false,
-    stripeID: "",
-    ecwidPublicKey: "",
-    ecwidSecretKey: ""
-  });
+  const setInitialState = (): void => {
+      setAccount({
+      PK: "",
+      SK: "",
+      name: "",
+      currency: "",
+      take: 0,
+      totalPayoutAmount: 0,
+      instantPayoutEnabled: false,
+      stripeID: "",
+      ecwidPublicKey: "",
+      ecwidSecretKey: ""
+    });
+  };
+
+  if (!props.accounts || props.accounts.length === 0) return <div>OHHHH</div>;
 
   return (
     <>

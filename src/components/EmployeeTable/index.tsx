@@ -73,7 +73,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = (props): React.ReactElement 
     if (state.isToggled) {
       onMount();
     };
-  }, [state.selectedID]);
+  }, [state.selectedID, state.isToggled]);
 
   return (
     <>

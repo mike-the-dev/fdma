@@ -42,23 +42,6 @@ const columns: {
 
 interface AccountTableProps {accounts: any};
 
-// const getData = async <T,>(): Promise<T> => {
-//   await new Promise(resolve => setTimeout(resolve, 5000));
-//   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
-//     method: "GET",
-//     headers: {
-//       'Content-type': 'application/json; charset=UTF-8'
-//     }
-//   });
-
-//   if (!res.ok) {
-//     // This will activate the closest `error.js` Error Boundary
-//     // throw new Error('Failed to fetch data');
-//   };
-
-//   return res.json() as Promise<T>;
-// };
-
 const AccountTable = (props: AccountTableProps): React.ReactElement => {
 
   return (

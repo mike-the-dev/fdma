@@ -17,18 +17,18 @@ const columns: {
       key: "PK",
       label: "ID",
     },
-    {
-      key: "currency",
-      label: "CURRENCY"
-    },
-    {
-      key: "take",
-      label: "TAKE"
-    },
-    {
-      key: "instantPayoutEnabled",
-      label: "INSTANT PAYOUT ENABLED"
-    },
+    // {
+    //   key: "currency",
+    //   label: "CURRENCY"
+    // },
+    // {
+    //   key: "take",
+    //   label: "TAKE"
+    // },
+    // {
+    //   key: "instantPayoutEnabled",
+    //   label: "INSTANT PAYOUT ENABLED"
+    // },
     {
       key: "stripeID",
       label: "Stripe ID"

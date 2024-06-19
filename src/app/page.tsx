@@ -67,7 +67,7 @@ const Home: React.FC<HomeProps> = (): React.ReactElement => {
     onMount(); 
   }, []);
 
-  if (accounts.length !== 0) console.log("accounts available from server: ", accounts);
+  if (accounts.length !== 0) console.log("accounts available from server:: ", accounts);
 
   return (
     <div>

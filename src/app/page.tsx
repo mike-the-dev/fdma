@@ -18,6 +18,7 @@ const getData = async <T,>(): Promise<T> => {
 
   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
     next: { revalidate: 10 },
+    cache: "no-store",
     method: "GET",
     headers: {
       'Content-type': 'application/json; charset=UTF-8'

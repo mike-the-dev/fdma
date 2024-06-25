@@ -1,5 +1,7 @@
 import listAccounts from "@/utils/listAccounts";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request, response: Response) {
   const accounts = await listAccounts();
 

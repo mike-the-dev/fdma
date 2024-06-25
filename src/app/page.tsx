@@ -17,7 +17,7 @@ const getData = async <T,>(): Promise<T> => {
   // await new Promise(resolve => setTimeout(resolve, 30000));
 
   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
-    cache: "no-cache",
+    next: { revalidate: 10 },
     method: "GET",
     headers: {
       'Content-type': 'application/json; charset=UTF-8'
@@ -49,23 +49,23 @@ const getEmployeeData = async <T,>(): Promise<T> => {
   return res.json() as Promise<T>;
 };
 
-const Home: React.FC<HomeProps> = (): React.ReactElement => {
-  // const { accounts } = await getData<AccountHttpResponse>();
+const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
+  const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 
   // console.log("accounts: ", accounts);
 
-  const [accounts, setAccounts] = React.useState<any>([]);
+  // const [accounts, setAccounts] = React.useState<any>([]);
 
-  const onMount = async () => {
-    const { accounts } = await getData<AccountHttpResponse>();
+  // const onMount = async () => {
+  //   const { accounts } = await getData<AccountHttpResponse>();
 
-    setAccounts(accounts);
-  };
+  //   setAccounts(accounts);
+  // };
 
-  React.useEffect(() => {
-    onMount(); 
-  }, []);
+  // React.useEffect(() => {
+  //   onMount(); 
+  // }, []);
 
   if (accounts.length !== 0) console.log("accounts available from server:: ", accounts);
 

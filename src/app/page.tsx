@@ -17,7 +17,6 @@ const getData = async <T,>(): Promise<T> => {
   // await new Promise(resolve => setTimeout(resolve, 30000));
 
   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
-    next: { revalidate: 10 },
     cache: "no-store",
     method: "GET",
     headers: {

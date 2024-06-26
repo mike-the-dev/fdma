@@ -9,7 +9,7 @@ interface NavigationProps {};
 
 const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   const pathname = usePathname();
-  console.log("pathname:", pathname)
+  console.log("pathname:", pathname);
 
   if (
     pathname === "/login" ||
@@ -23,16 +23,16 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
         <p className="font-bold text-inherit">JOYMD</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
+        <NavbarItem isActive={pathname.includes("/dashboard/home") ? true : false}>
           <Link href="/dashboard/home">
-            <NextUILink color="foreground" aria-current="page">
+            <NextUILink color={pathname.includes("/dashboard/home") ? "secondary" : "foreground"} aria-current="page">
               Home
             </NextUILink>
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem isActive={pathname.includes("/dashboard/account-creation") ? true : false}>
           <Link href="/dashboard/account-creation">
-            <NextUILink color="foreground" aria-current="page">
+            <NextUILink color={pathname.includes("/dashboard/account-creation") ? "secondary" : "foreground"} aria-current="page">
               Account Creation
             </NextUILink>
           </Link>

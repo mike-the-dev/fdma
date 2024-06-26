@@ -5,7 +5,7 @@ export default function JoymdLogo() {
     <Image
       src="/joymd_logo.png"
       width={100}
-      height={223}
+      height={44.53}
       alt="joymd logo"
     />
   )

@@ -74,10 +74,9 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
       // Update a user.
       await updateAccount(state);
       setIsSubmitting(false);
-      // Router.refresh();
-      console.log("Thank you for everything! Router.refresh() did not run");
+      Router.refresh();
+      console.log("Thank you for everything! Router.refresh() did run!");
       
-      // setState(resetState);
       toast.success(`✅ ${state.name} has been updated successfully!`, { duration: 4000 });
       props.onClose();
     } catch (error) {

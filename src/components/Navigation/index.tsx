@@ -5,6 +5,7 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link as NextUILink, But
 interface NavigationProps {};
 
 const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
+  console.log("navigation! ");
   return (
     <Navbar>
       <NavbarBrand>
@@ -13,14 +14,14 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link href="/">
+          <Link href="/dashboard">
             <NextUILink color="foreground">
               Home
             </NextUILink>
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="/dashboard">
+          <Link href="/dashboard/account-creation">
             <NextUILink color="foreground" aria-current="page">
               Account Creation
             </NextUILink>

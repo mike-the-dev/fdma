@@ -13,8 +13,8 @@ interface DashboardLayout {
 
 export default function DashboardLayout(props: DashboardLayout): React.ReactElement {
   return (
-    <Providers>
-      { props.children }
-    </Providers>
+    <>
+      {props.children}
+    </>
   );
 };

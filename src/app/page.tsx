@@ -1,13 +1,12 @@
 import React from "react";
-import { Spacer, Card } from "@nextui-org/react";
-import AccountTable from "@/components/AccountTable";
+// import { Spacer, Card } from "@nextui-org/react";
+// import AccountTable from "@/components/AccountTable";
 import styles from "./page.module.css"
-import { Suspense } from "react";
-import Loading from "@/components/AccountTable/loading";
+// import { Suspense } from "react";
+// import Loading from "@/components/AccountTable/loading";
 import { AccountHttpResponse } from "@/types/Account";
-import Link from "next/link";
+// import Link from "next/link";
 import { cookies } from "next/headers";
-import Navigation from "@/components/Navigation";
 
 interface HomeProps {
 
@@ -56,25 +55,24 @@ const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
 
   return (
     <div>
-      <Navigation />
       <div className={styles.row}>
         <div className={styles.column}>
-          <Link href="/dashboard">Dashboard</Link>
-          <Card
+          {/* <Link href="/dashboard">Dashboard</Link> */}
+          {/* <Card
             isBlurred
             className="border-none bg-background/60 dark:bg-default-100/50"
             shadow="sm"
             style={{ padding: "12px 12px 12px 12px", width: "100%" }}
-          > 
-            <h3>User Accounts</h3>
-            <p className="text-small text-default-500">List of user customer accounts.</p>
-            <Spacer y={4} />
-            <Suspense fallback={<Loading />}>
-              <AccountTable accounts={accounts} />
-            </Suspense>
-            <Spacer y={6} />
+          >  */}
+            {/* <h3>User Accounts</h3> */}
+            {/* <p className="text-small text-default-500">List of user customer accounts.</p> */}
+            {/* <Spacer y={4} /> */}
+            {/* <Suspense fallback={<Loading />}> */}
+              {/* <AccountTable accounts={accounts} /> */}
+            {/* </Suspense> */}
+            {/* <Spacer y={6} /> */}
             {/* <UserForm heading={"CREATE NEW USER"} /> */}
-          </Card>
+          {/* </Card> */}
           {/* <Spacer y={10} /> */}
           {/* <Divider /> */}
           {/* <Spacer y={4} /> */}

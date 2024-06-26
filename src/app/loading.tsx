@@ -8,7 +8,7 @@ interface LoadingProps {
 const Loading: React.FC<LoadingProps> = (): React.ReactElement => {
   return (
     <div>
-      <div className={styles.row}>
+      {/* <div className={styles.row}>
         <div className={styles.column}>
           <Card 
             isBlurred
@@ -32,7 +32,7 @@ const Loading: React.FC<LoadingProps> = (): React.ReactElement => {
             </div>
           </Card>
          </div>
-       </div>
+       </div> */}
      </div>
   );
 };

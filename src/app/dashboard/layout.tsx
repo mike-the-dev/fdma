@@ -1,10 +1,10 @@
-import Providers from "../providers";
+import Navigation from "@/components/Navigation";
 import type { Metadata } from "next";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "Test!",
-  description: "A JOY MD dashboard manager",
+  title: "JOYMD - Dashboard",
+  description: "A JOYMD dashboard manager.",
 };
 
 interface DashboardLayout {
@@ -13,8 +13,9 @@ interface DashboardLayout {
 
 export default function DashboardLayout(props: DashboardLayout): React.ReactElement {
   return (
-    <Providers>
+    <>
+      <Navigation />
       { props.children }
-    </Providers>
+    </>
   );
 };

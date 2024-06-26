@@ -6,8 +6,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Dashboard Manager",
-  description: "A JOY MD dashboard manager",
+  title: "JOYMD - Dashboard",
+  description: "A JOYMD dashboard manager.",
 };
 
 interface RootLayout {

@@ -4,12 +4,12 @@ import React from "react";
 import Link from 'next/link';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link as NextUILink, Button } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
+import JoymdLogo from "../Logos/JoymdLogo";
 
 interface NavigationProps {};
 
 const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   const pathname = usePathname();
-  console.log("pathname:", pathname);
 
   if (
     pathname === "/login" ||
@@ -19,8 +19,8 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        {/* <AcmeLogo /> */}
-        <p className="font-bold text-inherit">JOYMD</p>
+        <JoymdLogo />
+        {/* <p className="font-bold text-inherit">JOYMD</p> */}
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive={pathname.includes("/dashboard/home") ? true : false}>

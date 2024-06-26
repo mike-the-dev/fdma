@@ -1,14 +1,13 @@
 import React from "react";
 import { Spacer, Card } from "@nextui-org/react";
 import AccountTable from "@/components/AccountTable";
-import styles from "../page.module.css"
+import styles from "../../page.module.css"
 // import { Suspense } from "react";
 // import Loading from "@/components/AccountTable/loading";
 import { AccountHttpResponse } from "@/types/Account";
-// import Link from "next/link";
 import { cookies } from "next/headers";
 
-interface DashboardProps {
+interface HomeProps {
 
 };
 
@@ -49,7 +48,7 @@ const getData = async <T,>(): Promise<T> => {
 //   return res.json() as Promise<T>;
 // };
 
-const Dashboard: React.FC<DashboardProps> = async (): Promise<React.ReactElement> => {
+const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
   const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 
@@ -66,9 +65,7 @@ const Dashboard: React.FC<DashboardProps> = async (): Promise<React.ReactElement
             <h3>User Accounts</h3>
             <p className="text-small text-default-500">List of user customer accounts.</p>
             <Spacer y={4} />
-            {/* <Suspense fallback={<Loading />}> */}
-            <AccountTable accounts={accounts} />
-            {/* </Suspense> */}
+              <AccountTable accounts={accounts} />
             <Spacer y={6} />
             {/* <UserForm heading={"CREATE NEW USER"} /> */}
           </Card>
@@ -82,4 +79,4 @@ const Dashboard: React.FC<DashboardProps> = async (): Promise<React.ReactElement
   );
 };
 
-export default Dashboard;
+export default Home;

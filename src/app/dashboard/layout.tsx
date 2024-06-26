@@ -1,4 +1,3 @@
-import Navigation from "@/components/Navigation";
 import type { Metadata } from "next";
 import "../globals.css";
 
@@ -14,7 +13,6 @@ interface DashboardLayout {
 export default function DashboardLayout(props: DashboardLayout): React.ReactElement {
   return (
     <>
-      <Navigation />
       { props.children }
     </>
   );

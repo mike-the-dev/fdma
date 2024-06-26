@@ -28,7 +28,7 @@ const LoginForm = (): React.ReactElement => {
 
       setState(({ code: "", isSubmitting: false }));
 
-      router.push("/dashboard");
+      router.push("/dashboard/home");
     } catch (error) {
       localStorage.removeItem("auth-public-token");
       setState((prevState => ({ code: prevState.code, isSubmitting: false })));

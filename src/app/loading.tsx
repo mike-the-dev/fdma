@@ -8,6 +8,7 @@ interface LoadingProps {
 const Loading: React.FC<LoadingProps> = (): React.ReactElement => {
   return (
     <div>
+      <h1>Loading!!</h1>
       {/* <div className={styles.row}>
         <div className={styles.column}>
           <Card 

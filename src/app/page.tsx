@@ -4,33 +4,33 @@ import React from "react";
 import styles from "./page.module.css"
 // import { Suspense } from "react";
 // import Loading from "@/components/AccountTable/loading";
-import { AccountHttpResponse } from "@/types/Account";
+// import { AccountHttpResponse } from "@/types/Account";
 // import Link from "next/link";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 
 interface HomeProps {
 
 };
 
-const getData = async <T,>(): Promise<T> => {
-  const key: string = cookies().get("auth-public-token")?.value || "";
+// const getData = async <T,>(): Promise<T> => {
+//   const key: string = cookies().get("auth-public-token")?.value || "";
 
-  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
-    cache: "no-store",
-    method: "GET",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      "Authorization": `Bearer ${key}}`
-    }
-  });
+//   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
+//     cache: "no-store",
+//     method: "GET",
+//     headers: {
+//       "Content-type": "application/json; charset=UTF-8",
+//       "Authorization": `Bearer ${key}}`
+//     }
+//   });
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
-  };
+//   if (!res.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     throw new Error('Failed to fetch data');
+//   };
 
-  return res.json() as Promise<T>;
-};
+//   return res.json() as Promise<T>;
+// };
 
 // const getEmployeeData = async <T,>(): Promise<T> => {
 //   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/employee", {
@@ -50,7 +50,7 @@ const getData = async <T,>(): Promise<T> => {
 // };
 
 const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
-  const { accounts } = await getData<AccountHttpResponse>();
+  // const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 
   return (

@@ -17,7 +17,7 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   ) return <></>;
 
   return (
-    <Navbar>
+    <Navbar isBordered>
       <NavbarBrand>
         {/* <AcmeLogo /> */}
         <p className="font-bold text-inherit">JOYMD</p>

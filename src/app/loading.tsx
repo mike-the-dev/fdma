@@ -1,4 +1,4 @@
-import { Card, Skeleton, Spacer } from "@nextui-org/react";
+import { Card, Skeleton, Spacer, Spinner } from "@nextui-org/react";
 import styles from "./page.module.css"
 
 interface LoadingProps {
@@ -8,32 +8,24 @@ interface LoadingProps {
 const Loading: React.FC<LoadingProps> = (): React.ReactElement => {
   return (
     <div>
-      <h1>Loading!!</h1>
-      {/* <div className={styles.row}>
+      <div className={styles.row}>
         <div className={styles.column}>
-          <Card 
-            isBlurred
-            className="border-none bg-background/60 dark:bg-default-100/50"
-            shadow="sm"
-            style={{ padding: "12px 12px 12px 12px", width: "100%" }}
-          >
-            <h3>Loading dashboard</h3>
-            <p className="text-small text-default-500">Hopefully not too long.</p>
-            <Spacer y={4} />
-            <Skeleton className="rounded-lg" style={{ height: 973 }}>
-              <div className="h-24 rounded-lg bg-default-300"></div>
-            </Skeleton>
-            <Spacer y={5} />
-            <div className="">
-              <Skeleton className="w-2/5 rounded-lg">
-                <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
-                <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
-                <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
-              </Skeleton>
+          <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 9999 }}>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+              <p>Loading...</p>
+              <Spacer y={2} />
+              <Card
+                className="border-none bg-background/60 dark:bg-default-100/50"
+                shadow="sm"
+                style={{ padding: "12px 12px 12px 12px" }}
+              >
+                <Spinner color="secondary" />
+              </Card>
+
             </div>
-          </Card>
+          </div>
          </div>
-       </div> */}
+       </div>
      </div>
   );
 };

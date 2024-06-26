@@ -1,78 +1,65 @@
-"use client";
 import React from "react";
-import { Divider, Spacer, Card } from "@nextui-org/react";
+import { Spacer, Card } from "@nextui-org/react";
 import AccountTable from "@/components/AccountTable";
-import UserForm from "@/components/UserForm";
 import styles from "./page.module.css"
-import EmployeeTable from "@/components/EmployeeTable";
 import { Suspense } from "react";
 import Loading from "@/components/AccountTable/loading";
 import { AccountHttpResponse } from "@/types/Account";
+import Link from "next/link";
+import { cookies } from "next/headers";
+import Navigation from "@/components/Navigation";
 
 interface HomeProps {
 
 };
 
 const getData = async <T,>(): Promise<T> => {
-  // await new Promise(resolve => setTimeout(resolve, 30000));
+  const key: string = cookies().get("auth-public-token")?.value || "";
 
   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
     cache: "no-store",
     method: "GET",
     headers: {
-      'Content-type': 'application/json; charset=UTF-8'
+      "Content-type": "application/json; charset=UTF-8",
+      "Authorization": `Bearer ${key}}`
     }
   });
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    // throw new Error('Failed to fetch data');
+    throw new Error('Failed to fetch data');
   };
 
   return res.json() as Promise<T>;
 };
 
-const getEmployeeData = async <T,>(): Promise<T> => {
-  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/employee", {
-    method: "GET",
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8'
-    }
-  });
+// const getEmployeeData = async <T,>(): Promise<T> => {
+//   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/employee", {
+//     method: "GET",
+//     headers: {
+//       'Content-type': 'application/json; charset=UTF-8'
+//     }
+//   });
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    // throw new Error('Failed to fetch data');
-    throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
-  };
+//   if (!res.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     // throw new Error('Failed to fetch data');
+//     throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
+//   };
 
-  return res.json() as Promise<T>;
-};
+//   return res.json() as Promise<T>;
+// };
 
 const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
   const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 
-  // console.log("accounts: ", accounts);
-
-  // const [accounts, setAccounts] = React.useState<any>([]);
-
-  // const onMount = async () => {
-  //   const { accounts } = await getData<AccountHttpResponse>();
-
-  //   setAccounts(accounts);
-  // };
-
-  // React.useEffect(() => {
-  //   onMount(); 
-  // }, []);
-
-  if (accounts.length !== 0) console.log("accounts available from server:: ", accounts);
-
   return (
     <div>
+      <Navigation />
       <div className={styles.row}>
         <div className={styles.column}>
+          <Link href="/dashboard">Dashboard</Link>
           <Card
             isBlurred
             className="border-none bg-background/60 dark:bg-default-100/50"

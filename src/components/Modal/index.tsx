@@ -38,7 +38,8 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
         ...createUpdateInput
       }),
       headers: {
-        'Content-type': 'application/json; charset=UTF-8'
+        "Content-type": "application/json; charset=UTF-8",
+        "Authorization": `Bearer ${localStorage.getItem("auth-public-token")}`
       }
     });
 

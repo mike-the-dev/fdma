@@ -82,7 +82,7 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
     });
   };
 
-  if (!props.accounts || props.accounts.length === 0) return <div>OHHHH</div>;
+  if (!props.accounts || props.accounts.length === 0) return <div>No Accounts</div>;
 
   return (
     <>

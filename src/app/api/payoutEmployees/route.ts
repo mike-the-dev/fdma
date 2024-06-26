@@ -1,3 +1,4 @@
+import authorizeRequest from "@/utils/authorizeRequest";
 import payoutEmployees from "@/utils/payoutEmployees";
 
 type ResponseData = {
@@ -7,6 +8,8 @@ type ResponseData = {
 };
 
 export async function POST(request: Request, response: Response) {
+  await authorizeRequest(request.headers.get("authorization")?.split("Bearer ")[1].trim() || "");
+
   const body: ResponseData = await request.json();
 
   await payoutEmployees({

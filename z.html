@@ -1,0 +1,58 @@
+<script>
+  window.navigation.addEventListener("navigate", function (event) {
+    console.log("replaced", event.destination.url.replace(window.location.origin, ""));
+    const pathName = event.destination.url.replace(window.location.origin, "");
+    console.log("pathname length: ", pathName.length);
+    console.log("pathname length?: ", pathName.length > 10);
+
+    const affirmAsLowAsNode = document.querySelector(".affirm-as-low-as");
+
+    if (!affirmAsLowAsNode) {
+        var _affirm_config = null;
+
+        const myTimeout = setTimeout(getThatMoney, 1000);
+
+        function myStopFunction() {
+          clearTimeout(myTimeout);
+        };
+
+        function insertAfter(el, htmlString) {
+          el.insertAdjacentHTML('afterend', htmlString);
+        };
+
+        function getThatMoney() {
+          var productDetailsModuleContentNode = document.querySelector(".product-details-module__content");
+          console.log("productDetailsModuleContentNode: ", productDetailsModuleContentNode);
+          var detailProductPriceValueNode = document.querySelector(".details-product-price__value");
+          console.log("detailProductPriceValueNode: ", detailProductPriceValueNode);
+
+          if (productDetailsModuleContentNode && detailProductPriceValueNode) {
+            _affirm_config = {
+              public_api_key: "8D84QQJ0P3WFX2SD",
+              script: "https://cdn1.affirm.com/js/v2/affirm.js"
+            };
+
+            (function (l, g, m, e, a, f, b) { var d, c = l[m] || {}, h = document.createElement(f), n = document.getElementsByTagName(f)[0], k = function (a, b, c) { return function () { a[b]._.push([c, arguments]) } }; c[e] = k(c, e, "set"); d = c[e]; c[a] = {}; c[a]._ = []; d._ = []; c[a][b] = k(c, a, b); a = 0; for (b = "set add save post open empty reset on off trigger ready setProduct".split(" "); a < b.length; a++)d[b[a]] = k(c, e, b[a]); a = 0; for (b = ["get", "token", "url", "items"]; a < b.length; a++)d[b[a]] = function () { }; h.async = !0; h.src = g[f]; n.parentNode.insertBefore(h, n); delete g[f]; d(g); l[m] = c })(window, _affirm_config, "affirm", "checkout", "ui", "script", "ready");
+
+            console.log("Affirm: Elements found. Setting price.");
+            var productPrice = parseInt(detailProductPriceValueNode.textContent.slice(1)) * 100;
+            console.log("productPrice: ", productPrice);
+            insertAfter(productDetailsModuleContentNode, '<p class="affirm-as-low-as" data-page-type="product" data-affirm-type="text" data-amount="' + productPrice + '"></p>');
+            myStopFunction()
+          };
+        };
+    } else {
+      console.log("The affirm as low as node already exists. NOT running affirm script again.");
+      console.log(affirmAsLowAsNode);
+    };
+  });
+</script>
+
+<style>
+.product-details__product-price-row .affirm-as-low-as:nth-child(3),
+.product-details__product-price-row .affirm-as-low-as:nth-child(4),
+.product-details__product-price-row .affirm-as-low-as:nth-child(5) {
+  display: none;
+}
+
+</style>

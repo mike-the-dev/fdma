@@ -7,8 +7,10 @@ export type Account = {
   totalPayoutAmount: number;
   instantPayoutEnabled: boolean;
   stripeID: string;
+  ecwidAppSecretKey: string;
   ecwidPublicKey: string;
   ecwidSecretKey: string;
+  "GSI1-PK": string;
 };
 
 export type AccountInputForm = {
@@ -25,8 +27,10 @@ export type AccountUpdateInputForm = {
   take: number;
   instantPayoutEnabled: boolean;
   stripeID: string;
+  ecwidAppSecretKey: string;
   ecwidPublicKey: string;
   ecwidSecretKey: string;
+  "GSI1-PK": string;
 };
 
 export type AccountHttpResponse = {

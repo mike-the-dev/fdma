@@ -9,8 +9,10 @@ type ResponseData = {
   take: number;
   instantPayoutEnabled: boolean;
   stripeID: string;
+  ecwidAppSecretKey: string;
   ecwidPublicKey: string;
   ecwidSecretKey: string;
+  "GSI1-PK": string;
 };
 
 export async function POST(request: Request, response: Response) {
@@ -26,8 +28,11 @@ export async function POST(request: Request, response: Response) {
     take: body.take,
     instantPayoutEnabled: body.instantPayoutEnabled,
     stripeID: body.stripeID,
+    ecwidAppSecretKey: body.ecwidAppSecretKey,
     ecwidPublicKey: body.ecwidPublicKey,
-    ecwidSecretKey: body.ecwidSecretKey
+    ecwidSecretKey: body.ecwidSecretKey,
+    "GSI1-PK": body["GSI1-PK"],
+    "GSI1-SK": body["GSI1-PK"]
   });
 
   return Response.json({ 

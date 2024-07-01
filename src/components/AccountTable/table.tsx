@@ -34,6 +34,22 @@ const columns: {
       label: "Stripe ID"
     },
     {
+      key: "ecwidAppSecretKey",
+      label: "Ecwid App Secret Key"
+    },
+    {
+      key: "ecwidPublicKey",
+      label: "Ecwid Public Key"
+    },
+    {
+      key: "ecwidSecretKey",
+      label: "Ecwid Secret Key"
+    },
+    {
+      key: "GSI1-PK",
+      label: "Ecwid Store ID"
+    },
+    {
       key: "edit",
       label: "EDIT"
     }
@@ -56,8 +72,10 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
     totalPayoutAmount: 0,
     instantPayoutEnabled: false,
     stripeID: "",
+    ecwidAppSecretKey: "",
     ecwidPublicKey: "",
-    ecwidSecretKey: ""
+    ecwidSecretKey: "",
+    "GSI1-PK" : ""
   });
 
   const onClickEditHandler = (item: Account) => {
@@ -77,8 +95,10 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
       totalPayoutAmount: 0,
       instantPayoutEnabled: false,
       stripeID: "",
+      ecwidAppSecretKey: "",
       ecwidPublicKey: "",
-      ecwidSecretKey: ""
+      ecwidSecretKey: "",
+      "GSI1-PK": ""
     });
   };
 

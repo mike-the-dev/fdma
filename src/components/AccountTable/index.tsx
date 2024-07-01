@@ -35,6 +35,22 @@ const columns: {
     label: "Stripe ID"
   },
   {
+    key: "ecwidAppSecretKey",
+    label: "Ecwid App Secret Key"
+  },
+  {
+    key: "ecwidPublicKey",
+    label: "Ecwid Public Key"
+  },
+  {
+    key: "ecwidSecretKey",
+    label: "Ecwid Secret Key"
+  },
+  {
+    key: "GSI1-PK",
+    label: "Ecwid Store ID"
+  },
+  {
     key: "edit",
     label: "EDIT"
   }
@@ -46,7 +62,6 @@ const AccountTable = (props: AccountTableProps): React.ReactElement => {
 
   return (
     <>
-    {/* <h1>cool {props.accounts[0].PK}</h1> */}
       <Table 
         heading="User Acounts" 
         accounts={props.accounts}

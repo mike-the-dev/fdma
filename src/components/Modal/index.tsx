@@ -24,8 +24,10 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
     take: 0,
     instantPayoutEnabled: false,
     stripeID: "",
+    ecwidAppSecretKey: "",
     ecwidPublicKey: "",
-    ecwidSecretKey: ""
+    ecwidSecretKey: "",
+    "GSI1-PK" : ""
   };
   const [state, setState] = React.useState<AccountUpdateInputForm>(initalState);
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
@@ -94,8 +96,10 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
       && state.take === props.account.take
       && state.instantPayoutEnabled === props.account.instantPayoutEnabled
       && state.stripeID === props.account.stripeID
+      && state.ecwidAppSecretKey === props.account.ecwidAppSecretKey
       && state.ecwidPublicKey === props.account.ecwidPublicKey
       && state.ecwidSecretKey === props.account.ecwidSecretKey
+      && state["GSI1-PK"] === props.account["GSI1-PK"]
     ) return true;
 
     return false;
@@ -115,8 +119,10 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
       take: props.account.take,
       instantPayoutEnabled: props.account.instantPayoutEnabled ? props.account.instantPayoutEnabled : false,
       stripeID: props.account.stripeID ? props.account.stripeID : "",
+      ecwidAppSecretKey: props.account.ecwidAppSecretKey ? props.account.ecwidAppSecretKey : "",
       ecwidPublicKey: props.account.ecwidPublicKey ? props.account.ecwidPublicKey : "",
-      ecwidSecretKey: props.account.ecwidSecretKey ? props.account.ecwidSecretKey : ""
+      ecwidSecretKey: props.account.ecwidSecretKey ? props.account.ecwidSecretKey : "",
+      "GSI1-PK": props.account["GSI1-PK"] ? props.account["GSI1-PK"] : ""
     });
   }, [props.account]);
   
@@ -153,13 +159,21 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
                 name={"take"} 
                 value={state.take.toString()} 
               /> */}
-              {/* <Input
+              <Input
+                isDisabled
                 type="text"
                 label="Stripe ID"
                 onChange={onUpdateFormData}
                 name={"stripeID"}
                 value={state.stripeID}
-              /> */}
+              />
+              <Input
+                type="text"
+                label="Ecwid App Secret Key"
+                onChange={onUpdateFormData}
+                name={"ecwidAppSecretKey"}
+                value={state.ecwidAppSecretKey}
+              />
               <Input
                 type="text"
                 label="Ecwid Public Key"
@@ -173,6 +187,14 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
                 onChange={onUpdateFormData}
                 name={"ecwidSecretKey"}
                 value={state.ecwidSecretKey}
+              />
+              <Input
+                isDisabled
+                type="text"
+                label="Ecwid Store ID"
+                onChange={onUpdateFormData}
+                name={"GSI1-PK"}
+                value={state["GSI1-PK"]}
               />
               {/* <Checkbox 
                 isSelected={state.instantPayoutEnabled}

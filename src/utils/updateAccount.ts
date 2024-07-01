@@ -10,8 +10,11 @@ export type Account = {
   take: number;
   instantPayoutEnabled: boolean;
   stripeID: string;
+  ecwidAppSecretKey: string;
   ecwidPublicKey: string;
   ecwidSecretKey: string;
+  "GSI1-PK": string;
+  "GSI1-SK": string;
 };
 
 export type AccountInputParams = {
@@ -22,15 +25,18 @@ export type AccountInputParams = {
   take: number;
   instantPayoutEnabled: boolean;
   stripeID: string;
+  ecwidAppSecretKey: string;
   ecwidPublicKey: string;
   ecwidSecretKey: string;
+  "GSI1-PK": string;
+  "GSI1-SK": string;
 };
 
 export type IUpdateCommandOutput<T> = Omit<UpdateCommandOutput, "Items"> & {
   Items?: T,
 };
 
-const updateAccount = async (payload: AccountInputParams): Promise<any> => {
+const updateAccount = async (payload: AccountInputParams): Promise<void> => {
   const userInput: Account = {
     ...payload,
   };
@@ -41,15 +47,16 @@ const updateAccount = async (payload: AccountInputParams): Promise<any> => {
       PK: userInput.PK,
       SK: userInput.SK
     },
-    UpdateExpression: "set #name = :name, currency = :currency, take = :take, instantPayoutEnabled = :instantPayoutEnabled, stripeID = :stripeID, ecwidPublicKey = :ecwidPublicKey, ecwidSecretKey = :ecwidSecretKey",
+    UpdateExpression: "set #name = :name, currency = :currency, take = :take, instantPayoutEnabled = :instantPayoutEnabled, stripeID = :stripeID, ecwidAppSecretKey = :ecwidAppSecretKey, ecwidPublicKey = :ecwidPublicKey, ecwidSecretKey = :ecwidSecretKey",
     ExpressionAttributeValues: {
       ":name": userInput.name,
       ":currency": userInput.currency,
       ":take": userInput.take,
       ":instantPayoutEnabled": userInput.instantPayoutEnabled,
       ":stripeID": userInput.stripeID,
+      ":ecwidAppSecretKey": userInput.ecwidAppSecretKey,
       ":ecwidPublicKey": userInput.ecwidPublicKey,
-      ":ecwidSecretKey": userInput.ecwidSecretKey
+      ":ecwidSecretKey": userInput.ecwidSecretKey,
     },
     "ExpressionAttributeNames": {
       "#name": "name"

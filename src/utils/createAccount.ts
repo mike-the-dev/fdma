@@ -13,6 +13,8 @@ export type AccountPayload = {
   take: number;
   totalPayoutAmount: number;
   stripeID: string;
+  "GSI1-PK": string;
+  "GSI1-SK": string;
 };
 
 export type AccountInputParams = {
@@ -21,6 +23,8 @@ export type AccountInputParams = {
   take: number;
   totalPayoutAmount: number;
   businessUrl: string;
+  "GSI1-PK": string;
+  "GSI1-SK": string;
 };
 
 export type IPutCommandOutput<T> = Omit<PutCommandOutput, "Items"> & {
@@ -35,7 +39,7 @@ const createAccount = async (payload: AccountInputParams): Promise<any> => {
     ...payload,
     PK: UID,
     SK: UID,
-    stripeID: stripeID
+    stripeID: stripeID,
   };
 
   const command = new PutCommand({

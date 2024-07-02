@@ -7,6 +7,7 @@ type ResponseData = {
   take: number;
   totalPayoutAmount: number;
   businessUrl: string;
+  "GSI1-PK": string;
 };
 
 export async function POST(request: Request, response: Response) {
@@ -21,6 +22,8 @@ export async function POST(request: Request, response: Response) {
       take: 20,
       totalPayoutAmount: 0,
       businessUrl: body.businessUrl,
+      "GSI1-PK": body["GSI1-PK"],
+      "GSI1-SK": body["GSI1-PK"]
     });
   
     return Response.json({ 

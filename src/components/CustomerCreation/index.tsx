@@ -3,8 +3,9 @@ import { Card, Spacer, Input, Button, Snippet, Code } from "@nextui-org/react";
 import { useState } from "react";
 
 interface State {
-  name:  string;
+  name: string;
   businessUrl: string;
+  "GSI1-PK": string;
   isSubmitting: boolean;
   refresh_url: string;
 }; 
@@ -13,6 +14,7 @@ const CustomerCreation = (): React.ReactElement => {
   const [state, setState] = useState<State>({
     name: "",
     businessUrl: "",
+    "GSI1-PK": "",
     isSubmitting: false,
     refresh_url: ""
   });
@@ -55,21 +57,21 @@ const CustomerCreation = (): React.ReactElement => {
       // @ts-ignore
       if (account.error) throw new Error(account.error.message);
 
-      setState(({ name: "", businessUrl: "", isSubmitting: false, refresh_url: account.name.toLowerCase().replaceAll(" ", "-") }));
+      setState(({ name: "", businessUrl: "", "GSI1-PK": state["GSI1-PK"], isSubmitting: false, refresh_url: account.name.toLowerCase().replaceAll(" ", "-") }));
     } catch (error) {
-      setState(({ name: "", businessUrl: "", isSubmitting: false, refresh_url: "" }));
+      setState(({ name: "", businessUrl: "", "GSI1-PK": state["GSI1-PK"], isSubmitting: false, refresh_url: "" }));
       console.error("Error creating new account: ", error);
     };
   };
 
   const isSubmitDisabled = (): boolean => {
-    if (!state.name || !state.businessUrl) return true;
+    if (!state.name || !state["GSI1-PK"] || !state.businessUrl) return true;
 
     return false;
   }; 
 
   const closeCodeSnippet = (): void => {
-    setState(({ name: "", businessUrl: "", isSubmitting: false, refresh_url: "" }));
+    setState(({ name: "", businessUrl: "", "GSI1-PK": "", isSubmitting: false, refresh_url: "" }));
   };
 
   return (
@@ -84,6 +86,7 @@ const CustomerCreation = (): React.ReactElement => {
       <Spacer y={4} />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <Input type="text" label="name" placeholder="Company Name" onChange={onUpdateFormData} name={"name"} value={state.name} />
+        <Input type="text" label="ecwid store id" placeholder="Ecwid Store ID" onChange={onUpdateFormData} name={"GSI1-PK"} value={state["GSI1-PK"]} />
         <Input type="url" label="url" placeholder="Company URL" onChange={onUpdateFormData} name={"businessUrl"} value={state.businessUrl} />
       </div>
       <Spacer y={4} />

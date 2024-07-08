@@ -150,7 +150,7 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
                 name={"currency"} 
                 value={state.currency} 
               /> */}
-              {/* <Input 
+              <Input 
                 type="number" 
                 label="Take" 
                 placeholder="0" 
@@ -158,7 +158,7 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
                 onChange={onUpdateFormData} 
                 name={"take"} 
                 value={state.take.toString()} 
-              /> */}
+              />
               <Input
                 isDisabled
                 type="text"

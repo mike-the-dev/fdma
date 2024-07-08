@@ -22,10 +22,6 @@ const columns: {
     //   label: "CURRENCY"
     // },
     // {
-    //   key: "take",
-    //   label: "TAKE"
-    // },
-    // {
     //   key: "instantPayoutEnabled",
     //   label: "INSTANT PAYOUT ENABLED"
     // },
@@ -33,21 +29,25 @@ const columns: {
       key: "stripeID",
       label: "Stripe ID"
     },
-    {
-      key: "ecwidAppSecretKey",
-      label: "Ecwid App Secret Key"
-    },
-    {
-      key: "ecwidPublicKey",
-      label: "Ecwid Public Key"
-    },
-    {
-      key: "ecwidSecretKey",
-      label: "Ecwid Secret Key"
-    },
+    // {
+    //   key: "ecwidAppSecretKey",
+    //   label: "Ecwid App Secret Key"
+    // },
+    // {
+    //   key: "ecwidPublicKey",
+    //   label: "Ecwid Public Key"
+    // },
+    // {
+    //   key: "ecwidSecretKey",
+    //   label: "Ecwid Secret Key"
+    // },
     {
       key: "GSI1-PK",
       label: "Ecwid Store ID"
+    },
+    {
+      key: "take",
+      label: "TAKE"
     },
     {
       key: "edit",

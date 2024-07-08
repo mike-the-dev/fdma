@@ -1,6 +1,7 @@
 
 "use client";
 
+import React from "react";
 import { Card, NextUIProvider } from '@nextui-org/react';
 import { Toaster, resolveValue } from "react-hot-toast";
 
@@ -8,8 +9,7 @@ interface ProvidersProps {
   children: React.ReactNode;
 };
 
-const Providers = (props: ProvidersProps): React.ReactElement | any => {
-
+const Providers = (props: ProvidersProps): React.ReactElement => {
   return (
     <NextUIProvider>
       <Toaster position="top-center">

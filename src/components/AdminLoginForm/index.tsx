@@ -11,7 +11,7 @@ interface State {
   isSubmitting: boolean;
 }; 
 
-const LoginForm = (): React.ReactElement => {
+const AdminLoginForm = (): React.ReactElement => {
   const [state, setState] = useState<State>({
     code: "",
     isSubmitting: false
@@ -58,7 +58,7 @@ const LoginForm = (): React.ReactElement => {
       shadow="sm"
       style={{ padding: "12px 12px 12px 12px", width: "100%", maxWidth: 500 }}
     >
-      <h1>Login</h1>
+      <h1>Admin Login</h1>
       <Spacer y={4} />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <Input type="text" label="code" placeholder="Code" onChange={onUpdateFormData} name={"code"} value={state.code} />
@@ -73,4 +73,4 @@ const LoginForm = (): React.ReactElement => {
   );
 };
 
-export default LoginForm;
+export default AdminLoginForm;

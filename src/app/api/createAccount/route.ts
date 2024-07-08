@@ -19,7 +19,7 @@ export async function POST(request: Request, response: Response) {
     await createAccount({
       name: body.name,
       currency: "usd",
-      take: 20,
+      take: 11,
       totalPayoutAmount: 0,
       businessUrl: body.businessUrl,
       "GSI1-PK": body["GSI1-PK"],

@@ -49,7 +49,7 @@ interface HomeProps {
 //   return res.json() as Promise<T>;
 // };
 
-const Home: React.FC<HomeProps> = async (): Promise<React.ReactElement> => {
+const Home = async (): Promise<React.ReactElement> => {
   // const { accounts } = await getData<AccountHttpResponse>();
   // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
 

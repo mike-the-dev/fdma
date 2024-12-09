@@ -4,7 +4,7 @@ import LoginForm from "@/components/LoginForm";
 import JoymdLogo from "@/components/Logos/JoymdLogo";
 import { Spacer } from "@nextui-org/react";
 
-const Login: React.FC = async (): Promise<React.ReactElement> => {
+const Login = async (): Promise<React.ReactElement> => {
   return (
     <div>
       <div className={styles.row}>

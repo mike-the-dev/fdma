@@ -6,7 +6,7 @@ interface AccountCreationProps {
 
 };
 
-const AccountCreation: React.FC<AccountCreationProps> = async (): Promise<React.ReactElement> => {
+const AccountCreation: React.FC<AccountCreationProps> = (): React.ReactElement => {
   return (
     <div>
       <div className={styles.row}>

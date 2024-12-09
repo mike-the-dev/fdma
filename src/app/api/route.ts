@@ -11,5 +11,4 @@ export async function GET(request: Request, response: Response) {
   return new Response(JSON.stringify({ accounts: accounts }), {
     status: 200,
   });
-
 };

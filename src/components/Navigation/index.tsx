@@ -37,6 +37,13 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
             </NextUILink>
           </Link>
         </NavbarItem>
+        <NavbarItem isActive={pathname.includes("/dashboard/account-deployment") ? true : false}>
+          <Link href="/dashboard/account-deployment">
+            <NextUILink color={pathname.includes("/dashboard/account-deployment") ? "secondary" : "foreground"} aria-current="page">
+              Account Deployment
+            </NextUILink>
+          </Link>
+        </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
         {/* <NavbarItem className="hidden lg:flex">

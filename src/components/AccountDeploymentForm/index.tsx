@@ -87,9 +87,18 @@ const AccountDeploymentForm = (): React.ReactElement => {
 
   const deployAccount = async (deployAccountInput: AccountDeploymentFormData): Promise<void> => {
     try {
+      // Construct the full domain with prefix and suffix
+      const fullDomain = `shop.${deployAccountInput.domain}.instapaytient.com`;
+      
+      // Create the payload with the complete domain
+      const payload = {
+        ...deployAccountInput,
+        domain: fullDomain
+      };
+      
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/createAccountDeployment`,
-        deployAccountInput,
+        payload,
         {
           headers: {
             "Content-Type": "application/json"
@@ -116,7 +125,6 @@ const AccountDeploymentForm = (): React.ReactElement => {
       reset();
       setFormKey(prev => prev + 1); // Force re-render
       
-      console.log("Account deployment successful:", data);
     } catch (error) {
       console.error("Error deploying account: ", error);
     }

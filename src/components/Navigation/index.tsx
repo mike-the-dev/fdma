@@ -23,10 +23,17 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
         {/* <p className="font-bold text-inherit">JOYMD</p> */}
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive={pathname.includes("/dashboard/home") ? true : false}>
-          <Link href="/dashboard/home">
-            <NextUILink color={pathname.includes("/dashboard/home") ? "secondary" : "foreground"} aria-current="page">
-              Home
+        <NavbarItem isActive={pathname.includes("/dashboard/ecwid") ? true : false}>
+          <Link href="/dashboard/ecwid">
+            <NextUILink color={pathname.includes("/dashboard/ecwid") ? "secondary" : "foreground"} aria-current="page">
+              Ecwid
+            </NextUILink>
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive={pathname.includes("/dashboard/instapaytient") ? true : false}>
+          <Link href="/dashboard/instapaytient">
+            <NextUILink color={pathname.includes("/dashboard/instapaytient") ? "secondary" : "foreground"} aria-current="page">
+              Instapaytient
             </NextUILink>
           </Link>
         </NavbarItem>
@@ -41,6 +48,13 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
           <Link href="/dashboard/account-deployment">
             <NextUILink color={pathname.includes("/dashboard/account-deployment") ? "secondary" : "foreground"} aria-current="page">
               Account Deployment
+            </NextUILink>
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive={pathname.includes("/dashboard/scheduler") ? true : false}>
+          <Link href="/dashboard/scheduler">
+            <NextUILink color={pathname.includes("/dashboard/scheduler") ? "secondary" : "foreground"} aria-current="page">
+              Scheduler
             </NextUILink>
           </Link>
         </NavbarItem>

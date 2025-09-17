@@ -58,8 +58,8 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
         
         // Check for Instapaytient structure: payload.order_id
         if (inputData.payload?.order_id) {
-          // Remove "ORDER#" prefix if it exists, then add single hashtag
-          const orderId = inputData.payload.order_id.replace(/^ORDER#/, '');
+          // Remove "O#" or "ORDER#" prefix if it exists, then add single hashtag
+          const orderId = inputData.payload.order_id.replace(/^(O#|ORDER#)/, '');
           return `#${orderId}`;
         }
         

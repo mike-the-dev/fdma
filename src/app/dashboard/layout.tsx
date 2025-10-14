@@ -5,9 +5,11 @@ import { useAuthContext } from "@/context/AuthContext";
 
 interface DashboardLayout {
   children: React.ReactNode;
-};
+}
 
-export default function DashboardLayout(props: DashboardLayout): React.ReactElement {
+export default function DashboardLayout(
+  props: DashboardLayout
+): React.ReactElement {
   const { isAuthenticated, isLoading } = useAuthContext();
 
   // If not authenticated AND not loading, AuthProvider will handle redirect
@@ -17,9 +19,5 @@ export default function DashboardLayout(props: DashboardLayout): React.ReactElem
   }
 
   // User is authenticated or loading, render dashboard
-  return (
-    <>
-      { props.children }
-    </>
-  );
-};
+  return <>{props.children}</>;
+}

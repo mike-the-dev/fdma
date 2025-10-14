@@ -12,8 +12,8 @@ export type AccountInstapaytient = {
     instant_payout_enabled: boolean;
     stripe_id: string;
   };
-  'GSI1-PK': string;
-  'GSI1-SK': string;
+  "GSI1-PK": string;
+  "GSI1-SK": string;
   entity: string;
   _createdAt_: string;
   _lastUpdated_: string;

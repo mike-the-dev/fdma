@@ -1,9 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+  useRef,
+} from "react";
 import { useRouter, usePathname } from "next/navigation";
+
 import { setGlobalLogout } from "@/utils/apiClient";
-import { getLocalStorageItem, setLocalStorageItem, removeLocalStorageItem } from "@/hooks/useLocalStorage";
+import {
+  getLocalStorageItem,
+  removeLocalStorageItem,
+} from "@/hooks/useLocalStorage";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -21,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
   const hasCheckedAuth = useRef(false);
-  
+
   // Always start with a consistent state for SSR/hydration
   const [authState, setAuthState] = useState<{
     isAuthenticated: boolean;
@@ -32,14 +43,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: false,
     isLoading: true,
     userId: null,
-    userRole: null
+    userRole: null,
   });
 
   // Single effect that handles both mounting and auth checking
   useEffect(() => {
     // Mark as mounted
     setIsMounted(true);
-    
+
     // Only check auth once
     if (hasCheckedAuth.current) {
       return;
@@ -58,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isAuthenticated: isAuth,
       isLoading: false,
       userId: isAuth ? userId : null,
-      userRole: isAuth ? userRole : null
+      userRole: isAuth ? userRole : null,
     });
 
     // Handle redirects based on pathname - only once on mount
@@ -88,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isAuthenticated: isAuth,
       isLoading: false,
       userId: isAuth ? userId : null,
-      userRole: isAuth ? userRole : null
+      userRole: isAuth ? userRole : null,
     });
 
     // Handle redirects based on current pathname
@@ -112,14 +123,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     removeLocalStorageItem("refresh-token");
     removeLocalStorageItem("user-id");
     removeLocalStorageItem("user-role");
-    
+
     setAuthState({
       isAuthenticated: false,
       isLoading: false,
       userId: null,
-      userRole: null
+      userRole: null,
     });
-    
+
     router.push("/login");
   };
 
@@ -140,9 +151,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
+
   if (context === undefined) {
     throw new Error("useAuthContext must be used within an AuthProvider");
   }
+
   return context;
 };
-

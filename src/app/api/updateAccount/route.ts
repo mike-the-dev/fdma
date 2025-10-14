@@ -15,10 +15,12 @@ type ResponseData = {
   "GSI1-PK": string;
 };
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
   const body: ResponseData = await request.json();
 
-  await authorizeRequest(request.headers.get("authorization")?.split("Bearer ")[1].trim() || "");
+  await authorizeRequest(
+    request.headers.get("authorization")?.split("Bearer ")[1].trim() || ""
+  );
 
   await updateAccount({
     PK: body.PK,
@@ -32,12 +34,12 @@ export async function POST(request: Request, response: Response) {
     ecwidPublicKey: body.ecwidPublicKey,
     ecwidSecretKey: body.ecwidSecretKey,
     "GSI1-PK": body["GSI1-PK"],
-    "GSI1-SK": body["GSI1-PK"]
+    "GSI1-SK": body["GSI1-PK"],
   });
 
-  return Response.json({ 
+  return Response.json({
     name: body.name,
     currency: body.currency,
-    take: body.take
+    take: body.take,
   });
-};
+}

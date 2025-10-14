@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface RedirectCountdownProps {
   seconds: number;
@@ -9,7 +9,11 @@ interface RedirectCountdownProps {
   onRedirect?: () => void;
 }
 
-const RedirectCountdown = ({ seconds, redirectPath, onRedirect }: RedirectCountdownProps) => {
+const RedirectCountdown = ({
+  seconds,
+  redirectPath,
+  onRedirect,
+}: RedirectCountdownProps) => {
   const [countdown, setCountdown] = useState(seconds);
   const router = useRouter();
 
@@ -22,8 +26,10 @@ const RedirectCountdown = ({ seconds, redirectPath, onRedirect }: RedirectCountd
             onRedirect();
           }
           router.push(redirectPath);
+
           return 0;
         }
+
         return prev - 1;
       });
     }, 1000);
@@ -34,7 +40,7 @@ const RedirectCountdown = ({ seconds, redirectPath, onRedirect }: RedirectCountd
 
   return (
     <p className="text-small text-default-400 mt-2">
-      in {countdown} second{countdown !== 1 ? 's' : ''}
+      in {countdown} second{countdown !== 1 ? "s" : ""}
     </p>
   );
 };

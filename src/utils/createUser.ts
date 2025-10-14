@@ -1,7 +1,7 @@
 import { ulid } from "ulid";
 import { PutCommand, PutCommandOutput } from "@aws-sdk/lib-dynamodb";
-import dynamoClient from "./dynamoClient";
 
+import dynamoClient from "./dynamoClient";
 
 export type Account = {
   PK: string;
@@ -20,7 +20,7 @@ export type AccountInputParams = {
 };
 
 export type IPutCommandOutput<T> = Omit<PutCommandOutput, "Items"> & {
-  Items?: T,
+  Items?: T;
 };
 
 const createUser = async (payload: AccountInputParams): Promise<any> => {
@@ -28,14 +28,16 @@ const createUser = async (payload: AccountInputParams): Promise<any> => {
   const userInput: Account = {
     ...payload,
     PK: UID,
-    SK: UID
+    SK: UID,
   };
 
   const command = new PutCommand({
-    TableName: process.env.DYNAMODB_TABLE_NAME ? process.env.DYNAMODB_TABLE_NAME : "",
+    TableName: process.env.DYNAMODB_TABLE_NAME
+      ? process.env.DYNAMODB_TABLE_NAME
+      : "",
     Item: {
-      ...userInput
-    }
+      ...userInput,
+    },
   });
 
   (await dynamoClient.send(command)) as IPutCommandOutput<Account>;

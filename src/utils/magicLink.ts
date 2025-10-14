@@ -9,7 +9,9 @@
  * @returns The complete magic link URL
  */
 export function generateMagicLinkUrl(token: string, baseUrl?: string): string {
-  const base = baseUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+  const base =
+    baseUrl || (typeof window !== "undefined" ? window.location.origin : "");
+
   return `${base}/auth/verify-magic-link?token=${encodeURIComponent(token)}`;
 }
 
@@ -21,9 +23,11 @@ export function generateMagicLinkUrl(token: string, baseUrl?: string): string {
 export function extractTokenFromMagicLink(url: string): string | null {
   try {
     const urlObj = new URL(url);
-    return urlObj.searchParams.get('token');
+
+    return urlObj.searchParams.get("token");
   } catch (error) {
-    console.error('Error parsing magic link URL:', error);
+    console.error("Error parsing magic link URL:", error);
+
     return null;
   }
 }
@@ -36,7 +40,11 @@ export function extractTokenFromMagicLink(url: string): string | null {
 export function isValidMagicLinkUrl(url: string): boolean {
   try {
     const urlObj = new URL(url);
-    return urlObj.pathname === '/auth/verify-magic-link' && urlObj.searchParams.has('token');
+
+    return (
+      urlObj.pathname === "/auth/verify-magic-link" &&
+      urlObj.searchParams.has("token")
+    );
   } catch (error) {
     return false;
   }

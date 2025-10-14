@@ -1,13 +1,13 @@
 import { Skeleton } from "@heroui/skeleton";
 import { Spacer } from "@heroui/spacer";
 
-interface LoadingProps {};
+interface LoadingProps {}
 
 const Loading: React.FC<LoadingProps> = (): React.ReactElement => {
   return (
     <div>
       <Skeleton className="rounded-lg" style={{ height: 973 }}>
-        <div className="h-24 rounded-lg bg-default-300"></div>
+        <div className="h-24 rounded-lg bg-default-300" />
       </Skeleton>
       <Spacer y={5} />
       {/* <div className="">

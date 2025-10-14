@@ -1,18 +1,18 @@
-import Image from 'next/image'
+import Image from "next/image";
 
 export default function JoymdLogo() {
   return (
     <Image
-      src="/instapaytient_logo.png"
-      width={100}
-      height={44.53}
       alt="joymd logo"
-      priority={true}
+      height={44.53}
       placeholder="empty"
+      priority={true}
+      src="/instapaytient_logo.png"
       style={{
-        width: 'auto',
-        height: 'auto'
+        width: "auto",
+        height: "auto",
       }}
+      width={100}
     />
-  )
+  );
 }

@@ -4,15 +4,15 @@ import React, { useEffect, useState } from "react";
 import { Spacer } from "@heroui/spacer";
 import { Card } from "@heroui/card";
 import { Spinner } from "@heroui/spinner";
+
+import styles from "../../page.module.css";
+
 import apiClient from "@/utils/apiClient";
 import AccountTable from "@/components/AccountTable";
-import styles from "../../page.module.css"
 import { AccountHttpResponse } from "@/types/Account";
 import { useAuthContext } from "@/context/AuthContext";
 
-interface HomeProps {
-
-};
+interface HomeProps {}
 
 const Home = (): React.ReactElement => {
   const { isAuthenticated, isLoading: authLoading } = useAuthContext();
@@ -23,34 +23,45 @@ const Home = (): React.ReactElement => {
   useEffect(() => {
     // Only fetch accounts when authentication is complete and user is authenticated
     if (!authLoading && isAuthenticated) {
-    const getData = async () => {
-      try {
-        const response = await apiClient.get<AccountHttpResponse>("/api");
+      const getData = async () => {
+        try {
+          const response = await apiClient.get<AccountHttpResponse>("/api");
 
-        console.log("accounts: ", response.data.accounts);
-        setAccounts(response.data.accounts);
-      } catch (err: any) {
-        console.error("Error fetching accounts:", err);
-        
-        // If it's a token expiration error, don't show error message as user will be logged out
-        if (err.isTokenExpired) {
-          return;
+          console.log("accounts: ", response.data.accounts);
+          setAccounts(response.data.accounts);
+        } catch (err: any) {
+          console.error("Error fetching accounts:", err);
+
+          // If it's a token expiration error, don't show error message as user will be logged out
+          if (err.isTokenExpired) {
+            return;
+          }
+
+          const errorMessage =
+            err.response?.data?.message ||
+            err.message ||
+            "Failed to load accounts";
+
+          setError(errorMessage);
+        } finally {
+          setIsLoading(false);
         }
-        
-        const errorMessage = err.response?.data?.message || err.message || "Failed to load accounts";
-        setError(errorMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      };
 
-    getData();
+      getData();
     }
   }, [authLoading, isAuthenticated]);
 
   if (authLoading || isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "400px",
+        }}
+      >
         <div style={{ textAlign: "center" }}>
           <Spinner color="secondary" />
           <Spacer y={2} />
@@ -89,9 +100,11 @@ const Home = (): React.ReactElement => {
             style={{ padding: "12px 12px 12px 12px", width: "100%" }}
           >
             <h3>User Accounts</h3>
-            <p className="text-small text-default-500">List of user customer accounts.</p>
+            <p className="text-small text-default-500">
+              List of user customer accounts.
+            </p>
             <Spacer y={4} />
-              <AccountTable accounts={accounts} />
+            <AccountTable accounts={accounts} />
             <Spacer y={6} />
             {/* <UserForm heading={"CREATE NEW USER"} /> */}
           </Card>

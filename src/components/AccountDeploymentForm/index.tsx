@@ -7,9 +7,14 @@ import { Select, SelectItem } from "@heroui/select";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { accountDeploymentSchema, AccountDeploymentFormData } from "../../schemas/accountDeployment";
+import { toast } from "react-hot-toast";
+
+import {
+  accountDeploymentSchema,
+  AccountDeploymentFormData,
+} from "../../schemas/accountDeployment";
+
 import apiClient from "@/utils/apiClient";
-import { toast } from 'react-hot-toast';
 
 // Remove the old State interface since we're using Zod schema now
 
@@ -63,7 +68,7 @@ const US_STATES = [
   { key: "WA", label: "Washington" },
   { key: "WV", label: "West Virginia" },
   { key: "WI", label: "Wisconsin" },
-  { key: "WY", label: "Wyoming" }
+  { key: "WY", label: "Wyoming" },
 ];
 
 const AccountDeploymentForm = (): React.ReactElement => {
@@ -73,7 +78,7 @@ const AccountDeploymentForm = (): React.ReactElement => {
     formState: { errors, isSubmitting },
     setValue,
     watch,
-    reset
+    reset,
   } = useForm<AccountDeploymentFormData>({
     resolver: zodResolver(accountDeploymentSchema),
     mode: "onBlur", // Validate on blur for better UX
@@ -81,8 +86,8 @@ const AccountDeploymentForm = (): React.ReactElement => {
       name: "",
       company: "",
       state: "",
-      domain: ""
-    }
+      domain: "",
+    },
   });
 
   // Add a key to force re-render when form resets
@@ -90,22 +95,24 @@ const AccountDeploymentForm = (): React.ReactElement => {
 
   const watchedState = watch("state");
 
-  const deployAccount = async (deployAccountInput: AccountDeploymentFormData): Promise<void> => {
+  const deployAccount = async (
+    deployAccountInput: AccountDeploymentFormData
+  ): Promise<void> => {
     try {
       // Construct the full domain with prefix and suffix
       const fullDomain = `shop.${deployAccountInput.domain}.instapaytient.com`;
-      
+
       // Create the payload with the complete domain
       const payload = {
         ...deployAccountInput,
-        domain: fullDomain
+        domain: fullDomain,
       };
-      
+
       const response = await apiClient.post(
         "/api/user/createAccountDeployment",
         payload
       );
-      
+
       return response.data;
     } catch (error) {
       console.error("Error deploying account:", error);
@@ -117,27 +124,34 @@ const AccountDeploymentForm = (): React.ReactElement => {
     setValue("state", value, { shouldValidate: true });
   };
 
-  const onSubmitFormData = async (data: AccountDeploymentFormData): Promise<void> => {
+  const onSubmitFormData = async (
+    data: AccountDeploymentFormData
+  ): Promise<void> => {
     try {
       await deployAccount(data);
-      
+
       // Reset form on success
       reset();
-      setFormKey(prev => prev + 1); // Force re-render
-      
+      setFormKey((prev) => prev + 1); // Force re-render
+
       // Show success toast
-      toast.success(`✅ Account "${data.name}" has been deployed successfully!`, { duration: 4000 });
-      
+      toast.success(
+        `✅ Account "${data.name}" has been deployed successfully!`,
+        { duration: 4000 }
+      );
     } catch (error: any) {
       console.error("Error deploying account: ", error);
-      
+
       // If it's a token expiration error, don't show error message as user will be logged out
       if (error.isTokenExpired) {
         return;
       }
-      
+
       // Show error toast
-      toast.error(`❌ Failed to deploy account "${data.name}". Please try again.`, { duration: 4000 });
+      toast.error(
+        `❌ Failed to deploy account "${data.name}". Please try again.`,
+        { duration: 4000 }
+      );
     }
   };
 
@@ -154,25 +168,25 @@ const AccountDeploymentForm = (): React.ReactElement => {
       <Spacer y={4} />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <div className="flex-1">
-          <Input 
-            type="text" 
-            label="Name" 
-            placeholder="Enter name" 
+          <Input
+            label="Name"
+            placeholder="Enter name"
+            type="text"
             {...register("name")}
-            isInvalid={!!errors.name}
-            errorMessage={errors.name?.message}
             color={errors.name ? "danger" : "default"}
+            errorMessage={errors.name?.message}
+            isInvalid={!!errors.name}
           />
         </div>
         <div className="flex-1">
-          <Input 
-            type="text" 
-            label="Company" 
-            placeholder="Enter company name" 
+          <Input
+            label="Company"
+            placeholder="Enter company name"
+            type="text"
             {...register("company")}
-            isInvalid={!!errors.company}
-            errorMessage={errors.company?.message}
             color={errors.company ? "danger" : "default"}
+            errorMessage={errors.company?.message}
+            isInvalid={!!errors.company}
           />
         </div>
       </div>
@@ -180,18 +194,19 @@ const AccountDeploymentForm = (): React.ReactElement => {
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <div className="flex-1">
           <Select
+            color={errors.state ? "danger" : "default"}
+            errorMessage={errors.state?.message}
+            isInvalid={!!errors.state}
             label="State"
             placeholder="Select a state"
             selectedKeys={watchedState ? [watchedState] : []}
             onSelectionChange={(keys) => {
               const selectedValue = Array.from(keys)[0] as string;
+
               if (selectedValue) {
                 onStateChange(selectedValue);
               }
             }}
-            isInvalid={!!errors.state}
-            errorMessage={errors.state?.message}
-            color={errors.state ? "danger" : "default"}
           >
             {US_STATES.map((state) => (
               <SelectItem key={state.key}>
@@ -201,25 +216,25 @@ const AccountDeploymentForm = (): React.ReactElement => {
           </Select>
         </div>
         <div className="flex-1">
-          <Input 
-            type="text" 
-            label="Domain" 
-            placeholder="subdomain" 
-            startContent="shop."
+          <Input
             endContent=".instapaytient.com"
+            label="Domain"
+            placeholder="subdomain"
+            startContent="shop."
+            type="text"
             {...register("domain")}
-            isInvalid={!!errors.domain}
-            errorMessage={errors.domain?.message}
             color={errors.domain ? "danger" : "default"}
+            errorMessage={errors.domain?.message}
+            isInvalid={!!errors.domain}
           />
         </div>
       </div>
       <Spacer y={4} />
       <div>
-        <Button 
-          color="primary" 
-          variant="shadow" 
-          isDisabled={isSubmitting} 
+        <Button
+          color="primary"
+          isDisabled={isSubmitting}
+          variant="shadow"
           onPress={() => handleSubmit(onSubmitFormData)()}
         >
           {isSubmitting ? "Deploying..." : "Deploy Account"}

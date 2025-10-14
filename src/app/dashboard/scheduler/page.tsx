@@ -1,18 +1,19 @@
 "use client";
 
+import type { Scheduler } from "@/utils/listSchedulers";
+
 import React, { useEffect, useState } from "react";
 import { Spacer } from "@heroui/spacer";
 import { Card } from "@heroui/card";
 import { Spinner } from "@heroui/spinner";
+
+import styles from "../../page.module.css";
+
 import apiClient from "@/utils/apiClient";
 import SchedulerTable from "@/components/SchedulerTable";
-import styles from "../../page.module.css"
-import type { Scheduler } from "@/utils/listSchedulers";
 import { useAuthContext } from "@/context/AuthContext";
 
-interface SchedulerProps {
-
-};
+interface SchedulerProps {}
 
 const Scheduler = (): React.ReactElement => {
   const { isAuthenticated, isLoading: authLoading } = useAuthContext();
@@ -28,13 +29,17 @@ const Scheduler = (): React.ReactElement => {
       setSchedulers(response.data);
     } catch (err: any) {
       console.error("Error fetching schedulers:", err);
-      
+
       // If it's a token expiration error, don't show error message as user will be logged out
       if (err.isTokenExpired) {
         return;
       }
-      
-      const errorMessage = err.response?.data?.message || err.message || "Failed to load schedulers";
+
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to load schedulers";
+
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -50,7 +55,14 @@ const Scheduler = (): React.ReactElement => {
 
   if (authLoading || isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "400px",
+        }}
+      >
         <div style={{ textAlign: "center" }}>
           <Spinner color="secondary" />
           <Spacer y={2} />
@@ -62,7 +74,14 @@ const Scheduler = (): React.ReactElement => {
 
   if (error) {
     return (
-      <div style={{ maxWidth: '1600px', width: '100%', margin: '0 auto', padding: '0 16px' }}>
+      <div
+        style={{
+          maxWidth: "1600px",
+          width: "100%",
+          margin: "0 auto",
+          padding: "0 16px",
+        }}
+      >
         <div className={styles.row}>
           <div className={styles.column}>
             <Card
@@ -81,7 +100,14 @@ const Scheduler = (): React.ReactElement => {
   }
 
   return (
-    <div style={{ maxWidth: '1600px', width: '100%', margin: '0 auto', padding: '0 16px' }}>
+    <div
+      style={{
+        maxWidth: "1600px",
+        width: "100%",
+        margin: "0 auto",
+        padding: "0 16px",
+      }}
+    >
       <div className={styles.row}>
         <div className={styles.column}>
           <Card
@@ -91,7 +117,9 @@ const Scheduler = (): React.ReactElement => {
             style={{ padding: "12px 12px 12px 12px", width: "100%" }}
           >
             <h3>Scheduler</h3>
-            <p className="text-small text-default-500">Manage your scheduling and appointments.</p>
+            <p className="text-small text-default-500">
+              Manage your scheduling and appointments.
+            </p>
             <Spacer y={4} />
             <SchedulerTable schedules={schedulers} />
             <Spacer y={6} />

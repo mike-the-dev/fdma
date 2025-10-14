@@ -1,6 +1,6 @@
 import { UpdateCommand, UpdateCommandOutput } from "@aws-sdk/lib-dynamodb";
-import dynamoClient from "./dynamoClient";
 
+import dynamoClient from "./dynamoClient";
 
 export type Account = {
   PK: string;
@@ -33,7 +33,7 @@ export type AccountInputParams = {
 };
 
 export type IUpdateCommandOutput<T> = Omit<UpdateCommandOutput, "Items"> & {
-  Items?: T,
+  Items?: T;
 };
 
 const updateAccount = async (payload: AccountInputParams): Promise<void> => {
@@ -42,12 +42,15 @@ const updateAccount = async (payload: AccountInputParams): Promise<void> => {
   };
 
   const command = new UpdateCommand({
-    TableName: process.env.DYNAMODB_TABLE_NAME ? process.env.DYNAMODB_TABLE_NAME : "",
+    TableName: process.env.DYNAMODB_TABLE_NAME
+      ? process.env.DYNAMODB_TABLE_NAME
+      : "",
     Key: {
       PK: userInput.PK,
-      SK: userInput.SK
+      SK: userInput.SK,
     },
-    UpdateExpression: "set #name = :name, currency = :currency, take = :take, instantPayoutEnabled = :instantPayoutEnabled, stripeID = :stripeID, ecwidAppSecretKey = :ecwidAppSecretKey, ecwidPublicKey = :ecwidPublicKey, ecwidSecretKey = :ecwidSecretKey",
+    UpdateExpression:
+      "set #name = :name, currency = :currency, take = :take, instantPayoutEnabled = :instantPayoutEnabled, stripeID = :stripeID, ecwidAppSecretKey = :ecwidAppSecretKey, ecwidPublicKey = :ecwidPublicKey, ecwidSecretKey = :ecwidSecretKey",
     ExpressionAttributeValues: {
       ":name": userInput.name,
       ":currency": userInput.currency,
@@ -58,9 +61,9 @@ const updateAccount = async (payload: AccountInputParams): Promise<void> => {
       ":ecwidPublicKey": userInput.ecwidPublicKey,
       ":ecwidSecretKey": userInput.ecwidSecretKey,
     },
-    "ExpressionAttributeNames": {
-      "#name": "name"
-    }
+    ExpressionAttributeNames: {
+      "#name": "name",
+    },
   });
 
   (await dynamoClient.send(command)) as IUpdateCommandOutput<Account>;

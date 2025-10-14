@@ -8,26 +8,31 @@ type UpdateRequestData = {
   updates: Partial<AccountInstapaytient>;
 };
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
   try {
     const body: UpdateRequestData = await request.json();
 
     // Validate required fields
     if (!body.PK || !body.SK) {
-      return Response.json({
-        success: false,
-        error: {
-          message: "PK and SK are required for updating an account"
-        }
-      }, { status: 400 });
+      return Response.json(
+        {
+          success: false,
+          error: {
+            message: "PK and SK are required for updating an account",
+          },
+        },
+        { status: 400 }
+      );
     }
 
-    await authorizeRequest(request.headers.get("authorization")?.split("Bearer ")[1].trim() || "");
+    await authorizeRequest(
+      request.headers.get("authorization")?.split("Bearer ")[1].trim() || ""
+    );
 
     // Add _lastUpdated_ timestamp to track when the account was last modified
     const updatesWithTimestamp = {
       ...body.updates,
-      _lastUpdated_: new Date().toISOString()
+      _lastUpdated_: new Date().toISOString(),
     };
 
     // Use the generic updateItem function
@@ -36,22 +41,26 @@ export async function POST(request: Request, response: Response) {
       updatesWithTimestamp
     );
 
-    return Response.json({ 
+    return Response.json({
       success: true,
       message: "Account updated successfully",
       data: {
         PK: body.PK,
         SK: body.SK,
-        updatedFields: Object.keys(body.updates)
-      }
+        updatedFields: Object.keys(body.updates),
+      },
     });
   } catch (error: any) {
     console.error("Error updating Instapaytient account: ", error);
-    return Response.json({
-      success: false,
-      error: {
-        message: error.message || "Failed to update account"
-      }
-    }, { status: 500 });
+
+    return Response.json(
+      {
+        success: false,
+        error: {
+          message: error.message || "Failed to update account",
+        },
+      },
+      { status: 500 }
+    );
   }
 }

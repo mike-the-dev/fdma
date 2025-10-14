@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from 'next/link';
+import Link from "next/link";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
 import { Link as NextUILink } from "@heroui/link";
 import { usePathname } from "next/navigation";
+
 import JoymdLogo from "../Logos/JoymdLogo";
 import LogoutButton from "../LogoutButton";
 
-interface NavigationProps {};
+interface NavigationProps {}
 
 const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   const pathname = usePathname();
@@ -19,7 +20,11 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   }, []);
 
   // Don't show navigation on login, home page, or magic link verification
-  if (pathname === "/login" || pathname === "/" || pathname.startsWith("/auth/")) {
+  if (
+    pathname === "/login" ||
+    pathname === "/" ||
+    pathname.startsWith("/auth/")
+  ) {
     return <></>;
   }
 
@@ -38,42 +43,72 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
         {/* <p className="font-bold text-inherit">Instapaytient</p> */}
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive={pathname.includes("/dashboard/instapaytient") ? true : false}>
-          <NextUILink 
-            as={Link}
-            href="/dashboard/instapaytient"
-            color={pathname.includes("/dashboard/instapaytient") ? "secondary" : "foreground"} 
+        <NavbarItem
+          isActive={
+            pathname.includes("/dashboard/instapaytient") ? true : false
+          }
+        >
+          <NextUILink
             aria-current="page"
+            as={Link}
+            color={
+              pathname.includes("/dashboard/instapaytient")
+                ? "secondary"
+                : "foreground"
+            }
+            href="/dashboard/instapaytient"
           >
             Instapaytient
           </NextUILink>
         </NavbarItem>
-        <NavbarItem isActive={pathname.includes("/dashboard/account-creation") ? true : false}>
-          <NextUILink 
-            as={Link}
-            href="/dashboard/account-creation"
-            color={pathname.includes("/dashboard/account-creation") ? "secondary" : "foreground"} 
+        <NavbarItem
+          isActive={
+            pathname.includes("/dashboard/account-creation") ? true : false
+          }
+        >
+          <NextUILink
             aria-current="page"
+            as={Link}
+            color={
+              pathname.includes("/dashboard/account-creation")
+                ? "secondary"
+                : "foreground"
+            }
+            href="/dashboard/account-creation"
           >
             Account Creation
           </NextUILink>
         </NavbarItem>
-        <NavbarItem isActive={pathname.includes("/dashboard/account-deployment") ? true : false}>
-          <NextUILink 
-            as={Link}
-            href="/dashboard/account-deployment"
-            color={pathname.includes("/dashboard/account-deployment") ? "secondary" : "foreground"} 
+        <NavbarItem
+          isActive={
+            pathname.includes("/dashboard/account-deployment") ? true : false
+          }
+        >
+          <NextUILink
             aria-current="page"
+            as={Link}
+            color={
+              pathname.includes("/dashboard/account-deployment")
+                ? "secondary"
+                : "foreground"
+            }
+            href="/dashboard/account-deployment"
           >
             Account Deployment
           </NextUILink>
         </NavbarItem>
-        <NavbarItem isActive={pathname.includes("/dashboard/scheduler") ? true : false}>
-          <NextUILink 
-            as={Link}
-            href="/dashboard/scheduler"
-            color={pathname.includes("/dashboard/scheduler") ? "secondary" : "foreground"} 
+        <NavbarItem
+          isActive={pathname.includes("/dashboard/scheduler") ? true : false}
+        >
+          <NextUILink
             aria-current="page"
+            as={Link}
+            color={
+              pathname.includes("/dashboard/scheduler")
+                ? "secondary"
+                : "foreground"
+            }
+            href="/dashboard/scheduler"
           >
             Scheduler
           </NextUILink>

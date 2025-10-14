@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface UseWindowDimensionsState {
   width: number | undefined;
@@ -15,7 +15,7 @@ export default function useWindowSize() {
 
   useEffect(() => {
     // only execute all the code below in client side
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Handler to call on window resize
       const handleResize = () => {
         // Set window width/height to state
@@ -24,18 +24,19 @@ export default function useWindowSize() {
           height: window.innerHeight,
         });
       };
-    
+
       // Add event listener
       window.addEventListener("resize", handleResize);
-     
+
       // Call handler right away so state gets updated with initial window size
       handleResize();
-    
+
       // Remove event listener on cleanup
       return () => window.removeEventListener("resize", handleResize);
     }
 
     // return () => null;
   }, []); // Empty array ensures that effect is only run on mount
+
   return windowSize;
 }

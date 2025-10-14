@@ -1,18 +1,17 @@
 import { Card, CardBody, CardHeader, CardFooter } from "@heroui/card";
 import { Image } from "@heroui/image";
 import { Divider } from "@heroui/divider";
-import { Skeleton } from "@heroui/skeleton";
 import { useEffect } from "react";
 
 interface EmployeeDetailProps {
   customers: any[];
   isLoading: boolean;
-};
+}
 
-const EmployeeDetail: React.FC<EmployeeDetailProps> = (props): React.ReactElement => {
-  useEffect(() => {
-
-  }, [props.customers]);
+const EmployeeDetail: React.FC<EmployeeDetailProps> = (
+  props
+): React.ReactElement => {
+  useEffect(() => {}, [props.customers]);
 
   if (props.isLoading) return <></>;
 
@@ -34,20 +33,22 @@ const EmployeeDetail: React.FC<EmployeeDetailProps> = (props): React.ReactElemen
         />
         <div className="flex flex-col">
           <p className="text-md">Customers</p>
-          <p className="text-small text-default-500">A list of customers for employee.</p>
+          <p className="text-small text-default-500">
+            A list of customers for employee.
+          </p>
         </div>
       </CardHeader>
       <Divider />
       <CardBody>
         {props.customers.map((customer) => {
-          return (
-            <p key={customer.SK}>{customer.name}</p>
-          );
+          return <p key={customer.SK}>{customer.name}</p>;
         })}
       </CardBody>
       <Divider />
       <CardFooter>
-        <p style={{ color: "aqua" }}>This card will dynamically change based on customer.</p>
+        <p style={{ color: "aqua" }}>
+          This card will dynamically change based on customer.
+        </p>
       </CardFooter>
     </Card>
   );

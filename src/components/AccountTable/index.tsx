@@ -1,19 +1,19 @@
 import React from "react";
+
 import Table from "./table";
 
 interface AccountTableProps {
-  accounts: any
-};
+  accounts: any;
+}
 
-const AccountTable: React.FC<AccountTableProps> = (props): React.ReactElement => {
+const AccountTable: React.FC<AccountTableProps> = (
+  props
+): React.ReactElement => {
   return (
     <>
-      <Table 
-        heading="User Acounts" 
-        accounts={props.accounts}
-      />
+      <Table accounts={props.accounts} heading="User Acounts" />
     </>
   );
-}
+};
 
 export default AccountTable;

@@ -8,12 +8,10 @@ export const metadata: Metadata = {
 
 interface DashboardLayout {
   children: React.ReactNode;
-};
+}
 
-export default function DashboardLayout(props: DashboardLayout): React.ReactElement {
-  return (
-    <>
-      {props.children}
-    </>
-  );
-};
+export default function DashboardLayout(
+  props: DashboardLayout
+): React.ReactElement {
+  return <>{props.children}</>;
+}

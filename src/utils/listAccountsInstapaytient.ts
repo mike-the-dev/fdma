@@ -1,7 +1,7 @@
 import { ScanCommand, ScanCommandOutput } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import dynamoClient from "./dynamoClient";
 
+import dynamoClient from "./dynamoClient";
 
 export type AccountInstapaytient = {
   entity: string;
@@ -15,9 +15,9 @@ export type AccountInstapaytient = {
     stripe_id: string;
   };
   company: string;
-  'GSI1-SK': string;
+  "GSI1-SK": string;
   SK: string;
-  'GSI1-PK': string;
+  "GSI1-PK": string;
   PK: string;
   name: string;
   _lastUpdated_: string;
@@ -25,7 +25,7 @@ export type AccountInstapaytient = {
 };
 
 export type IScanCommandOutput<T> = Omit<ScanCommandOutput, "Items"> & {
-  Items?: T,
+  Items?: T;
 };
 
 const listAccountsInstapaytient = async (): Promise<AccountInstapaytient[]> => {
@@ -34,22 +34,26 @@ const listAccountsInstapaytient = async (): Promise<AccountInstapaytient[]> => {
 
   do {
     const command = new ScanCommand({
-      TableName: process.env.DYNAMODB_TABLE_NAME_INSTAPAYTIENT ? process.env.DYNAMODB_TABLE_NAME_INSTAPAYTIENT : "",
-      "ConsistentRead": false,
-      "FilterExpression": "begins_with(#PK, :PK) AND begins_with(#SK, :SK)",
-      "ExpressionAttributeNames": {
+      TableName: process.env.DYNAMODB_TABLE_NAME_INSTAPAYTIENT
+        ? process.env.DYNAMODB_TABLE_NAME_INSTAPAYTIENT
+        : "",
+      ConsistentRead: false,
+      FilterExpression: "begins_with(#PK, :PK) AND begins_with(#SK, :SK)",
+      ExpressionAttributeNames: {
         "#PK": "PK",
-        "#SK": "SK"
+        "#SK": "SK",
       },
-      "ExpressionAttributeValues": marshall({ 
+      ExpressionAttributeValues: marshall({
         ":PK": "A#",
-        ":SK": "A#"
-       }),
-      ...(lastEvaluatedKey && { ExclusiveStartKey: lastEvaluatedKey })
+        ":SK": "A#",
+      }),
+      ...(lastEvaluatedKey && { ExclusiveStartKey: lastEvaluatedKey }),
     });
 
-    const response = (await dynamoClient.send(command)) as IScanCommandOutput<AccountInstapaytient[]>;
-    
+    const response = (await dynamoClient.send(command)) as IScanCommandOutput<
+      AccountInstapaytient[]
+    >;
+
     response.Items?.forEach((item) => {
       // @ts-ignore
       Items.push(unmarshall(item));
@@ -59,7 +63,7 @@ const listAccountsInstapaytient = async (): Promise<AccountInstapaytient[]> => {
   } while (lastEvaluatedKey);
 
   // Default sort by company
-  Items.sort((a: any, b: any) => (a.company > b.company) ? 1 : -1); 
+  Items.sort((a: any, b: any) => (a.company > b.company ? 1 : -1));
 
   return Items;
 };

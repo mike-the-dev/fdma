@@ -13,7 +13,7 @@ interface State {
   "GSI1-PK": string;
   isSubmitting: boolean;
   refresh_url: string;
-}; 
+}
 
 const CustomerCreation = (): React.ReactElement => {
   const [state, setState] = useState<State>({
@@ -21,62 +21,87 @@ const CustomerCreation = (): React.ReactElement => {
     businessUrl: "",
     "GSI1-PK": "",
     isSubmitting: false,
-    refresh_url: ""
+    refresh_url: "",
   });
 
   const createAccount = async <T,>(createAccountInput: State): Promise<T> => {
-    const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/createAccount", {
-      method: "POST",
-      body: JSON.stringify({
-        ...createAccountInput
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        "Authorization": `Bearer ${localStorage.getItem("auth-public-token")}`
+    const res = await fetch(
+      process.env.NEXT_PUBLIC_URL + "/api/createAccount",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          ...createAccountInput,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${localStorage.getItem("auth-public-token")}`,
+        },
       }
-    });
+    );
 
     if (!res.ok) {
       // This will activate the closest `error.js` Error Boundary
       throw new Error("Failed to fetch data");
-    };
+    }
 
     return res.json() as Promise<T>;
   };
 
   const onUpdateFormData = (event: any): void => {
     const key: string = event.target.name;
-    const value: any = event.target.name === "amount" ? parseFloat(event.target.value) : event.target.value;
-    setState(prevState => ({
+    const value: any =
+      event.target.name === "amount"
+        ? parseFloat(event.target.value)
+        : event.target.value;
+
+    setState((prevState) => ({
       ...prevState,
-      [key]: value
-    }))
+      [key]: value,
+    }));
   };
 
   const onSubmitFormData = async (): Promise<void> => {
     try {
-      setState(prevState => ({ ...prevState, isSubmitting: true }));
+      setState((prevState) => ({ ...prevState, isSubmitting: true }));
 
       const account = await createAccount<State>(state);
 
       // @ts-ignore
       if (account.error) throw new Error(account.error.message);
 
-      setState(({ name: "", businessUrl: "", "GSI1-PK": state["GSI1-PK"], isSubmitting: false, refresh_url: account.name.toLowerCase().replaceAll(" ", "-") }));
+      setState({
+        name: "",
+        businessUrl: "",
+        "GSI1-PK": state["GSI1-PK"],
+        isSubmitting: false,
+        refresh_url: account.name.toLowerCase().replaceAll(" ", "-"),
+      });
     } catch (error) {
-      setState(({ name: "", businessUrl: "", "GSI1-PK": state["GSI1-PK"], isSubmitting: false, refresh_url: "" }));
+      setState({
+        name: "",
+        businessUrl: "",
+        "GSI1-PK": state["GSI1-PK"],
+        isSubmitting: false,
+        refresh_url: "",
+      });
       console.error("Error creating new account: ", error);
-    };
+    }
   };
 
   const isSubmitDisabled = (): boolean => {
     if (!state.name || !state["GSI1-PK"] || !state.businessUrl) return true;
 
     return false;
-  }; 
+  };
 
   const closeCodeSnippet = (): void => {
-    setState(({ name: "", businessUrl: "", "GSI1-PK": "", isSubmitting: false, refresh_url: "" }));
+    setState({
+      name: "",
+      businessUrl: "",
+      "GSI1-PK": "",
+      isSubmitting: false,
+      refresh_url: "",
+    });
   };
 
   return (
@@ -90,57 +115,186 @@ const CustomerCreation = (): React.ReactElement => {
       <p>Create a new Instapaytient customer account.</p>
       <Spacer y={4} />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-        <Input type="text" label="name" placeholder="Company Name" onChange={onUpdateFormData} name={"name"} value={state.name} />
-        <Input type="text" label="ecwid store id" placeholder="Ecwid Store ID" onChange={onUpdateFormData} name={"GSI1-PK"} value={state["GSI1-PK"]} />
-        <Input type="url" label="url" placeholder="Company URL" onChange={onUpdateFormData} name={"businessUrl"} value={state.businessUrl} />
+        <Input
+          label="name"
+          name={"name"}
+          placeholder="Company Name"
+          type="text"
+          value={state.name}
+          onChange={onUpdateFormData}
+        />
+        <Input
+          label="ecwid store id"
+          name={"GSI1-PK"}
+          placeholder="Ecwid Store ID"
+          type="text"
+          value={state["GSI1-PK"]}
+          onChange={onUpdateFormData}
+        />
+        <Input
+          label="url"
+          name={"businessUrl"}
+          placeholder="Company URL"
+          type="url"
+          value={state.businessUrl}
+          onChange={onUpdateFormData}
+        />
       </div>
       <Spacer y={4} />
       <div>
-        <Button color="primary" variant="shadow" isDisabled={isSubmitDisabled() || state.isSubmitting} onClick={onSubmitFormData}>
+        <Button
+          color="primary"
+          isDisabled={isSubmitDisabled() || state.isSubmitting}
+          variant="shadow"
+          onClick={onSubmitFormData}
+        >
           Create Account
         </Button>
       </div>
       <Spacer y={4} />
-      {
-        !state.refresh_url 
-        ? null
-        : (
-          <>
-              <p>✅ Customer created successfully. Your script is ready. Please copy and inject it in the body of your website.</p>
-            <Spacer y={2} />
-            <div style={{ display: "flex", justifyContent: "end" }}>
-                <Button isIconOnly onPress={closeCodeSnippet}>
-                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 6L18 18M18 6L6 18" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </Button>
-            </div>
-            <Spacer y={2} />
-            <Snippet style={{ overflow: "scroll" }} symbol={""} hideCopyButton={true}>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', marginLeft: 0 }}>{`<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`<script>`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`    $("#generate-dash-link-button").click(function (event) {`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`        event.preventDefault();`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`        $.ajax({`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`            url: "https://apistripe.joymd.com/api/shopify/express/create-link",`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`            type: 'POST',`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`            dataType: 'json',`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`            data: {`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`                account: "acct_1PTWEkFKygeAChDZ",`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`                refresh_url: "https://www.medaestheticsgroup.com/sign-up-for-pay-outs-${state.refresh_url}",`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`                return_url: "https://www.medaestheticsgroup.com/sign-up-for-pay-outs-${state.refresh_url}",`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`            },`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`            success: function (response) {`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`                const collection = document.getElementsByClassName("generate-link-text");`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{'                collection[0].innerHTML = "Here is your link to: " + `<a href="${response.data.link}" target="_blank" > SIGN UP.</a>`;'}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`            }`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`        });`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`    });`}</Code></pre>
-              <pre><Code style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{`</script>`}</Code></pre>
-            </Snippet>
-          </>
-        )
-      }
+      {!state.refresh_url ? null : (
+        <>
+          <p>
+            ✅ Customer created successfully. Your script is ready. Please copy
+            and inject it in the body of your website.
+          </p>
+          <Spacer y={2} />
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <Button isIconOnly onPress={closeCodeSnippet}>
+              <svg
+                fill="none"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 6L18 18M18 6L6 18"
+                  stroke="#FFF"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
+              </svg>
+            </Button>
+          </div>
+          <Spacer y={2} />
+          <Snippet
+            hideCopyButton={true}
+            style={{ overflow: "scroll" }}
+            symbol={""}
+          >
+            <pre>
+              <Code
+                style={{
+                  whiteSpace: "pre-wrap",
+                  overflowWrap: "break-word",
+                  marginLeft: 0,
+                }}
+              >{`<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`<script>`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`    $("#generate-dash-link-button").click(function (event) {`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`        event.preventDefault();`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`        $.ajax({`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`            url: "https://apistripe.joymd.com/api/shopify/express/create-link",`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`            type: 'POST',`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`            dataType: 'json',`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`            data: {`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`                account: "acct_1PTWEkFKygeAChDZ",`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`                refresh_url: "https://www.medaestheticsgroup.com/sign-up-for-pay-outs-${state.refresh_url}",`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`                return_url: "https://www.medaestheticsgroup.com/sign-up-for-pay-outs-${state.refresh_url}",`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`            },`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`            success: function (response) {`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`                const collection = document.getElementsByClassName("generate-link-text");`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >
+                {
+                  '                collection[0].innerHTML = "Here is your link to: " + `<a href="${response.data.link}" target="_blank" > SIGN UP.</a>`;'
+                }
+              </Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`            }`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`        });`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`    });`}</Code>
+            </pre>
+            <pre>
+              <Code
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
+              >{`</script>`}</Code>
+            </pre>
+          </Snippet>
+        </>
+      )}
     </Card>
   );
 };

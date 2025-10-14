@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosError,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 // Global logout function that will be set by the AuthContext
 let globalLogout: (() => void) | null = null;
@@ -18,17 +22,17 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Get access token from localStorage
-    const accessToken = localStorage.getItem('access-token');
-    
+    const accessToken = localStorage.getItem("access-token");
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-    
+
     // Add x-client-domain header (required by backend)
-    if (typeof window !== 'undefined') {
-      config.headers['x-client-domain'] = window.location.origin;
+    if (typeof window !== "undefined") {
+      config.headers["x-client-domain"] = window.location.origin;
     }
-    
+
     return config;
   },
   (error: AxiosError) => {
@@ -44,33 +48,33 @@ apiClient.interceptors.response.use(
   (error: AxiosError) => {
     // Check if it's an authentication error
     if (error.response?.status === 401 || error.response?.status === 403) {
-      console.warn('Authentication error detected, logging out user');
-      
+      console.warn("Authentication error detected, logging out user");
+
       // Clear localStorage tokens
-      localStorage.removeItem('auth-public-token');
-      localStorage.removeItem('access-token');
-      localStorage.removeItem('refresh-token');
-      localStorage.removeItem('user-id');
-      localStorage.removeItem('user-role');
-      
+      localStorage.removeItem("auth-public-token");
+      localStorage.removeItem("access-token");
+      localStorage.removeItem("refresh-token");
+      localStorage.removeItem("user-id");
+      localStorage.removeItem("user-role");
+
       // Call global logout function if available
       if (globalLogout) {
         globalLogout();
       }
-      
+
       // Return a specific error that components can handle
       return Promise.reject({
         ...error,
         isTokenExpired: true,
-        message: 'Your session has expired. Please log in again.'
+        message: "Your session has expired. Please log in again.",
       });
     }
-    
+
     // Handle network errors or other issues
     if (!error.response) {
-      console.error('Network error or server unavailable:', error.message);
+      console.error("Network error or server unavailable:", error.message);
     }
-    
+
     return Promise.reject(error);
   }
 );

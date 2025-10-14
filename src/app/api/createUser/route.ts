@@ -8,22 +8,24 @@ type ResponseData = {
   totalPayoutAmount: number;
 };
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
   const body: ResponseData = await request.json();
 
-  await authorizeRequest(request.headers.get("authorization")?.split("Bearer ")[1].trim() || "");
+  await authorizeRequest(
+    request.headers.get("authorization")?.split("Bearer ")[1].trim() || ""
+  );
 
   await createUser({
     name: body.name,
     currency: body.currency,
     take: body.take,
-    totalPayoutAmount: 0
+    totalPayoutAmount: 0,
   });
 
-  return Response.json({ 
+  return Response.json({
     name: body.name,
     currency: body.currency,
     take: body.take,
-    totalPayoutAmount: 0
+    totalPayoutAmount: 0,
   });
-};
+}

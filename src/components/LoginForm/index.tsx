@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import requestMagicLink from "@/utils/requestMagicLink";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
@@ -18,16 +19,18 @@ type MagicLinkLoginData = {
   emailAddress: string;
 };
 
-
 const LoginForm = (): React.ReactElement => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [isRememberedEmail, setIsRememberedEmail] = useState<boolean>(false);
   const router = useRouter();
-  
+
   // Local storage for remembering email
-  const [rememberedEmail, setRememberedEmail] = useLocalStorage<string>("rememberedEmail", "");
-  
+  const [rememberedEmail, setRememberedEmail] = useLocalStorage<string>(
+    "rememberedEmail",
+    ""
+  );
+
   // Simple email-only schema for magic link
   const magicLinkSchema = z.object({
     emailAddress: z
@@ -41,12 +44,12 @@ const LoginForm = (): React.ReactElement => {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue
+    setValue,
   } = useForm<MagicLinkLoginData>({
     resolver: zodResolver(magicLinkSchema),
     defaultValues: {
       emailAddress: "",
-    }
+    },
   });
 
   // Check for remembered email on component mount
@@ -64,10 +67,10 @@ const LoginForm = (): React.ReactElement => {
 
       // Magic link login - send magic link to email
       await requestMagicLink({ emailAddress: data.emailAddress });
-      
+
       // Add a 2-second delay to ensure users see the loading state
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Show success toast
       addToast({
         title: "Magic Link Sent",
@@ -76,15 +79,16 @@ const LoginForm = (): React.ReactElement => {
         severity: "success",
         timeout: 5000,
       });
-      
+
       // Remember the email for future logins
       setRememberedEmail(data.emailAddress);
       setIsRememberedEmail(true);
-      
+
       reset();
     } catch (error: any) {
-      const errorMessage = error.message || "Failed to send magic link. Please try again.";
-      
+      const errorMessage =
+        error.message || "Failed to send magic link. Please try again.";
+
       // Show error toast
       addToast({
         title: "Error",
@@ -93,7 +97,7 @@ const LoginForm = (): React.ReactElement => {
         severity: "danger",
         timeout: 5000,
       });
-      
+
       console.error("Error:", errorMessage);
       console.error("Error sending magic link: ", error);
     } finally {
@@ -109,7 +113,7 @@ const LoginForm = (): React.ReactElement => {
   const handleChangeEmail = (): void => {
     setIsRememberedEmail(false);
     setValue("emailAddress", "");
-  }; 
+  };
 
   return (
     <Card
@@ -121,8 +125,8 @@ const LoginForm = (): React.ReactElement => {
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-semibold">Sign In</h1>
         <p className="text-foreground-500">
-          {isRememberedEmail 
-            ? "Continue with your email" 
+          {isRememberedEmail
+            ? "Continue with your email"
             : "Enter your email to receive a magic link"}
         </p>
       </div>
@@ -135,54 +139,51 @@ const LoginForm = (): React.ReactElement => {
             <div className="border border-default-200 rounded-medium p-4 flex items-center justify-between bg-content1">
               <div className="flex items-center gap-3">
                 <div className="bg-primary/10 p-2 rounded-full">
-                  <Icon 
-                    icon="lucide:mail" 
-                    className="text-primary text-lg"
-                  />
+                  <Icon className="text-primary text-lg" icon="lucide:mail" />
                 </div>
                 <span className="font-medium">{rememberedEmail}</span>
               </div>
-              <Button 
-                size="sm" 
-                variant="light" 
-                onPress={handleChangeEmail}
+              <Button
                 className="text-default-500"
+                size="sm"
+                variant="light"
+                onPress={handleChangeEmail}
               >
                 Change
               </Button>
             </div>
           ) : (
-            <Input 
-              type="email" 
-              label="Email address" 
-              placeholder="Enter your email" 
+            <Input
+              label="Email address"
+              placeholder="Enter your email"
+              type="email"
               {...register("emailAddress")}
               isRequired
-              isInvalid={!!errors.emailAddress}
               errorMessage={errors.emailAddress?.message}
+              isInvalid={!!errors.emailAddress}
               startContent={
-                <Icon 
-                  icon="lucide:mail" 
+                <Icon
                   className="text-default-400 text-lg pointer-events-none"
+                  icon="lucide:mail"
                 />
               }
             />
           )}
         </div>
-        
+
         <Spacer y={6} />
-        
+
         <div>
-          <Button 
-            type="submit"
-            color="primary" 
-            variant="shadow" 
+          <Button
+            fullWidth
+            color="primary"
             isDisabled={isSubmitDisabled()}
             isLoading={isSubmitting}
-            fullWidth
             startContent={!isSubmitting && <Icon icon="lucide:arrow-right" />}
+            type="submit"
+            variant="shadow"
           >
-            {isSubmitting ? 'Sending Login Link...' : 'Login'}
+            {isSubmitting ? "Sending Login Link..." : "Login"}
           </Button>
         </div>
 
@@ -191,17 +192,19 @@ const LoginForm = (): React.ReactElement => {
         <div className="text-center text-small text-foreground-500">
           <p>
             Don&apos;t have an account?{" "}
-            <a href="#" className="text-primary font-medium hover:underline">
+            <a className="text-primary font-medium hover:underline" href="#">
               Sign up
             </a>
           </p>
         </div>
       </form>
-      
+
       {message && (
         <>
           <Spacer y={4} />
-          <div className={`text-small ${message.includes('Failed') || message.includes('Error') ? 'text-danger' : 'text-success'}`}>
+          <div
+            className={`text-small ${message.includes("Failed") || message.includes("Error") ? "text-danger" : "text-success"}`}
+          >
             {message}
           </div>
         </>

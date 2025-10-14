@@ -13,7 +13,7 @@ interface AuthState {
 export const useAuth = (redirectTo: string = "/login") => {
   const router = useRouter();
   const hasCheckedAuth = useRef(false);
-  
+
   // Check localStorage immediately (synchronously) for initial state
   const getInitialAuthState = (): AuthState => {
     if (typeof window === "undefined") {
@@ -21,7 +21,7 @@ export const useAuth = (redirectTo: string = "/login") => {
         isAuthenticated: false,
         isLoading: true,
         userId: null,
-        userRole: null
+        userRole: null,
       };
     }
 
@@ -36,7 +36,7 @@ export const useAuth = (redirectTo: string = "/login") => {
         isAuthenticated: true,
         isLoading: false,
         userId: userId,
-        userRole: userRole
+        userRole: userRole,
       };
     }
 
@@ -45,7 +45,7 @@ export const useAuth = (redirectTo: string = "/login") => {
       isAuthenticated: false,
       isLoading: true,
       userId: null,
-      userRole: null
+      userRole: null,
     };
   };
 
@@ -73,9 +73,10 @@ export const useAuth = (redirectTo: string = "/login") => {
             isAuthenticated: false,
             isLoading: false,
             userId: null,
-            userRole: null
+            userRole: null,
           });
           hasCheckedAuth.current = true;
+
           return;
         }
 
@@ -84,7 +85,7 @@ export const useAuth = (redirectTo: string = "/login") => {
           isAuthenticated: true,
           isLoading: false,
           userId: userId,
-          userRole: userRole
+          userRole: userRole,
         });
         hasCheckedAuth.current = true;
       } catch (error) {
@@ -94,7 +95,7 @@ export const useAuth = (redirectTo: string = "/login") => {
           isAuthenticated: false,
           isLoading: false,
           userId: null,
-          userRole: null
+          userRole: null,
         });
         hasCheckedAuth.current = true;
       }
@@ -114,4 +115,3 @@ export const logout = () => {
   localStorage.removeItem("user-id");
   localStorage.removeItem("user-role");
 };
-

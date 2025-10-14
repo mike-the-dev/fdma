@@ -1,8 +1,12 @@
 "use client";
-import { useContext, useState } from 'react';
-import GlobalStateContext, { GlobalStateInterface } from './GlobalStateContext';
+import { useContext, useState } from "react";
 
-const GlobalStateProvider = ({ children, value = {} as GlobalStateInterface }: {
+import GlobalStateContext, { GlobalStateInterface } from "./GlobalStateContext";
+
+const GlobalStateProvider = ({
+  children,
+  value = {} as GlobalStateInterface,
+}: {
   children: React.ReactNode;
   value?: Partial<GlobalStateInterface>;
 }) => {
@@ -17,9 +21,11 @@ const GlobalStateProvider = ({ children, value = {} as GlobalStateInterface }: {
 
 const useGlobalState = () => {
   const context = useContext(GlobalStateContext);
+
   if (!context) {
     throw new Error("useGlobalState must be used within a GlobalStateContext");
   }
+
   return context;
 };
 

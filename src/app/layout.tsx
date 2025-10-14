@@ -1,6 +1,9 @@
-import {Providers} from "./providers";
 import type { Metadata } from "next";
+
 import { Inter } from "next/font/google";
+
+import { Providers } from "./providers";
+
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import { AuthProvider } from "@/context/AuthContext";
@@ -14,7 +17,7 @@ export const metadata: Metadata = {
 
 interface RootLayout {
   children: React.ReactNode;
-};
+}
 
 export default function RootLayout(props: RootLayout): React.ReactElement {
   return (
@@ -24,10 +27,10 @@ export default function RootLayout(props: RootLayout): React.ReactElement {
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <AuthProvider>
             <Navigation />
-            { props.children }
+            {props.children}
           </AuthProvider>
         </Providers>
       </body>
     </html>
   );
-};
+}

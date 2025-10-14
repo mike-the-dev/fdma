@@ -1,5 +1,3 @@
-
-
 export default (code: string) => {
   const hasSession: string = localStorage.getItem("auth-public-token") || "";
 

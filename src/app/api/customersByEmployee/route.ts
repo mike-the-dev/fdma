@@ -5,14 +5,16 @@ type ResponseData = {
   ID: string;
 };
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
   const body: ResponseData = await request.json();
 
-  await authorizeRequest(request.headers.get("authorization")?.split("Bearer ")[1].trim() || "");
+  await authorizeRequest(
+    request.headers.get("authorization")?.split("Bearer ")[1].trim() || ""
+  );
 
   const customers = await listCustomer(body.ID);
 
   return Response.json({
-    customers: customers
+    customers: customers,
   });
-};
+}

@@ -1,13 +1,19 @@
 "use client";
 
 import React from "react";
-import { Account, AccountUpdateInputForm } from "@/types/Account";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/modal";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { Checkbox } from "@heroui/checkbox";
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-hot-toast';
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+
+import { Account, AccountUpdateInputForm } from "@/types/Account";
 
 interface ModalProps {
   isOpen: any;
@@ -15,7 +21,7 @@ interface ModalProps {
   onClose: () => void;
   setInitialState: () => void;
   account: Account;
-};
+}
 
 const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
   const Router = useRouter();
@@ -30,45 +36,54 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
     ecwidAppSecretKey: "",
     ecwidPublicKey: "",
     ecwidSecretKey: "",
-    "GSI1-PK" : ""
+    "GSI1-PK": "",
   };
   const [state, setState] = React.useState<AccountUpdateInputForm>(initalState);
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 
-  const updateAccount = async <T,>(createUpdateInput: AccountUpdateInputForm): Promise<T> => {
+  const updateAccount = async <T,>(
+    createUpdateInput: AccountUpdateInputForm
+  ): Promise<T> => {
     // Just a comment
-    const res = await fetch(process.env.NEXT_PUBLIC_URL + `/api/updateAccount`, {
-      method: "POST",
-      body: JSON.stringify({
-        ...createUpdateInput
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        "Authorization": `Bearer ${localStorage.getItem("auth-public-token")}`
+    const res = await fetch(
+      process.env.NEXT_PUBLIC_URL + `/api/updateAccount`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          ...createUpdateInput,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${localStorage.getItem("auth-public-token")}`,
+        },
       }
-    });
+    );
 
     if (!res.ok) {
       // This will activate the closest `error.js` Error Boundary
       throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
-    };
+    }
 
     return res.json() as Promise<T>;
   };
 
   const onUpdateFormData = (event: any): void => {
     const key: string = event.target.name;
-    const value: string = event.target.name === "take" ? parseFloat(event.target.value) : event.target.value;
-    setState(prevState => ({
+    const value: string =
+      event.target.name === "take"
+        ? parseFloat(event.target.value)
+        : event.target.value;
+
+    setState((prevState) => ({
       ...prevState,
-      [key]: value
-    }))
+      [key]: value,
+    }));
   };
 
   const onUpdateCheckboxData = (isSelected: boolean) => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
-      instantPayoutEnabled: isSelected
+      instantPayoutEnabled: isSelected,
     }));
   };
 
@@ -81,29 +96,32 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
       setIsSubmitting(false);
       Router.refresh();
       console.log("Thank you for everything! Router.refresh() did run!");
-      
-      toast.success(`✅ ${state.name} has been updated successfully!`, { duration: 4000 });
+
+      toast.success(`✅ ${state.name} has been updated successfully!`, {
+        duration: 4000,
+      });
       props.onClose();
     } catch (error) {
       setIsSubmitting(false);
       console.error("Error creating use r: ", error);
-    };
+    }
   };
 
   const isSubmitDisabled = (): boolean => {
     if (!state.name) return true;
 
     if (
-      state.name === props.account.name 
-      && state.currency === props.account.currency 
-      && state.take === props.account.take
-      && state.instantPayoutEnabled === props.account.instantPayoutEnabled
-      && state.stripeID === props.account.stripeID
-      && state.ecwidAppSecretKey === props.account.ecwidAppSecretKey
-      && state.ecwidPublicKey === props.account.ecwidPublicKey
-      && state.ecwidSecretKey === props.account.ecwidSecretKey
-      && state["GSI1-PK"] === props.account["GSI1-PK"]
-    ) return true;
+      state.name === props.account.name &&
+      state.currency === props.account.currency &&
+      state.take === props.account.take &&
+      state.instantPayoutEnabled === props.account.instantPayoutEnabled &&
+      state.stripeID === props.account.stripeID &&
+      state.ecwidAppSecretKey === props.account.ecwidAppSecretKey &&
+      state.ecwidPublicKey === props.account.ecwidPublicKey &&
+      state.ecwidSecretKey === props.account.ecwidSecretKey &&
+      state["GSI1-PK"] === props.account["GSI1-PK"]
+    )
+      return true;
 
     return false;
   };
@@ -112,94 +130,104 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
     props.setInitialState();
     props.onClose();
   };
-  
+
   React.useEffect(() => {
-    setState({ 
+    setState({
       PK: props.account.PK,
       SK: props.account.SK,
       name: props.account.name,
       currency: props.account.currency,
       take: props.account.take,
-      instantPayoutEnabled: props.account.instantPayoutEnabled ? props.account.instantPayoutEnabled : false,
+      instantPayoutEnabled: props.account.instantPayoutEnabled
+        ? props.account.instantPayoutEnabled
+        : false,
       stripeID: props.account.stripeID ? props.account.stripeID : "",
-      ecwidAppSecretKey: props.account.ecwidAppSecretKey ? props.account.ecwidAppSecretKey : "",
-      ecwidPublicKey: props.account.ecwidPublicKey ? props.account.ecwidPublicKey : "",
-      ecwidSecretKey: props.account.ecwidSecretKey ? props.account.ecwidSecretKey : "",
-      "GSI1-PK": props.account["GSI1-PK"] ? props.account["GSI1-PK"] : ""
+      ecwidAppSecretKey: props.account.ecwidAppSecretKey
+        ? props.account.ecwidAppSecretKey
+        : "",
+      ecwidPublicKey: props.account.ecwidPublicKey
+        ? props.account.ecwidPublicKey
+        : "",
+      ecwidSecretKey: props.account.ecwidSecretKey
+        ? props.account.ecwidSecretKey
+        : "",
+      "GSI1-PK": props.account["GSI1-PK"] ? props.account["GSI1-PK"] : "",
     });
   }, [props.account]);
-  
+
   return (
     <>
       <Modal isOpen={props.isOpen} onOpenChange={props.onOpenChange}>
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Modify Account</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Modify Account
+              </ModalHeader>
               <ModalBody>
-              <p>{state.name}</p>
-              {/* Build Form */}
-              {/* <Input 
+                <p>{state.name}</p>
+                {/* Build Form */}
+                {/* <Input 
                 type="text" 
                 label="Company Name" 
                 onChange={onUpdateFormData} 
                 name={"name"} 
                 value={state.name} 
               /> */}
-              {/* <Input 
+                {/* <Input 
                 type="text" 
                 label="Currency" 
                 onChange={onUpdateFormData} 
                 name={"currency"} 
                 value={state.currency} 
               /> */}
-              <Input 
-                type="number" 
-                label="Take" 
-                placeholder="0" 
-                min={0} 
-                onChange={onUpdateFormData} 
-                name={"take"} 
-                value={state.take.toString()} 
-              />
-              <Input
-                isDisabled
-                type="text"
-                label="Stripe ID"
-                onChange={onUpdateFormData}
-                name={"stripeID"}
-                value={state.stripeID}
-              />
-              <Input
-                type="text"
-                label="Ecwid App Secret Key"
-                onChange={onUpdateFormData}
-                name={"ecwidAppSecretKey"}
-                value={state.ecwidAppSecretKey}
-              />
-              <Input
-                type="text"
-                label="Ecwid Public Key"
-                onChange={onUpdateFormData}
-                name={"ecwidPublicKey"}
-                value={state.ecwidPublicKey}
-              />
-              <Input
-                type="text"
-                label="Ecwid Secret Key"
-                onChange={onUpdateFormData}
-                name={"ecwidSecretKey"}
-                value={state.ecwidSecretKey}
-              />
-              <Input
-                isDisabled
-                type="text"
-                label="Ecwid Store ID"
-                onChange={onUpdateFormData}
-                name={"GSI1-PK"}
-                value={state["GSI1-PK"]}
-              />
-              {/* <Checkbox 
+                <Input
+                  label="Take"
+                  min={0}
+                  name={"take"}
+                  placeholder="0"
+                  type="number"
+                  value={state.take.toString()}
+                  onChange={onUpdateFormData}
+                />
+                <Input
+                  isDisabled
+                  label="Stripe ID"
+                  name={"stripeID"}
+                  type="text"
+                  value={state.stripeID}
+                  onChange={onUpdateFormData}
+                />
+                <Input
+                  label="Ecwid App Secret Key"
+                  name={"ecwidAppSecretKey"}
+                  type="text"
+                  value={state.ecwidAppSecretKey}
+                  onChange={onUpdateFormData}
+                />
+                <Input
+                  label="Ecwid Public Key"
+                  name={"ecwidPublicKey"}
+                  type="text"
+                  value={state.ecwidPublicKey}
+                  onChange={onUpdateFormData}
+                />
+                <Input
+                  label="Ecwid Secret Key"
+                  name={"ecwidSecretKey"}
+                  type="text"
+                  value={state.ecwidSecretKey}
+                  onChange={onUpdateFormData}
+                />
+                <Input
+                  isDisabled
+                  label="Ecwid Store ID"
+                  name={"GSI1-PK"}
+                  type="text"
+                  value={state["GSI1-PK"]}
+                  onChange={onUpdateFormData}
+                />
+                {/* <Checkbox 
                 isSelected={state.instantPayoutEnabled}
                 onValueChange={onUpdateCheckboxData}
               >
@@ -207,17 +235,13 @@ const ModalApp: React.FC<ModalProps> = (props): React.ReactElement => {
               </Checkbox> */}
               </ModalBody>
               <ModalFooter>
-                <Button 
-                  color="danger" 
-                  variant="light" 
-                  onPress={onCloseHandler}
-                >
+                <Button color="danger" variant="light" onPress={onCloseHandler}>
                   Close
                 </Button>
-                <Button 
-                  color="primary" 
-                  variant="shadow"
+                <Button
+                  color="primary"
                   isDisabled={isSubmitDisabled() || isSubmitting}
+                  variant="shadow"
                   onPress={onSubmitFormData}
                 >
                   Update

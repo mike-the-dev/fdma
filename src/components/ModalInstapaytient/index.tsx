@@ -11,7 +11,8 @@ import {
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Checkbox } from "@heroui/checkbox";
-import { toast } from "react-hot-toast";
+import { addToast } from "@heroui/toast";
+import { Icon } from "@iconify/react";
 
 import { AccountInstapaytient } from "@/types/AccountInstapaytient";
 import apiClient from "@/utils/apiClient";
@@ -146,8 +147,12 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
       // Refresh the accounts data instead of using router.refresh()
       await props.refetchAccounts();
 
-      toast.success(`✅ ${state.name} has been updated successfully!`, {
-        duration: 4000,
+      addToast({
+        title: "Account Updated Successfully",
+        description: `${state.name} has been updated successfully!`,
+        icon: <Icon icon="lucide:check-circle" width={24} />,
+        severity: "success",
+        timeout: 5000,
       });
       props.onClose();
     } catch (error: any) {
@@ -158,8 +163,12 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
         return;
       }
 
-      toast.error(`❌ Failed to update ${state.name}. Please try again.`, {
-        duration: 4000,
+      addToast({
+        title: "Update Failed",
+        description: `Failed to update ${state.name}. Please try again.`,
+        icon: <Icon icon="lucide:alert-circle" width={24} />,
+        severity: "danger",
+        timeout: 5000,
       });
     } finally {
       setIsSubmitting(false);

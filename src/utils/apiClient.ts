@@ -9,7 +9,7 @@ export const setGlobalLogout = (logoutFn: () => void) => {
 
 // Create axios instance with default config
 const apiClient: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_NESTJS_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   timeout: 10000,
   withCredentials: true,
 });

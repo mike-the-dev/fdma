@@ -5,7 +5,7 @@ type ResponseData = {
   businessUrl: string;
 };
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
   try {
     const body: ResponseData = await request.json();
 

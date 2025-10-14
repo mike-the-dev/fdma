@@ -90,8 +90,8 @@ const AccountDeploymentForm = (): React.ReactElement => {
     },
   });
 
-  // Add a key to force re-render when form resets
-  const [formKey, setFormKey] = useState(0);
+  // State for the Select component
+  const [selectedState, setSelectedState] = useState(new Set<string>());
 
   const watchedState = watch("state");
 
@@ -120,9 +120,6 @@ const AccountDeploymentForm = (): React.ReactElement => {
     }
   };
 
-  const onStateChange = (value: string): void => {
-    setValue("state", value, { shouldValidate: true });
-  };
 
   const onSubmitFormData = async (
     data: AccountDeploymentFormData
@@ -132,7 +129,7 @@ const AccountDeploymentForm = (): React.ReactElement => {
 
       // Reset form on success
       reset();
-      setFormKey((prev) => prev + 1); // Force re-render
+      setSelectedState(new Set()); // Reset Select component state
 
       // Show success toast
       toast.success(
@@ -157,7 +154,6 @@ const AccountDeploymentForm = (): React.ReactElement => {
 
   return (
     <Card
-      key={formKey}
       isBlurred
       className="border-none bg-background/60 dark:bg-default-100/50"
       shadow="sm"
@@ -199,19 +195,15 @@ const AccountDeploymentForm = (): React.ReactElement => {
             isInvalid={!!errors.state}
             label="State"
             placeholder="Select a state"
-            selectedKeys={watchedState ? [watchedState] : []}
+            selectedKeys={selectedState}
             onSelectionChange={(keys) => {
               const selectedValue = Array.from(keys)[0] as string;
-
-              if (selectedValue) {
-                onStateChange(selectedValue);
-              }
+              setSelectedState(keys as Set<string>);
+              setValue("state", selectedValue, { shouldValidate: true });
             }}
           >
             {US_STATES.map((state) => (
-              <SelectItem key={state.key}>
-                {state.label} ({state.key})
-              </SelectItem>
+              <SelectItem key={state.key}>{`${state.label} (${state.key})`}</SelectItem>
             ))}
           </Select>
         </div>

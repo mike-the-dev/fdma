@@ -60,13 +60,25 @@ const LoginForm = (): React.ReactElement => {
     }
   }, [rememberedEmail, setValue]);
 
+  const handleFormSubmission = async (): Promise<void> => {
+    // Ensure form always has the correct email value
+    if (isRememberedEmail && rememberedEmail) {
+      setValue("emailAddress", rememberedEmail);
+    }
+
+    // Use form submission which will validate and submit
+    return handleSubmit(onSubmitFormData)();
+  };
+
   const onSubmitFormData = async (data: MagicLinkLoginData): Promise<void> => {
     try {
       setIsSubmitting(true);
       setMessage("");
 
+      const emailToUse = data.emailAddress;
+
       // Magic link login - send magic link to email
-      await requestMagicLink({ emailAddress: data.emailAddress });
+      await requestMagicLink({ emailAddress: emailToUse });
 
       // Add a 2-second delay to ensure users see the loading state
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -74,17 +86,21 @@ const LoginForm = (): React.ReactElement => {
       // Show success toast
       addToast({
         title: "Magic Link Sent",
-        description: `We've sent a login link to ${data.emailAddress}. Please check your inbox.`,
+        description: `We've sent a login link to ${emailToUse}.\nPlease check your inbox.`,
         icon: <Icon icon="lucide:mail" width={24} />,
         severity: "success",
         timeout: 5000,
       });
 
-      // Remember the email for future logins
-      setRememberedEmail(data.emailAddress);
-      setIsRememberedEmail(true);
+      // Remember the email for future logins (only if not already remembered)
+      if (!isRememberedEmail) {
+        setRememberedEmail(emailToUse);
+        setIsRememberedEmail(true);
+      }
 
+      // Reset form and clear any errors
       reset();
+      setMessage("");
     } catch (error: any) {
       const errorMessage =
         error.message || "Failed to send magic link. Please try again.";
@@ -102,11 +118,13 @@ const LoginForm = (): React.ReactElement => {
       console.error("Error sending magic link: ", error);
     } finally {
       setIsSubmitting(false);
+      // Ensure form state is clean after any submission attempt
+      setMessage("");
     }
   };
 
   const isSubmitDisabled = (): boolean => {
-    return isSubmitting || Object.keys(errors).length > 0;
+    return isSubmitting;
   };
 
   // Handle changing email from remembered state
@@ -133,7 +151,10 @@ const LoginForm = (): React.ReactElement => {
 
       <Spacer y={4} />
 
-      <form onSubmit={handleSubmit(onSubmitFormData)}>
+      <form onSubmit={(e) => {
+        // Prevent default form submission - we handle everything via onPress
+        e.preventDefault();
+      }}>
         <div className="flex w-full flex-col gap-4">
           {isRememberedEmail ? (
             <div className="border border-default-200 rounded-medium p-4 flex items-center justify-between bg-content1">
@@ -182,6 +203,7 @@ const LoginForm = (): React.ReactElement => {
             startContent={!isSubmitting && <Icon icon="lucide:arrow-right" />}
             type="submit"
             variant="shadow"
+            onPress={handleFormSubmission}
           >
             {isSubmitting ? "Sending Login Link..." : "Login"}
           </Button>

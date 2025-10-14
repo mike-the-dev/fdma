@@ -3,6 +3,7 @@ import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Spacer } from "@heroui/spacer";
+import { Tooltip } from "@heroui/tooltip";
 import { Icon } from "@iconify/react";
 import { addToast } from "@heroui/toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -158,14 +159,16 @@ const LoginForm = (): React.ReactElement => {
         <div className="flex w-full flex-col gap-4">
           {isRememberedEmail ? (
             <div className="border border-default-200 rounded-medium p-4 flex items-center justify-between bg-content1">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div className="bg-primary/10 p-2 rounded-full">
                   <Icon className="text-primary text-lg" icon="lucide:mail" />
                 </div>
-                <span className="font-medium">{rememberedEmail}</span>
+                <Tooltip content={rememberedEmail} showArrow={true}>
+                  <span className="font-medium truncate flex-1 min-w-0">{rememberedEmail}</span>
+                </Tooltip>
               </div>
               <Button
-                className="text-default-500"
+                className="text-default-500 flex-shrink-0 ml-2"
                 size="sm"
                 variant="light"
                 onPress={handleChangeEmail}

@@ -1,6 +1,9 @@
 export type AccountInstapaytient = {
-  entity: string;
-  _createdAt_: string;
+  PK: string;
+  SK: string;
+  name: string;
+  company: string;
+  state: string;
   payout?: {
     name: string;
     total_payout_amount: number;
@@ -9,14 +12,11 @@ export type AccountInstapaytient = {
     instant_payout_enabled: boolean;
     stripe_id: string;
   };
-  company: string;
-  'GSI1-SK': string;
-  SK: string;
   'GSI1-PK': string;
-  PK: string;
-  name: string;
+  'GSI1-SK': string;
+  entity: string;
+  _createdAt_: string;
   _lastUpdated_: string;
-  state: string;
 };
 
 export type AccountInstapaytientHttpResponse = {

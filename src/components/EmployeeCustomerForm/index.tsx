@@ -1,7 +1,10 @@
 "use client";
 import { Account } from "@/types/Account";
 import { CustomerInputForm } from "@/types/Customer";
-import { Input, Spacer, Button, Select, SelectItem } from "@nextui-org/react";
+import { Input } from "@heroui/input";
+import { Spacer } from "@heroui/spacer";
+import { Button } from "@heroui/button";
+import { Select, SelectItem } from "@heroui/select";
 import { useState } from "react";
 
 interface EmployeeCustomerFormProps {
@@ -92,7 +95,7 @@ const EmployeeCustomerForm: React.FC<EmployeeCustomerFormProps> = (props): React
           onChange={onUpdateDropdownFormData}
         >
           {props.accounts.map((customer) => (
-            <SelectItem key={customer.PK} value={customer.name}>
+            <SelectItem key={customer.PK}>
               {customer.name}
             </SelectItem>
           ))}

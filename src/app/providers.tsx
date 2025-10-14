@@ -1,32 +1,36 @@
 
 "use client";
 
-import React from "react";
-import { Card, NextUIProvider } from '@nextui-org/react';
-import { Toaster, resolveValue } from "react-hot-toast";
+import type { ThemeProviderProps } from "next-themes";
 
-interface ProvidersProps {
+import * as React from "react";
+import { HeroUIProvider } from "@heroui/system";
+import { ToastProvider } from "@heroui/toast";
+import { useRouter } from "next/navigation";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+
+export interface ProvidersProps {
   children: React.ReactNode;
-};
+  themeProps?: ThemeProviderProps;
+}
 
-const Providers = (props: ProvidersProps): React.ReactElement => {
+declare module "@react-types/shared" {
+  interface RouterConfig {
+    routerOptions: NonNullable<
+      Parameters<ReturnType<typeof useRouter>["push"]>[1]
+    >;
+  }
+}
+
+export function Providers({ children, themeProps }: ProvidersProps) {
+  const router = useRouter();
+
   return (
-    <NextUIProvider>
-      <Toaster position="top-center">
-        {(t) => (
-          <Card
-          isBlurred
-          className="border-none bg-background/60 dark:bg-default-100/50"
-          shadow="sm"
-          style={{ opacity: t.visible ? 1 : 0, padding: "12px 12px 12px 12px" }}
-          > 
-            {resolveValue(t.message, t)}
-          </Card>
-        )}
-      </Toaster>
-      { props.children }
-    </NextUIProvider>
-  )
-};
-
-export default Providers;
+    <HeroUIProvider navigate={router.push}>
+      <NextThemesProvider {...themeProps}>
+        <ToastProvider placement="top-center" />
+        {children}
+      </NextThemesProvider>
+    </HeroUIProvider>
+  );
+}

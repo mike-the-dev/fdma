@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Spacer, Selection } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@heroui/table";
+import { Spacer } from "@heroui/spacer";
 import { Employee } from "@/types/Employee";
 
 const columns = [
@@ -21,7 +22,7 @@ interface EmployeeTableProps {
 };
 
 const EmployeeTable: React.FC<EmployeeTableProps> = (props): React.ReactElement => {
-  const onSelectionChangeHandler = (event: Selection) => {
+  const onSelectionChangeHandler = (event: any) => {
     const obj = {}
     // @ts-ignore
     Object.setPrototypeOf(obj, event);

@@ -1,4 +1,5 @@
-import { Skeleton, Spacer } from "@nextui-org/react";
+import { Skeleton } from "@heroui/skeleton";
+import { Spacer } from "@heroui/spacer";
 
 interface LoadingProps {};
 

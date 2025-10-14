@@ -1,4 +1,7 @@
-import { Card, CardBody, CardHeader, CardFooter, Image, Divider, Skeleton } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, CardFooter } from "@heroui/card";
+import { Image } from "@heroui/image";
+import { Divider } from "@heroui/divider";
+import { Skeleton } from "@heroui/skeleton";
 import { useEffect } from "react";
 
 interface EmployeeDetailProps {

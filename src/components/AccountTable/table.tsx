@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
-import { Table as NextUITable, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Button, useDisclosure } from "@nextui-org/react";
+import { Table as NextUITable, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@heroui/table";
+import { Button } from "@heroui/button";
+import { useDisclosure } from "@heroui/modal";
 import { Account } from "@/types/Account";
 import ModalApp from "../Modal";
 

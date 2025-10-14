@@ -1,61 +1,87 @@
-import React from "react";
-import { Spacer, Card } from "@nextui-org/react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Spacer } from "@heroui/spacer";
+import { Card } from "@heroui/card";
+import { Spinner } from "@heroui/spinner";
+import apiClient from "@/utils/apiClient";
 import AccountTableInstapaytient from "@/components/AccountTableInstapaytient";
 import styles from "../../page.module.css"
-// import { Suspense } from "react";
-// import Loading from "@/components/AccountTable/loading";
-import { AccountInstapaytientHttpResponse } from "@/types/AccountInstapaytient";
-import { cookies } from "next/headers";
+import { AccountInstapaytient } from "@/types/AccountInstapaytient";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface HomeProps {
 
 };
 
-const getData = async <T,>(): Promise<T> => {
-  const key: string = cookies().get("auth-public-token")?.value || "";
+const Home = (): React.ReactElement => {
+  const { isAuthenticated, isLoading: authLoading } = useAuthContext();
+  const [accounts, setAccounts] = useState<AccountInstapaytient[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/instapaytient", {
-    cache: "no-store",
-    method: "GET",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      "Authorization": `Bearer ${key}}`
+  const fetchAccounts = async () => {
+    try {
+      const response = await apiClient.get<AccountInstapaytient[]>("/api/user/listAccounts");
+
+      console.log("accounts: ", response.data);
+      setAccounts(response.data);
+    } catch (err: any) {
+      console.error("Error fetching accounts:", err);
+      
+      // If it's a token expiration error, don't show error message as user will be logged out
+      if (err.isTokenExpired) {
+        return;
+      }
+      
+      const errorMessage = err.response?.data?.message || err.message || "Failed to load accounts";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
-  });
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
   };
 
-  return res.json() as Promise<T>;
-};
+  useEffect(() => {
+    // Only fetch accounts when authentication is complete and user is authenticated
+    if (!authLoading && isAuthenticated) {
+      fetchAccounts();
+    }
+  }, [authLoading, isAuthenticated]);
 
-// const getEmployeeData = async <T,>(): Promise<T> => {
-//   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/employee", {
-//     method: "GET",
-//     headers: {
-//       'Content-type': 'application/json; charset=UTF-8'
-//     }
-//   });
+  if (authLoading || isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
+        <div style={{ textAlign: "center" }}>
+          <Spinner color="secondary" />
+          <Spacer y={2} />
+          <p>Loading accounts...</p>
+        </div>
+      </div>
+    );
+  }
 
-//   if (!res.ok) {
-//     // This will activate the closest `error.js` Error Boundary
-//     // throw new Error('Failed to fetch data');
-//     throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
-//   };
-
-//   return res.json() as Promise<T>;
-// };
-
-const Home = async (): Promise<React.ReactElement> => {
-  const { accounts } = await getData<AccountInstapaytientHttpResponse>();
-  // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
-
-  console.log("accounts: ", accounts);
+  if (error) {
+    return (
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 16px' }}>
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <Card
+              isBlurred
+              className="border-none bg-background/60 dark:bg-default-100/50"
+              shadow="sm"
+              style={{ padding: "12px 12px 12px 12px", width: "100%" }}
+            >
+              <h3>Error</h3>
+              <p className="text-small text-danger">{error}</p>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 16px' }}>
       <div className={styles.row}>
         <div className={styles.column}>
           <Card
@@ -67,7 +93,7 @@ const Home = async (): Promise<React.ReactElement> => {
             <h3>User Accounts</h3>
             <p className="text-small text-default-500">List of user customer accounts.</p>
             <Spacer y={4} />
-              <AccountTableInstapaytient accounts={accounts} />
+              <AccountTableInstapaytient accounts={accounts} refetchAccounts={fetchAccounts} />
             <Spacer y={6} />
             {/* <UserForm heading={"CREATE NEW USER"} /> */}
           </Card>

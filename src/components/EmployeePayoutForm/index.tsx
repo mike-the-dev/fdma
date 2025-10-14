@@ -1,5 +1,8 @@
 "use client";
-import { Card, Spacer, Input, Button } from "@nextui-org/react";
+import { Card } from "@heroui/card";
+import { Spacer } from "@heroui/spacer";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
 import { useState } from "react";
 
 interface State {

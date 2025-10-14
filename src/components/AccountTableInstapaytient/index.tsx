@@ -2,7 +2,8 @@ import React from "react";
 import Table from "./table";
 
 interface AccountTableInstapaytientProps {
-  accounts: any
+  accounts: any;
+  refetchAccounts: () => Promise<void>;
 };
 
 const AccountTableInstapaytient: React.FC<AccountTableInstapaytientProps> = (props): React.ReactElement => {
@@ -11,6 +12,7 @@ const AccountTableInstapaytient: React.FC<AccountTableInstapaytientProps> = (pro
       <Table 
         heading="Instapaytient Accounts" 
         accounts={props.accounts}
+        refetchAccounts={props.refetchAccounts}
       />
     </>
   );

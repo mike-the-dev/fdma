@@ -1,41 +1,87 @@
-import React from "react";
-import { Spacer, Card } from "@nextui-org/react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Spacer } from "@heroui/spacer";
+import { Card } from "@heroui/card";
+import { Spinner } from "@heroui/spinner";
+import apiClient from "@/utils/apiClient";
 import SchedulerTable from "@/components/SchedulerTable";
 import styles from "../../page.module.css"
 import type { Scheduler } from "@/utils/listSchedulers";
-import { cookies } from "next/headers";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface SchedulerProps {
 
 };
 
-const getData = async <T,>(): Promise<T> => {
-  const key: string = cookies().get("auth-public-token")?.value || "";
+const Scheduler = (): React.ReactElement => {
+  const { isAuthenticated, isLoading: authLoading } = useAuthContext();
+  const [schedulers, setSchedulers] = useState<Scheduler[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/scheduler", {
-    cache: "no-store",
-    method: "GET",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      "Authorization": `Bearer ${key}}`
+  const fetchSchedulers = async () => {
+    try {
+      const response = await apiClient.get<Scheduler[]>("/api/user/schedulers");
+
+      console.log("schedulers: ", response.data);
+      setSchedulers(response.data);
+    } catch (err: any) {
+      console.error("Error fetching schedulers:", err);
+      
+      // If it's a token expiration error, don't show error message as user will be logged out
+      if (err.isTokenExpired) {
+        return;
+      }
+      
+      const errorMessage = err.response?.data?.message || err.message || "Failed to load schedulers";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
-  });
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
   };
 
-  return res.json() as Promise<T>;
-};
+  useEffect(() => {
+    // Only fetch schedulers when authentication is complete and user is authenticated
+    if (!authLoading && isAuthenticated) {
+      fetchSchedulers();
+    }
+  }, [authLoading, isAuthenticated]);
 
-const Scheduler = async (): Promise<React.ReactElement> => {
-  const { schedulers } = await getData<{ schedulers: Scheduler[] }>();
+  if (authLoading || isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
+        <div style={{ textAlign: "center" }}>
+          <Spinner color="secondary" />
+          <Spacer y={2} />
+          <p>Loading schedulers...</p>
+        </div>
+      </div>
+    );
+  }
 
-  console.log("schedulers: ", schedulers);
+  if (error) {
+    return (
+      <div style={{ maxWidth: '1600px', width: '100%', margin: '0 auto', padding: '0 16px' }}>
+        <div className={styles.row}>
+          <div className={styles.column}>
+            <Card
+              isBlurred
+              className="border-none bg-background/60 dark:bg-default-100/50"
+              shadow="sm"
+              style={{ padding: "12px 12px 12px 12px", width: "100%" }}
+            >
+              <h3>Error</h3>
+              <p className="text-small text-danger">{error}</p>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div style={{ maxWidth: '1600px', width: '100%', margin: '0 auto', padding: '0 16px' }}>
       <div className={styles.row}>
         <div className={styles.column}>
           <Card

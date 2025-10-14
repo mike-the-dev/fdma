@@ -1,54 +1,42 @@
-
+import apiClient from "./apiClient";
+import type {
+  SuperAdminLoginRequest,
+  SuperAdminLoginResponse
+} from "@/types/auth";
 
 export default () => {
-  const login = async (code: string): Promise<void> => {
-    const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/loginAccount", {
-      method: "POST",
-      body: JSON.stringify({
-        code: code
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        // "Authorization": `Bearer ${localStorage.getItem("auth-public-token")}`
-        "Authorization": `Bearer ${code}`
+  const login = async (emailAddress: string, password: string): Promise<SuperAdminLoginResponse> => {
+    try {
+      const response = await apiClient.post<SuperAdminLoginResponse, any, SuperAdminLoginRequest>(
+        "/api/loginSuperAdmin",
+        {
+          emailAddress,
+          password
+        }
+      );
+
+      console.log("Super admin login response: ", response.data);
+
+      // Store tokens in localStorage
+      if (response.data.authorization?.tokens) {
+        localStorage.setItem("access-token", response.data.authorization.tokens.access);
+        localStorage.setItem("refresh-token", response.data.authorization.tokens.refresh);
       }
-    });
 
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch data");
-    };
-
-    const jsonResponse = await res.json();
-
-    console.log("jsonResponse login: ", jsonResponse);
-  };
-
-  const loginAdmin = async (code: string): Promise<void> => {
-    const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/loginAdminAccount", {
-      method: "POST",
-      body: JSON.stringify({
-        code: code
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        // "Authorization": `Bearer ${localStorage.getItem("auth-public-token")}`
-        "Authorization": `Bearer ${code}`
+      // Store super admin user info
+      if (response.data.authorization?.user) {
+        localStorage.setItem("user-id", response.data.authorization.user.id);
+        localStorage.setItem("user-role", response.data.authorization.user.role);
       }
-    });
 
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error("Failed to fetch data");
-    };
-
-    const jsonResponse = await res.json();
-
-    console.log("jsonResponse login: ", jsonResponse);
+      return response.data;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Super admin login failed";
+      throw new Error(errorMessage);
+    }
   };
 
   return {
-    login: login,
-    loginAdmin: loginAdmin
-  }
+    login
+  };
 };

@@ -1,14 +1,15 @@
-import Providers from "./providers";
+import {Providers} from "./providers";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import { AuthProvider } from "@/context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "JOYMD",
-  description: "A JOYMD dashboard manager.",
+  title: "Instapaytient",
+  description: "An Instapaytient dashboard manager.",
 };
 
 interface RootLayout {
@@ -17,11 +18,14 @@ interface RootLayout {
 
 export default function RootLayout(props: RootLayout): React.ReactElement {
   return (
-    <html lang="en" className="dark text-foreground bg-background">
+    <html suppressHydrationWarning lang="en">
+      <head />
       <body className={inter.className}>
-        <Navigation />
-        <Providers>
-          { props.children }
+        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          <AuthProvider>
+            <Navigation />
+            { props.children }
+          </AuthProvider>
         </Providers>
       </body>
     </html>

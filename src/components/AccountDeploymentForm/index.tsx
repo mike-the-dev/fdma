@@ -1,10 +1,15 @@
 "use client";
-import { Card, Spacer, Input, Button, Select, SelectItem } from "@nextui-org/react";
+import { Card } from "@heroui/card";
+import { Spacer } from "@heroui/spacer";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Select, SelectItem } from "@heroui/select";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { accountDeploymentSchema, AccountDeploymentFormData } from "../../schemas/accountDeployment";
-import axios from "axios";
+import apiClient from "@/utils/apiClient";
+import { toast } from 'react-hot-toast';
 
 // Remove the old State interface since we're using Zod schema now
 
@@ -96,14 +101,9 @@ const AccountDeploymentForm = (): React.ReactElement => {
         domain: fullDomain
       };
       
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/createAccountDeployment`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
+      const response = await apiClient.post(
+        "/api/user/createAccountDeployment",
+        payload
       );
       
       return response.data;
@@ -125,8 +125,19 @@ const AccountDeploymentForm = (): React.ReactElement => {
       reset();
       setFormKey(prev => prev + 1); // Force re-render
       
-    } catch (error) {
+      // Show success toast
+      toast.success(`✅ Account "${data.name}" has been deployed successfully!`, { duration: 4000 });
+      
+    } catch (error: any) {
       console.error("Error deploying account: ", error);
+      
+      // If it's a token expiration error, don't show error message as user will be logged out
+      if (error.isTokenExpired) {
+        return;
+      }
+      
+      // Show error toast
+      toast.error(`❌ Failed to deploy account "${data.name}". Please try again.`, { duration: 4000 });
     }
   };
 
@@ -183,7 +194,7 @@ const AccountDeploymentForm = (): React.ReactElement => {
             color={errors.state ? "danger" : "default"}
           >
             {US_STATES.map((state) => (
-              <SelectItem key={state.key} value={state.key} textValue={`${state.label} (${state.key})`}>
+              <SelectItem key={state.key}>
                 {state.label} ({state.key})
               </SelectItem>
             ))}

@@ -1,5 +1,10 @@
 "use client";
-import { Card, Spacer, Input, Button, Snippet, Code } from "@nextui-org/react";
+import { Card } from "@heroui/card";
+import { Spacer } from "@heroui/spacer";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Snippet } from "@heroui/snippet";
+import { Code } from "@heroui/code";
 import { useState } from "react";
 
 interface State {
@@ -82,7 +87,7 @@ const CustomerCreation = (): React.ReactElement => {
       style={{ padding: "12px 12px 12px 12px", width: "100%" }}
     >
       <h3>Account Creation</h3>
-      <p>Create a new JOYMD customer account.</p>
+      <p>Create a new Instapaytient customer account.</p>
       <Spacer y={4} />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <Input type="text" label="name" placeholder="Company Name" onChange={onUpdateFormData} name={"name"} value={state.name} />

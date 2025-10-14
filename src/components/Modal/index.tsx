@@ -2,7 +2,10 @@
 
 import React from "react";
 import { Account, AccountUpdateInputForm } from "@/types/Account";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, Checkbox } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/modal";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Checkbox } from "@heroui/checkbox";
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 

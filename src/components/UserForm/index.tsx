@@ -1,6 +1,8 @@
 "use client";
 import { AccountInputForm } from "@/types/Account";
-import { Input, Spacer, Button } from "@nextui-org/react";
+import { Input } from "@heroui/input";
+import { Spacer } from "@heroui/spacer";
+import { Button } from "@heroui/button";
 import { useState } from "react";
 
 interface UserFormProps {

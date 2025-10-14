@@ -1,56 +1,82 @@
-import React from "react";
-import { Spacer, Card } from "@nextui-org/react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Spacer } from "@heroui/spacer";
+import { Card } from "@heroui/card";
+import { Spinner } from "@heroui/spinner";
+import apiClient from "@/utils/apiClient";
 import AccountTable from "@/components/AccountTable";
 import styles from "../../page.module.css"
-// import { Suspense } from "react";
-// import Loading from "@/components/AccountTable/loading";
 import { AccountHttpResponse } from "@/types/Account";
-import { cookies } from "next/headers";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface HomeProps {
 
 };
 
-const getData = async <T,>(): Promise<T> => {
-  const key: string = cookies().get("auth-public-token")?.value || "";
+const Home = (): React.ReactElement => {
+  const { isAuthenticated, isLoading: authLoading } = useAuthContext();
+  const [accounts, setAccounts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api", {
-    cache: "no-store",
-    method: "GET",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      "Authorization": `Bearer ${key}}`
+  useEffect(() => {
+    // Only fetch accounts when authentication is complete and user is authenticated
+    if (!authLoading && isAuthenticated) {
+    const getData = async () => {
+      try {
+        const response = await apiClient.get<AccountHttpResponse>("/api");
+
+        console.log("accounts: ", response.data.accounts);
+        setAccounts(response.data.accounts);
+      } catch (err: any) {
+        console.error("Error fetching accounts:", err);
+        
+        // If it's a token expiration error, don't show error message as user will be logged out
+        if (err.isTokenExpired) {
+          return;
+        }
+        
+        const errorMessage = err.response?.data?.message || err.message || "Failed to load accounts";
+        setError(errorMessage);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getData();
     }
-  });
+  }, [authLoading, isAuthenticated]);
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
-  };
+  if (authLoading || isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
+        <div style={{ textAlign: "center" }}>
+          <Spinner color="secondary" />
+          <Spacer y={2} />
+          <p>Loading accounts...</p>
+        </div>
+      </div>
+    );
+  }
 
-  return res.json() as Promise<T>;
-};
-
-// const getEmployeeData = async <T,>(): Promise<T> => {
-//   const res = await fetch(process.env.NEXT_PUBLIC_URL + "/api/employee", {
-//     method: "GET",
-//     headers: {
-//       'Content-type': 'application/json; charset=UTF-8'
-//     }
-//   });
-
-//   if (!res.ok) {
-//     // This will activate the closest `error.js` Error Boundary
-//     // throw new Error('Failed to fetch data');
-//     throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
-//   };
-
-//   return res.json() as Promise<T>;
-// };
-
-const Home = async (): Promise<React.ReactElement> => {
-  const { accounts } = await getData<AccountHttpResponse>();
-  // const { employees } = await getEmployeeData<EmployeeHttpResponse>();
+  if (error) {
+    return (
+      <div className={styles.row}>
+        <div className={styles.column}>
+          <Card
+            isBlurred
+            className="border-none bg-background/60 dark:bg-default-100/50"
+            shadow="sm"
+            style={{ padding: "12px 12px 12px 12px", width: "100%" }}
+          >
+            <h3>Error</h3>
+            <p className="text-small text-danger">{error}</p>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

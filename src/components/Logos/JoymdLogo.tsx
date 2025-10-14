@@ -7,6 +7,12 @@ export default function JoymdLogo() {
       width={100}
       height={44.53}
       alt="joymd logo"
+      priority={true}
+      placeholder="empty"
+      style={{
+        width: 'auto',
+        height: 'auto'
+      }}
     />
   )
 }

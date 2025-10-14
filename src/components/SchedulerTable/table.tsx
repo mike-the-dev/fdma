@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Table as NextUITable, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
+import { Table as NextUITable, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@heroui/table";
 import { DateTime } from "luxon";
 
 const columns: {

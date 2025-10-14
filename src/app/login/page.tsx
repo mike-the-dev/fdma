@@ -1,10 +1,13 @@
+"use client";
+
 import React from "react";
 import styles from "../page.module.css";
 import LoginForm from "@/components/LoginForm";
 import JoymdLogo from "@/components/Logos/JoymdLogo";
-import { Spacer } from "@nextui-org/react";
+import { Spacer } from "@heroui/spacer";
 
-const Login = async (): Promise<React.ReactElement> => {
+const Login = (): React.ReactElement => {
+  // AuthProvider handles redirect if already authenticated
   return (
     <div>
       <div className={styles.row}>

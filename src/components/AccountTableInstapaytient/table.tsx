@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
-import { Table as NextUITable, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Button, useDisclosure } from "@nextui-org/react";
+import { Table as NextUITable, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@heroui/table";
+import { Button } from "@heroui/button";
+import { useDisclosure } from "@heroui/modal";
 import { AccountInstapaytient } from "@/types/AccountInstapaytient";
 import ModalInstapaytient from "../ModalInstapaytient";
 
@@ -42,6 +44,7 @@ const columns: {
 interface TableProps {
   heading: string;
   accounts: AccountInstapaytient[];
+  refetchAccounts: () => Promise<void>;
 };
 
 
@@ -108,6 +111,7 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
         onClose={onClose}
         setInitialState={setInitialState}
         account={account}
+        refetchAccounts={props.refetchAccounts}
       />
       <NextUITable 
         color={"default"}

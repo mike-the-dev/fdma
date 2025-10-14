@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Spacer, Card } from "@nextui-org/react";
+import { Spacer } from "@heroui/spacer";
+import { Card } from "@heroui/card";
 import { Employee } from "@/types/Employee";
 import Table from "@/components/EmployeeTable/table";
 import EmployeeDetail from "@/components/EmployeeDetail";

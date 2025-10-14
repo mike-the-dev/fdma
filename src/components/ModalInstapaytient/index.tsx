@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
+import apiClient from "@/utils/apiClient";
 import { AccountInstapaytient } from "@/types/AccountInstapaytient";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, Checkbox } from "@nextui-org/react";
-import { useRouter } from 'next/navigation';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/modal";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Checkbox } from "@heroui/checkbox";
 import { toast } from 'react-hot-toast';
 
 interface ModalInstapaytientProps {
@@ -12,10 +15,10 @@ interface ModalInstapaytientProps {
   onClose: () => void;
   setInitialState: () => void;
   account: AccountInstapaytient;
+  refetchAccounts: () => Promise<void>;
 };
 
 const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (props): React.ReactElement => {
-  const Router = useRouter();
   const initialState: AccountInstapaytient = {
     entity: "",
     _createdAt_: "",
@@ -39,35 +42,35 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (props): React.Rea
   const [state, setState] = React.useState<AccountInstapaytient>(initialState);
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 
-  const updateAccount = async <T,>(updateInput: AccountInstapaytient): Promise<T> => {
-    // Extract only the fields that have changed from the original account
-    const changes: Partial<AccountInstapaytient> = {};
-    
-    if (updateInput.name !== props.account.name) changes.name = updateInput.name;
-    if (updateInput.company !== props.account.company) changes.company = updateInput.company;
-    if (updateInput.state !== props.account.state) changes.state = updateInput.state;
-    if (JSON.stringify(updateInput.payout) !== JSON.stringify(props.account.payout)) {
-      changes.payout = updateInput.payout;
-    }
+  interface UpdateAccountPayload extends Partial<AccountInstapaytient> {
+    PK: string;
+    SK: string;
+  }
 
-    const res = await fetch(process.env.NEXT_PUBLIC_URL + `/api/instapaytient/update`, {
-      method: "POST",
-      body: JSON.stringify({
+  interface UpdateAccountResponse {
+    success: boolean;
+    message: string;
+    data?: {
+      PK: string;
+      SK: string;
+      updatedFields: string[];
+    };
+  }
+
+  const updateAccount = async (updateInput: AccountInstapaytient): Promise<UpdateAccountResponse> => {
+    const response = await apiClient.post<UpdateAccountResponse, any, UpdateAccountPayload>(
+      "/api/user/updateAccount",
+      {
         PK: updateInput.PK,
         SK: updateInput.SK,
-        updates: changes
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        "Authorization": `Bearer ${localStorage.getItem("auth-public-token")}`
+        name: updateInput.name,
+        company: updateInput.company,
+        state: updateInput.state,
+        payout: updateInput.payout
       }
-    });
+    );
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
-    };
-
-    return res.json() as Promise<T>;
+    return response.data;
   };
 
   const onUpdateFormData = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -89,6 +92,14 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (props): React.Rea
         payout: {
           ...prevState.payout!,
           stripe_id: value
+        }
+      }));
+    } else if (key === "stripe_name") {
+      setState(prevState => ({
+        ...prevState,
+        payout: {
+          ...prevState.payout!,
+          name: value
         }
       }));
     } else {
@@ -113,13 +124,23 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (props): React.Rea
     try {
       setIsSubmitting(true);
 
+      // console.log("Form Payload State:", state);
+      
       await updateAccount(state);
-      Router.refresh();
+      
+      // Refresh the accounts data instead of using router.refresh()
+      await props.refetchAccounts();
       
       toast.success(`✅ ${state.name} has been updated successfully!`, { duration: 4000 });
       props.onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating account: ", error);
+      
+      // If it's a token expiration error, don't show error message as user will be logged out
+      if (error.isTokenExpired) {
+        return;
+      }
+      
       toast.error(`❌ Failed to update ${state.name}. Please try again.`, { duration: 4000 });
     } finally {
       setIsSubmitting(false);
@@ -133,6 +154,7 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (props): React.Rea
       state.name === props.account.name 
       && state.company === props.account.company 
       && state.state === props.account.state
+      && state.payout?.name === props.account.payout?.name
       && state.payout?.take === props.account.payout?.take
       && state.payout?.instant_payout_enabled === props.account.payout?.instant_payout_enabled
       && state.payout?.stripe_id === props.account.payout?.stripe_id
@@ -188,6 +210,9 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (props): React.Rea
                 onChange={onUpdateFormData} 
                 name={"company"} 
                 value={state.company} 
+                placeholder="Enter company name (cannot be changed once set)"
+                isDisabled={!!state.company}
+                description={state.company ? "Company name cannot be changed after initial setup" : ""}
               />
               <Input 
                 type="text" 
@@ -196,9 +221,17 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (props): React.Rea
                 name={"state"} 
                 value={state.state} 
               />
+              {/* Stripe Settings */}
+              <Input
+                type="text"
+                label="Stripe Name"
+                onChange={onUpdateFormData}
+                name={"stripe_name"}
+                value={state.payout?.name || ""}
+              />
               <Input 
                 type="number" 
-                label="Take (%)" 
+                label="Stripe Take (%)" 
                 placeholder="0" 
                 min={0} 
                 max={100}

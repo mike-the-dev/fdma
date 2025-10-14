@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "JOYMD - Login",
-  description: "A JOY MD dashboard manager",
+  title: "Instapaytient - Login",
+  description: "An Instapaytient dashboard manager",
 };
 
 interface DashboardLayout {

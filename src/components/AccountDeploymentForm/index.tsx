@@ -7,7 +7,8 @@ import { Select, SelectItem } from "@heroui/select";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-hot-toast";
+import { addToast } from "@heroui/toast";
+import { Icon } from "@iconify/react";
 
 import {
   accountDeploymentSchema,
@@ -132,10 +133,13 @@ const AccountDeploymentForm = (): React.ReactElement => {
       setSelectedState(new Set()); // Reset Select component state
 
       // Show success toast
-      toast.success(
-        `✅ Account "${data.name}" has been deployed successfully!`,
-        { duration: 4000 }
-      );
+      addToast({
+        title: "Account Deployed Successfully",
+        description: `Account "${data.name}" has been deployed successfully!`,
+        icon: <Icon icon="lucide:check-circle" width={24} />,
+        severity: "success",
+        timeout: 5000,
+      });
     } catch (error: any) {
       console.error("Error deploying account: ", error);
 
@@ -145,10 +149,13 @@ const AccountDeploymentForm = (): React.ReactElement => {
       }
 
       // Show error toast
-      toast.error(
-        `❌ Failed to deploy account "${data.name}". Please try again.`,
-        { duration: 4000 }
-      );
+      addToast({
+        title: "Deployment Failed",
+        description: `Failed to deploy account "${data.name}". Please try again.`,
+        icon: <Icon icon="lucide:alert-circle" width={24} />,
+        severity: "danger",
+        timeout: 5000,
+      });
     }
   };
 

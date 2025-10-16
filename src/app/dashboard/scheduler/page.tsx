@@ -1,6 +1,6 @@
 "use client";
 
-import type { Scheduler } from "@/utils/listSchedulers";
+import type { Scheduler } from "@/types/Scheduler";
 
 import React, { useEffect, useState } from "react";
 import { Spacer } from "@heroui/spacer";

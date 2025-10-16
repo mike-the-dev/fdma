@@ -73,7 +73,7 @@ export const accountDeploymentSchema = z.object({
     .min(2, "Company name must be at least 2 characters")
     .max(200, "Company name must be less than 200 characters")
     .regex(
-      /^[a-zA-Z0-9\s\-'\.&,()+]+$/,
+      /^[a-zA-Z0-9\u00C0-\u017F\s\-'\.&,()+]+$/,
       "Company name contains invalid characters"
     )
     .transform((val) => val.trim()),

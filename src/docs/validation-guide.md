@@ -100,7 +100,7 @@ const validateField = (field: string, value: string) => {
 - **Required**: Yes
 - **Min Length**: 2 characters
 - **Max Length**: 200 characters
-- **Pattern**: `^[a-zA-Z0-9\s\-'\.&,()]+$`
+- **Pattern**: `^[a-zA-Z0-9\u00C0-\u017F\s\-'\.&,()+]+$` (supports Latin accented characters)
 - **Transform**: Trims whitespace
 
 ### State Field

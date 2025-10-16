@@ -129,7 +129,12 @@ const AccountDeploymentForm = (): React.ReactElement => {
       await deployAccount(data);
 
       // Reset form on success
-      reset();
+      reset({
+        name: "",
+        company: "",
+        state: "",
+        domain: "",
+      });
       setSelectedState(new Set()); // Reset Select component state
 
       // Show success toast

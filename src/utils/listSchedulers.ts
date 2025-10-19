@@ -10,23 +10,7 @@ import {
   GetScheduleCommand,
   GetScheduleCommandOutput,
 } from "@aws-sdk/client-scheduler";
-
-export type Scheduler = {
-  Name: string;
-  Arn: string;
-  State: string;
-  Description?: string;
-  ScheduleExpression?: string;
-  Target?: any;
-  FlexibleTimeWindow?: any;
-  ScheduleExpressionTimezone?: string;
-  StartDate?: Date;
-  EndDate?: Date;
-  GroupName?: string;
-  KmsKeyArn?: string;
-  CreationDate?: Date;
-  LastModificationDate?: Date;
-};
+import type { Scheduler } from "@/types/Scheduler";
 
 const eventBridgeClient = new EventBridgeClient({
   region: process.env.AWS_PROD_REGION || "us-east-1",

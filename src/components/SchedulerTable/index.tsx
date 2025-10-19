@@ -1,9 +1,10 @@
 import React from "react";
+import type { Scheduler } from "@/types/Scheduler";
 
 import Table from "./table";
 
 interface SchedulerTableProps {
-  schedules: any;
+  schedules: Scheduler[];
 }
 
 const SchedulerTable: React.FC<SchedulerTableProps> = (

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import type { Scheduler } from "@/types/Scheduler";
 import {
   Table as NextUITable,
   TableHeader,
@@ -11,6 +12,7 @@ import {
   getKeyValue,
 } from "@heroui/table";
 import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
 
 const columns: {
   key: string;
@@ -33,10 +35,6 @@ const columns: {
     label: "DAYS TO PAYOUT",
   },
   {
-    key: "name",
-    label: "NAME",
-  },
-  {
     key: "platform",
     label: "PLATFORM",
   },
@@ -44,20 +42,25 @@ const columns: {
     key: "cardType",
     label: "PAYMENT METHOD",
   },
+  {
+    key: "amountToPayout",
+    label: "AMOUNT TO PAYOUT",
+  },
 ];
 
 interface TableProps {
   heading: string;
-  schedules: any[];
+  schedules: Scheduler[];
 }
 
 const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
+  const router = useRouter();
   // Helper function to extract order ID from Target.Input JSON
-  const extractOrderNumber = (schedule: any): string => {
+  const extractOrderNumber = (schedule: Scheduler): string => {
     try {
       if (schedule.Target?.Input) {
         const inputData = JSON.parse(schedule.Target.Input);
-
+        console.log("inputData:", inputData);
         // Check for Ecwid structure: payload.data.orderId
         if (inputData.payload?.data?.orderId) {
           return `#${inputData.payload.data.orderId}`;
@@ -85,8 +88,19 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
     }
   };
 
+  // Helper to truncate long schedule names, show last 4 after "payout-"
+  const formatName = (schedule: Scheduler): string => {
+    const name = schedule.Name || "N/A";
+    const prefix = "payout-";
+    if (name.startsWith(prefix)) {
+      const last4 = name.slice(-4);
+      return `${prefix}${last4}`;
+    }
+    return name;
+  };
+
   // Helper function to extract platform from Target.Input JSON
-  const extractPlatform = (schedule: any): string => {
+  const extractPlatform = (schedule: Scheduler): string => {
     try {
       if (schedule.Target?.Input) {
         const inputData = JSON.parse(schedule.Target.Input);
@@ -116,7 +130,7 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
   };
 
   // Helper function to extract payment method from Target.Input JSON
-  const extractCardType = (schedule: any): string => {
+  const extractCardType = (schedule: Scheduler): string => {
     try {
       if (schedule.Target?.Input) {
         const inputData = JSON.parse(schedule.Target.Input);
@@ -138,10 +152,48 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
     }
   };
 
-  // Helper function to format creation date
-  const formatCreationDate = (dateString: string): string => {
+  // Helper function to extract payout amount from Target.Input JSON (Instapaytient)
+  const extractAmountToPayout = (schedule: Scheduler): string => {
     try {
-      const dt = DateTime.fromISO(dateString, { zone: "utc" });
+      if (schedule.Target?.Input) {
+        const inputData = JSON.parse(schedule.Target.Input);
+
+        const amountCents = inputData.payload?.current_subtotal_price;
+        if (typeof amountCents === "number") {
+          const currency =
+            inputData.payload?.tenderTransaction_amount?.
+              tenderTransaction_amount_currencyCode || "USD";
+          const amount = amountCents / 100; // convert cents to currency units
+          try {
+            return new Intl.NumberFormat(undefined, {
+              style: "currency",
+              currency,
+              currencyDisplay: "narrowSymbol",
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            }).format(amount);
+          } catch (_) {
+            return amount.toFixed(2);
+          }
+        }
+
+        return "N/A";
+      }
+
+      return "N/A";
+    } catch (error) {
+      console.error("Error parsing Target.Input for payout amount:", error);
+
+      return "N/A";
+    }
+  };
+
+  // Helper function to format creation date
+  const formatCreationDate = (dateInput: string | Date): string => {
+    try {
+      const isoString =
+        typeof dateInput === "string" ? dateInput : dateInput.toISOString();
+      const dt = DateTime.fromISO(isoString, { zone: "utc" });
 
       if (dt.isValid) {
         // Convert to local time and format the same way as payout time
@@ -150,11 +202,11 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
         return localTime.toFormat("MMM dd, yyyy 'at' h:mm a");
       }
 
-      return dateString;
+      return typeof dateInput === "string" ? dateInput : dateInput.toString();
     } catch (error) {
       console.error("Error formatting creation date:", error);
 
-      return dateString;
+      return typeof dateInput === "string" ? dateInput : dateInput.toString();
     }
   };
 
@@ -203,12 +255,16 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
 
   // Helper function to calculate days to payout
   const calculateDaysToPayout = (
-    creationDate: string,
+    creationDateInput: string | Date,
     scheduleExpression: string
   ): string => {
     try {
       // Parse creation date
-      const createdDt = DateTime.fromISO(creationDate, { zone: "utc" });
+      const creationIso =
+        typeof creationDateInput === "string"
+          ? creationDateInput
+          : creationDateInput.toISOString();
+      const createdDt = DateTime.fromISO(creationIso, { zone: "utc" });
 
       if (!createdDt.isValid) return "N/A";
 
@@ -253,6 +309,11 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
       aria-label="Scheduler table with dynamic content"
       color={"default"}
       selectionMode={"single"}
+      onRowAction={(key) => {
+        // Navigate to the scheduler detail page using the row key (scheduler Name)
+        const id = String(key);
+        router.push(`/dashboard/scheduler/${encodeURIComponent(id)}`);
+      }}
     >
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
@@ -288,14 +349,14 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
                   </TableCell>
                 );
 
-              if (columnKey === "name")
-                return <TableCell>{item.Name || "N/A"}</TableCell>;
-
               if (columnKey === "platform")
                 return <TableCell>{extractPlatform(item)}</TableCell>;
 
               if (columnKey === "cardType")
                 return <TableCell>{extractCardType(item)}</TableCell>;
+
+              if (columnKey === "amountToPayout")
+                return <TableCell>{extractAmountToPayout(item)}</TableCell>;
 
               return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
             }}

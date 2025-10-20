@@ -28,6 +28,7 @@ const SchedulerDetailPage = ({ params }: PageProps): React.ReactElement => {
   
   const { isAuthenticated, isLoading: authLoading } = useAuthContext();
   const [payout, setPayout] = useState<PayoutPayload | null>(null);
+  const [schedulerData, setSchedulerData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,6 +38,9 @@ const SchedulerDetailPage = ({ params }: PageProps): React.ReactElement => {
       const response = await apiClient.get<any>(`/api/user/schedulers/${id}`);
       
       console.log("[SchedulerDetailPage] scheduler response:", response.data);
+      
+      // Store the full scheduler data for platform extraction
+      setSchedulerData(response.data);
       
       // Extract the payload from Target.Input (which is a stringified JSON)
       if (response.data?.Target?.Input) {
@@ -67,6 +71,40 @@ const SchedulerDetailPage = ({ params }: PageProps): React.ReactElement => {
     }
   };
 
+  // Helper function to extract platform from Target.Input JSON
+  const extractPlatform = (schedulerData: any): string => {
+    try {
+      if (schedulerData?.Target?.Input) {
+        const inputData = JSON.parse(schedulerData.Target.Input);
+        console.log("[SchedulerDetailPage] Target.Input parsed:", inputData);
+
+        // Check for platform field at root level (Ecwid)
+        if (inputData.platform) {
+          console.log("[SchedulerDetailPage] Found platform field:", inputData.platform);
+          return inputData.platform;
+        }
+
+        // Check for Instapaytient structure - look for specific fields that indicate Instapaytient
+        if (
+          inputData.payload?.payout_account_id ||
+          inputData.payload?.stripe_account_id
+        ) {
+          console.log("[SchedulerDetailPage] Detected Instapaytient structure");
+          return "instapaytient";
+        }
+
+        console.log("[SchedulerDetailPage] No platform detected, returning N/A");
+        return "N/A";
+      }
+
+      console.log("[SchedulerDetailPage] No Target.Input found");
+      return "N/A";
+    } catch (error) {
+      console.error("Error parsing Target.Input for platform:", error);
+      return "N/A";
+    }
+  };
+
   useEffect(() => {
     // Only fetch payout details when authentication is complete and user is authenticated
     if (!authLoading && isAuthenticated && id) {
@@ -89,6 +127,25 @@ const SchedulerDetailPage = ({ params }: PageProps): React.ReactElement => {
           <Spinner color="secondary" />
           <p>Loading payout details...</p>
         </div>
+      </div>
+    );
+  }
+
+  // Platform not supported state
+  if (schedulerData && extractPlatform(schedulerData) !== "instapaytient") {
+    const detectedPlatform = extractPlatform(schedulerData);
+    console.log("[SchedulerDetailPage] Platform not supported:", detectedPlatform);
+    
+    return (
+      <div className="max-w-6xl mx-auto mt-10">
+        <Card isBlurred className="border-none bg-background/60 dark:bg-default-100/50" shadow="sm">
+          <CardBody className="text-center p-6">
+            <Icon icon="lucide:alert-triangle" width={48} className="text-warning mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-warning mb-2">Platform Not Supported</h2>
+            <p className="text-foreground-500 mb-4">Other platforms outside of Instapaytient are not supported</p>
+            <p className="text-tiny text-foreground-400 mt-2">Detected platform: {detectedPlatform}</p>
+          </CardBody>
+        </Card>
       </div>
     );
   }

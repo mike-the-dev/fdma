@@ -10,7 +10,7 @@ import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { Spinner } from "@heroui/spinner";
 import { Icon } from "@iconify/react";
-import { formatCurrency, formatDate, calculatePlatformFee } from "@/utils/formatters";
+import { formatCurrency, calculatePlatformFee } from "@/utils/formatters";
 import type { PayoutPayload } from "@/types/Payout";
 import { PayoutSummary } from "@/components/PayoutSummary";
 import { TransactionDetails } from "@/components/TransactionDetails";

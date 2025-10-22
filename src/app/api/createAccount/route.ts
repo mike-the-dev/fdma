@@ -1,4 +1,3 @@
-import authorizeRequest from "@/utils/authorizeRequest";
 import createAccount from "@/utils/createAccount";
 
 type ResponseData = {
@@ -8,10 +7,6 @@ type ResponseData = {
 export async function POST(request: Request) {
   try {
     const body: ResponseData = await request.json();
-
-    await authorizeRequest(
-      request.headers.get("authorization")?.split("Bearer ")[1].trim() || ""
-    );
 
     const stripeID = await createAccount({
       businessUrl: body.businessUrl,

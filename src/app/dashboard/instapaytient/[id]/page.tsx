@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import React, { use } from "react";
+import { Card, CardBody } from "@heroui/card";
 import { Spinner } from "@heroui/spinner";
 import { Icon } from "@iconify/react";
-import { useAuthContext } from "@/context/AuthContext";
-import apiClient from "@/utils/apiClient";
+import { useAccount } from "@/features/instapaytient/account/useAccount";
 import { AccountSummary } from "@/components/Pages/Instapaytient/AccountDetail/AccountSummary";
 import { TransactionsTable } from "@/components/Pages/Instapaytient/AccountDetail/TransactionsTable";
 
@@ -17,54 +16,17 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   // Unwrap the params Promise using React.use()
   const { id } = use(params);
   
-  const { isAuthenticated, isLoading: authLoading } = useAuthContext();
-  const [account, setAccount] = useState<any | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchAccountDetails = async () => {
-    try {
-      // TODO: Replace with actual API endpoint for account details
-      const response = await apiClient.get<any>(`/api/user/instapaytient/${id}`);
-      
-      console.log("[InstapaytientDetailPage] account response:", response.data);
-      
-      setAccount(response.data);
-    } catch (err: any) {
-      console.error("Error fetching account details:", err);
-
-      // If it's a token expiration error, don't show error message as user will be logged out
-      if (err.isTokenExpired) {
-        return;
-      }
-
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
-        "Failed to load account details";
-
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // Only fetch account details when authentication is complete and user is authenticated
-    if (!authLoading && isAuthenticated && id) {
-      fetchAccountDetails();
-    }
-  }, [authLoading, isAuthenticated, id]);
+  const { account, isLoading, error, refetch } = useAccount(id);
 
   // Loading state
-  if (authLoading || isLoading) {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center p-8 gap-4">
         <Spinner size="lg" color="primary" />
         <p className="text-default-500">Loading account details...</p>
       </div>
     );
-  }
+  };
 
   // Error state
   if (error) {
@@ -77,7 +39,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
             <p className="text-foreground-500 mb-4">{error}</p>
             <button 
               className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600"
-              onClick={() => fetchAccountDetails()}
+              onClick={refetch}
             >
               Try Again
             </button>
@@ -85,7 +47,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
         </Card>
       </div>
     );
-  }
+  };
 
   // No account data
   if (!account) {
@@ -100,7 +62,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
         </Card>
       </div>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   Table as NextUITable,
   TableHeader,
@@ -58,6 +59,7 @@ interface TableProps {
 }
 
 const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [account, setAccount] = React.useState<AccountInstapaytient>({
     entity: "",
@@ -80,8 +82,17 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
     state: "",
   });
 
-  const onClickEditHandler = (item: AccountInstapaytient) => {
+  const handleRowClick = (item: AccountInstapaytient) => {
     return (): void => {
+      // Navigate to the account detail page using the PK as the ID
+      router.push(`/dashboard/instapaytient/${item.PK}`);
+    };
+  };
+
+  const onClickEditHandler = (item: AccountInstapaytient) => {
+    return (e: React.MouseEvent): void => {
+      // Prevent row click when clicking edit button
+      e.stopPropagation();
       setAccount(item);
       onOpen();
     };
@@ -135,7 +146,11 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
         </TableHeader>
         <TableBody items={props.accounts}>
           {(item) => (
-            <TableRow key={item.PK}>
+            <TableRow 
+              key={item.PK}
+              className="cursor-pointer hover:bg-default-100 transition-colors"
+              onClick={handleRowClick(item)}
+            >
               {(columnKey) => {
                 if (columnKey === "take") {
                   // Handle take from nested payout object

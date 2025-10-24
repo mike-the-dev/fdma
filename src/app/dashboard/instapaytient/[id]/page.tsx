@@ -9,6 +9,9 @@ import { AccountSummary } from "@/components/Pages/Instapaytient/AccountDetail/A
 import { TransactionsTable } from "@/components/Pages/Instapaytient/AccountDetail/TransactionsTable";
 import { AccountDetails } from "@/components/Pages/Instapaytient/AccountDetail/AccountDetails";
 import { AccountReadiness } from "@/components/Pages/Instapaytient/AccountDetail/AccountReadiness";
+import { AccountReadinessSkeleton } from "@/components/Pages/Instapaytient/AccountDetail/AccountReadinessSkeleton";
+import { BankAccountDetails } from "@/components/Pages/Instapaytient/AccountDetail/BankAccountDetails";
+import { BankAccountDetailsSkeleton } from "@/components/Pages/Instapaytient/AccountDetail/BankAccountDetailsSkeleton";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -18,7 +21,18 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   // Unwrap the params Promise using React.use()
   const { id } = use(params);
   
-  const { account, isLoading, error, refetch, transactions, transactionsLoading, transactionsError } = useAccount(id);
+  const { 
+    account, 
+    isLoading, 
+    error, 
+    refetch, 
+    transactions, 
+    transactionsLoading, 
+    transactionsError,
+    stripeAccount,
+    stripeAccountLoading,
+    stripeAccountError
+  } = useAccount(id);
 
   // Readiness data
   const readinessData = {
@@ -89,17 +103,36 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
         >
           <h1 className="mb-2 text-2xl font-semibold text-white">Account Details</h1>
           <p className="mb-6 text-gray-500">View and manage manage account.</p>
-
+          
           <AccountDetails account={account} />
 
           <div className="mt-12"></div>
 
           {/* New Account Readiness component */}
-          <AccountReadiness
-            affirm={readinessData.affirm}
-            readiness={readinessData.readiness}
-          />
-          
+          {
+            stripeAccountLoading
+              ? <AccountReadinessSkeleton />
+              : <AccountReadiness
+                stripeAccount={stripeAccount}
+                stripeAccountLoading={stripeAccountLoading}
+                stripeAccountError={stripeAccountError}
+                account={account}
+              />
+          }
+
+          <div className="mt-12"></div>
+
+          {/* New Bank Account Details component */}
+          {
+            stripeAccountLoading 
+              ? <BankAccountDetailsSkeleton />
+              : <BankAccountDetails 
+                  stripeAccount={stripeAccount}
+                  stripeAccountLoading={stripeAccountLoading}
+                  stripeAccountError={stripeAccountError}
+                />
+          }
+
           <div className="mt-12"></div>
 
           <AccountSummary />

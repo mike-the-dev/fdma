@@ -30,39 +30,32 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
   props
 ): React.ReactElement => {
   const initialState: AccountInstapaytient = {
-    entity: "",
-    _createdAt_: "",
+    id: "",
+    name: "",
+    company: "",
+    state: "",
+    entity: "ACCOUNT",
     payout: {
       name: "",
-      total_payout_amount: 0,
-      take: 0,
       currency: "",
-      instant_payout_enabled: false,
-      stripe_id: "",
+      stripeId: "",
+      take: 0,
+      totalPayoutAmount: 0,
+      instantPayoutEnabled: false,
     },
-    company: "",
-    "GSI1-SK": "",
-    SK: "",
-    "GSI1-PK": "",
-    PK: "",
-    name: "",
-    _lastUpdated_: "",
-    state: "",
   };
   const [state, setState] = React.useState<AccountInstapaytient>(initialState);
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 
   interface UpdateAccountPayload extends Partial<AccountInstapaytient> {
-    PK: string;
-    SK: string;
+    id: string;
   }
 
   interface UpdateAccountResponse {
     success: boolean;
     message: string;
     data?: {
-      PK: string;
-      SK: string;
+      id: string;
       updatedFields: string[];
     };
   }
@@ -75,8 +68,7 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
       any,
       UpdateAccountPayload
     >("/api/user/updateAccount", {
-      PK: updateInput.PK,
-      SK: updateInput.SK,
+      id: updateInput.id,
       name: updateInput.name,
       company: updateInput.company,
       state: updateInput.state,
@@ -107,7 +99,7 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
         ...prevState,
         payout: {
           ...prevState.payout!,
-          stripe_id: value,
+          stripeId: value,
         },
       }));
     } else if (key === "stripe_name") {
@@ -131,7 +123,7 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
       ...prevState,
       payout: {
         ...prevState.payout!,
-        instant_payout_enabled: isSelected,
+        instantPayoutEnabled: isSelected,
       },
     }));
   };
@@ -184,9 +176,9 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
       state.state === props.account.state &&
       state.payout?.name === props.account.payout?.name &&
       state.payout?.take === props.account.payout?.take &&
-      state.payout?.instant_payout_enabled ===
-        props.account.payout?.instant_payout_enabled &&
-      state.payout?.stripe_id === props.account.payout?.stripe_id
+      state.payout?.instantPayoutEnabled ===
+        props.account.payout?.instantPayoutEnabled &&
+      state.payout?.stripeId === props.account.payout?.stripeId
     )
       return true;
 
@@ -199,26 +191,21 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
   };
 
   React.useEffect(() => {
-    if (props.account && props.account.PK) {
+    if (props.account && props.account.id) {
       setState({
-        entity: props.account.entity || "",
-        _createdAt_: props.account._createdAt_ || "",
+        id: props.account.id || "",
+        name: props.account.name || "",
+        company: props.account.company || "",
+        state: props.account.state || "",
+        entity: props.account.entity || "ACCOUNT",
         payout: props.account.payout || {
           name: "",
-          total_payout_amount: 0,
-          take: 0,
           currency: "",
-          instant_payout_enabled: false,
-          stripe_id: "",
+          stripeId: "",
+          take: 0,
+          totalPayoutAmount: 0,
+          instantPayoutEnabled: false,
         },
-        company: props.account.company || "",
-        "GSI1-SK": props.account["GSI1-SK"] || "",
-        SK: props.account.SK || "",
-        "GSI1-PK": props.account["GSI1-PK"] || "",
-        PK: props.account.PK || "",
-        name: props.account.name || "",
-        _lastUpdated_: props.account._lastUpdated_ || "",
-        state: props.account.state || "",
       });
     } else {
       setState(initialState);
@@ -280,11 +267,11 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
                   label="Stripe ID"
                   name={"stripe_id"}
                   type="text"
-                  value={state.payout?.stripe_id || ""}
+                  value={state.payout?.stripeId || ""}
                   onChange={onUpdateFormData}
                 />
                 <Checkbox
-                  isSelected={state.payout?.instant_payout_enabled || false}
+                  isSelected={state.payout?.instantPayoutEnabled || false}
                   onValueChange={onUpdateCheckboxData}
                 >
                   Enable instant payout.

@@ -3,7 +3,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { fetchAccountById, fetchTransactionsByStripeAccount } from "./account.service";
 import { mapAccount, mapTransaction } from "./account.mappers";
 import { AccountInstapaytient } from "@/types/AccountInstapaytient";
-import { Transaction } from "./account.schema";
+import { TransactionMappedDTO } from "./account.schema";
 import { toAccountError } from "./account.errors";
 
 interface UseAccountReturn {
@@ -11,7 +11,7 @@ interface UseAccountReturn {
   isLoading: boolean;
   error: string | null;
   refetch: () => Promise<void>;
-  transactions: Transaction[];
+  transactions: TransactionMappedDTO[];
   transactionsLoading: boolean;
   transactionsError: string | null;
   refetchTransactions: () => Promise<void>;
@@ -25,7 +25,7 @@ export const useAccount = (id: string): UseAccountReturn => {
   const [error, setError] = useState<string | null>(null);
   
   // Transaction state
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<TransactionMappedDTO[]>([]);
   const [transactionsLoading, setTransactionsLoading] = useState(false);
   const [transactionsError, setTransactionsError] = useState<string | null>(null);
 

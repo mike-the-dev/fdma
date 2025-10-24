@@ -57,6 +57,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     hasCheckedAuth.current = true;
 
+    // Check if we should bypass auth in development
+    const bypassAuth = process.env.NODE_ENV === 'development' && 
+                      process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true';
+
+    if (bypassAuth) {
+      // Set mock authenticated state for development
+      setAuthState({
+        isAuthenticated: true,
+        isLoading: false,
+        userId: 'dev-user-123',
+        userRole: 'admin',
+      });
+      
+      // Handle redirects for bypassed auth
+      const isDashboardRoute = pathname.startsWith("/dashboard");
+      const isLoginRoute = pathname === "/login";
+      const isRootRoute = pathname === "/";
+
+      if (isDashboardRoute || isLoginRoute || isRootRoute) {
+        router.push("/dashboard/instapaytient");
+      }
+      return;
+    }
+
     // Check auth status only on client - using safe localStorage utilities
     const authToken = getLocalStorageItem("auth-public-token");
     const accessToken = getLocalStorageItem("access-token");
@@ -87,6 +111,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []); // Empty dependency array - only runs once
 
   const recheckAuth = () => {
+    // Check if we should bypass auth in development
+    const bypassAuth = process.env.NODE_ENV === 'development' && 
+                      process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true';
+
+    if (bypassAuth) {
+      // Set mock authenticated state for development
+      setAuthState({
+        isAuthenticated: true,
+        isLoading: false,
+        userId: 'dev-user-123',
+        userRole: 'admin',
+      });
+      
+      // Handle redirects for bypassed auth
+      const isDashboardRoute = pathname.startsWith("/dashboard");
+      const isLoginRoute = pathname === "/login";
+      const isRootRoute = pathname === "/";
+
+      if (!isDashboardRoute && (isLoginRoute || isRootRoute)) {
+        router.push("/dashboard/instapaytient");
+      }
+      return;
+    }
+
     // Check auth status - using safe localStorage utilities
     const authToken = getLocalStorageItem("auth-public-token");
     const accessToken = getLocalStorageItem("access-token");

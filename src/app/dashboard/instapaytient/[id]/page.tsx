@@ -8,6 +8,7 @@ import { useAccount } from "@/features/instapaytient/account/useAccount";
 import { AccountSummary } from "@/components/Pages/Instapaytient/AccountDetail/AccountSummary";
 import { TransactionsTable } from "@/components/Pages/Instapaytient/AccountDetail/TransactionsTable";
 import { AccountDetails } from "@/components/Pages/Instapaytient/AccountDetail/AccountDetails";
+import { AccountReadiness } from "@/components/Pages/Instapaytient/AccountDetail/AccountReadiness";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -18,6 +19,18 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   const { id } = use(params);
   
   const { account, isLoading, error, refetch, transactions, transactionsLoading, transactionsError } = useAccount(id);
+
+  // Readiness data
+  const readinessData = {
+    affirm: {
+      enabled: true
+    },
+    readiness: {
+      affirmEnabled: true,
+      bankAccountLinked: true,
+      stripeLinked: false
+    }
+  };
 
   // Loading state
   if (isLoading) {
@@ -80,7 +93,15 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
           <AccountDetails account={account} />
 
           <div className="mt-12"></div>
+
+          {/* New Account Readiness component */}
+          <AccountReadiness
+            affirm={readinessData.affirm}
+            readiness={readinessData.readiness}
+          />
           
+          <div className="mt-12"></div>
+
           <AccountSummary />
           
           <div className="mt-8">

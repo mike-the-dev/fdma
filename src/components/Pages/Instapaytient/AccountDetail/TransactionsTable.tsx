@@ -11,150 +11,14 @@ import { Card } from "@heroui/card";
 import { Icon } from "@iconify/react";
 import { Spinner } from "@heroui/spinner";
 import Image from "next/image";
-import { Transaction } from "@/features/instapaytient/account/account.schema";
-
-// Temporary test data - will be replaced with real data from props
-const testTransactions = [
-  {
-    id: "1",
-    amount: "$1,200.00",
-    currency: "USD",
-    status: "Succeeded",
-    paymentMethod: "Affirm",
-    description: "pi_35JLXfFB7NUYQVAN15iCNbJZ",
-    customer: "deisy.lino19@gmail.com",
-    date: "Oct 17, 2:53 PM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "2",
-    amount: "$4,995.00",
-    currency: "USD",
-    status: "Canceled",
-    paymentMethod: "Affirm",
-    description: "pi_35JLKrFB7NUYQVAN2waDUq5s",
-    customer: "daisy.lino19@gmail.com",
-    date: "Oct 17, 2:45 PM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "3",
-    amount: "$4,995.00",
-    currency: "USD",
-    status: "Canceled",
-    paymentMethod: "Affirm",
-    description: "pi_35JLRlFB7NUYQVAN0oB504B0",
-    customer: "gab@test3.com",
-    date: "Oct 17, 2:44 PM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "4",
-    amount: "$7,995.00",
-    currency: "USD",
-    status: "Canceled",
-    paymentMethod: "Affirm",
-    description: "pi_35JLCzFB7NUYQVAN2hjUj0Lp",
-    customer: "daisy.lino19@gmail.com",
-    date: "Oct 17, 2:31 PM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "5",
-    amount: "$7,995.00",
-    currency: "USD",
-    status: "Canceled",
-    paymentMethod: "Affirm",
-    description: "pi_35JL8XFB7NUYQVAN2Drj42Iv",
-    customer: "gab@test2.com",
-    date: "Oct 17, 2:24 PM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "6",
-    amount: "$7,995.00",
-    currency: "USD",
-    status: "Canceled",
-    paymentMethod: "Affirm",
-    description: "pi_35JL5gFB7NUYQVAN1RbsKAL0",
-    customer: "henry@medaestheticsgroup.com",
-    date: "Oct 17, 2:21 PM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "7",
-    amount: "$1,995.00",
-    currency: "USD",
-    status: "Succeeded",
-    paymentMethod: "Affirm",
-    description: "pi_35IZ8QFB7NUYQVAN1W0V9tvc",
-    customer: "Daintee.success@yahoo.com",
-    date: "Oct 15, 11:11 AM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "8",
-    amount: "$4,995.00",
-    currency: "USD",
-    status: "Canceled",
-    paymentMethod: "Affirm",
-    description: "pi_35IYvUFB7NUYQVAN0Fn8FbIJ",
-    customer: "gabrielle@instapatient.com",
-    date: "Oct 15, 11:06 AM",
-    merchant: "Texas Hair Restoration"
-  },
-  {
-    id: "9",
-    amount: "$258.82",
-    currency: "USD",
-    status: "Succeeded",
-    paymentMethod: "acct_1NIGoNFbIMQZZWcr",
-    description: "py_15FfCcFZ7Tps6WjhTpbaftXR",
-    customer: "",
-    date: "Oct 7, 11:01 AM",
-    merchant: "Instapatient"
-  },
-  {
-    id: "10",
-    amount: "$7,467.33",
-    currency: "USD",
-    status: "Succeeded",
-    paymentMethod: "acct_1QpxZf2Y7btXWnqf",
-    description: "py_15Ff82FZ7Tps6WjhnA84pBTb",
-    customer: "",
-    date: "Oct 7, 10:56 AM",
-    merchant: "Instapatient"
-  },
-  {
-    id: "11",
-    amount: "$250.00",
-    currency: "USD",
-    status: "Canceled",
-    paymentMethod: "Affirm",
-    description: "pi_35BIagFbIMQZZWcr1v21no0J",
-    customer: "mikedev0431@gmail.com",
-    date: "Sep 25, 10:04 AM",
-    merchant: "Medaestheticsgroup"
-  },
-  {
-    id: "12",
-    amount: "$250.00",
-    currency: "USD",
-    status: "Succeeded",
-    paymentMethod: "Affirm",
-    description: "pi_35AxnjFbIMQZZWcr1JEMioxm",
-    customer: "henryc134@gmail.com",
-    date: "Sep 24, 11:53 AM",
-    merchant: "Medaestheticsgroup"
-  }
-];
-
+import { TransactionMappedDTO } from "@/features/instapaytient/account/account.schema";
+import { Selection } from "@heroui/table";
 interface TransactionsTableProps {
-  transactions?: Transaction[];
+  transactions?: TransactionMappedDTO[];
   isLoading?: boolean;
   error?: string | null;
   selectedKeys: Set<string>;
-  onSelectionChange: (keys: Set<string>) => void;
+  onSelectionChange: (keys: Selection) => void;
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -165,15 +29,13 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   onSelectionChange
 }) => {
 
-  const renderCell = (transaction: Transaction, columnKey: string) => {
+  const renderCell = (transaction: TransactionMappedDTO, columnKey: string) => {
     switch (columnKey) {
       case "amount":
-        const amount = (transaction.amount / 100).toFixed(2);
-        const currency = transaction.currency?.toUpperCase();
         return (
           <div className="flex items-center gap-2">
-            <span className="font-medium">${amount}</span>
-            <span className="text-gray-500">{currency}</span>
+            <span className="font-medium">${transaction.amount}</span>
+            <span className="text-gray-500">{transaction.currency}</span>
             <Chip
               size="sm"
               color={transaction.status === "succeeded" ? "success" : "default"}
@@ -211,8 +73,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
       case "customer":
         return transaction.metadata?.customerEmail || "-";
       case "date":
-        const date = new Date(transaction.created * 1000).toLocaleDateString();
-        return date;
+        return transaction.created;
       case "merchant":
         return transaction.metadata?.orderNumber || "-";
       case "actions":
@@ -222,7 +83,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           </Button>
         );
       default:
-        return String(transaction[columnKey as keyof Transaction]);
+        return String(transaction[columnKey as keyof TransactionMappedDTO]);
     }
   };
 
@@ -268,7 +129,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         aria-label="Transactions table"
         selectionMode="multiple"
         selectedKeys={selectedKeys}
-        onSelectionChange={onSelectionChange as any}
+        onSelectionChange={onSelectionChange}
         removeWrapper
       >
         <TableHeader>

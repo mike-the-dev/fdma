@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 import { useAccount } from "@/features/instapaytient/account/useAccount";
 import { AccountSummary } from "@/components/Pages/Instapaytient/AccountDetail/AccountSummary";
 import { TransactionsTable } from "@/components/Pages/Instapaytient/AccountDetail/TransactionsTable";
+import { AccountDetails } from "@/components/Pages/Instapaytient/AccountDetail/AccountDetails";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -16,7 +17,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   // Unwrap the params Promise using React.use()
   const { id } = use(params);
   
-  const { account, isLoading, error, refetch } = useAccount(id);
+  const { account, isLoading, error, refetch, transactions, transactionsLoading, transactionsError } = useAccount(id);
 
   // Loading state
   if (isLoading) {
@@ -65,17 +66,34 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-7xl">
-        <h1 className="mb-2 text-2xl font-semibold text-gray-900">Account Details</h1>
-        <p className="mb-6 text-gray-500">View and manage your account transactions</p>
-        
-        <AccountSummary />
-        
-        <div className="mt-8">
-          <h2 className="mb-4 text-xl font-medium text-gray-900">Transactions</h2>
-          <TransactionsTable />
-        </div>
+        <Card
+          isBlurred
+          className="border-none bg-background/60 dark:bg-default-100/50"
+          shadow="sm"
+          style={{ padding: "12px 12px 12px 12px", width: "100%" }}
+        >
+          <h1 className="mb-2 text-2xl font-semibold text-white">Account Details</h1>
+          <p className="mb-6 text-gray-500">View and manage manage account.</p>
+
+          <AccountDetails account={account} />
+
+          <div className="mt-12"></div>
+          
+          <AccountSummary />
+          
+          <div className="mt-8">
+            <h2 className="mb-4 text-xl font-medium text-white">Transactions</h2>
+            <TransactionsTable 
+              transactions={transactions}
+              isLoading={transactionsLoading}
+              error={transactionsError}
+              selectedKeys={new Set()}
+              onSelectionChange={() => {}}
+            />
+          </div>
+        </Card>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ interface AccountProps {
     "GSI1-PK": string;
     "GSI1-SK": string;
     entity: string;
-    payout: {
+    payout?: {
       name: string;
       currency: string;
       stripe_id: string;

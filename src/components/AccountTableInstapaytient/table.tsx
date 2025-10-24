@@ -35,7 +35,7 @@ const columns: {
     label: "STATE",
   },
   {
-    key: "PK",
+    key: "id",
     label: "ID",
   },
   {
@@ -62,30 +62,25 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [account, setAccount] = React.useState<AccountInstapaytient>({
-    entity: "",
-    _createdAt_: "",
+    id: "",
+    name: "",
+    company: "",
+    state: "",
+    entity: "ACCOUNT",
     payout: {
       name: "",
-      total_payout_amount: 0,
-      take: 0,
       currency: "",
-      instant_payout_enabled: false,
-      stripe_id: "",
+      stripeId: "",
+      take: 0,
+      totalPayoutAmount: 0,
+      instantPayoutEnabled: false,
     },
-    company: "",
-    "GSI1-SK": "",
-    SK: "",
-    "GSI1-PK": "",
-    PK: "",
-    name: "",
-    _lastUpdated_: "",
-    state: "",
   });
 
   const handleRowClick = (item: AccountInstapaytient) => {
     return (): void => {
-      // Navigate to the account detail page using the PK as the ID
-      router.push(`/dashboard/instapaytient/${item.PK}`);
+      // Navigate to the account detail page using the id
+      router.push(`/dashboard/instapaytient/${encodeURIComponent(item.id)}`);
     };
   };
 
@@ -100,24 +95,19 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
 
   const setInitialState = (): void => {
     setAccount({
-      entity: "",
-      _createdAt_: "",
+      id: "",
+      name: "",
+      company: "",
+      state: "",
+      entity: "ACCOUNT",
       payout: {
         name: "",
-        total_payout_amount: 0,
-        take: 0,
         currency: "",
-        instant_payout_enabled: false,
-        stripe_id: "",
+        stripeId: "",
+        take: 0,
+        totalPayoutAmount: 0,
+        instantPayoutEnabled: false,
       },
-      company: "",
-      "GSI1-SK": "",
-      SK: "",
-      "GSI1-PK": "",
-      PK: "",
-      name: "",
-      _lastUpdated_: "",
-      state: "",
     });
   };
 
@@ -147,7 +137,7 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
         <TableBody items={props.accounts}>
           {(item) => (
             <TableRow 
-              key={item.PK}
+              key={item.id}
               className="cursor-pointer hover:bg-default-100 transition-colors"
               onClick={handleRowClick(item)}
             >
@@ -162,14 +152,14 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
                 if (columnKey === "stripeID") {
                   // Handle stripeID from nested payout object
                   return (
-                    <TableCell>{item.payout?.stripe_id || "N/A"}</TableCell>
+                    <TableCell>{item.payout?.stripeId || "N/A"}</TableCell>
                   );
                 }
 
                 if (columnKey === "instantPayoutEnabled")
                   return (
                     <TableCell>
-                      {item.payout?.instant_payout_enabled ? "Yes" : "No"}
+                      {item.payout?.instantPayoutEnabled ? "Yes" : "No"}
                     </TableCell>
                   );
 

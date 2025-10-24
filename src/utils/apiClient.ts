@@ -47,7 +47,7 @@ apiClient.interceptors.response.use(
   },
   (error: AxiosError) => {
     // Check if it's an authentication error
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    if (error.response?.status === 401) {
       console.warn("Authentication error detected, logging out user");
 
       // Clear localStorage tokens

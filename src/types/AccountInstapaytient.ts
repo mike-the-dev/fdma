@@ -1,22 +1,17 @@
 export type AccountInstapaytient = {
-  PK: string;
-  SK: string;
+  id: string;
   name: string;
   company: string;
   state: string;
+  entity: "ACCOUNT";
   payout?: {
     name: string;
-    total_payout_amount: number;
-    take: number;
     currency: string;
-    instant_payout_enabled: boolean;
-    stripe_id: string;
-  };
-  "GSI1-PK": string;
-  "GSI1-SK": string;
-  entity: string;
-  _createdAt_: string;
-  _lastUpdated_: string;
+    stripeId: string;
+    take: number;
+    totalPayoutAmount: number;
+    instantPayoutEnabled: boolean;
+  } | null;
 };
 
 export type AccountInstapaytientHttpResponse = {

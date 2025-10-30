@@ -10,18 +10,31 @@ import { useState } from "react";
 interface State {
   name: string;
   businessUrl: string;
-  "GSI1-PK": string;
   isSubmitting: boolean;
   refresh_url: string;
+  stripeID: string;
 }
+
+type ApiCreateAccountSuccess = {
+  businessUrl: string;
+  stripeID: string;
+};
+
+type ApiCreateAccountError = {
+  error: {
+    message: string;
+  };
+};
+
+type ApiCreateAccountResponse = ApiCreateAccountSuccess | ApiCreateAccountError;
 
 const CustomerCreation = (): React.ReactElement => {
   const [state, setState] = useState<State>({
     name: "",
     businessUrl: "",
-    "GSI1-PK": "",
     isSubmitting: false,
     refresh_url: "",
+    stripeID: "",
   });
 
   const createAccount = async <T,>(createAccountInput: State): Promise<T> => {
@@ -32,10 +45,10 @@ const CustomerCreation = (): React.ReactElement => {
         body: JSON.stringify({
           ...createAccountInput,
         }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${localStorage.getItem("auth-public-token")}`,
-        },
+        // headers: {
+        //   "Content-type": "application/json; charset=UTF-8",
+        //   Authorization: `Bearer ${localStorage.getItem("auth-public-token")}`,
+        // },
       }
     );
 
@@ -64,32 +77,31 @@ const CustomerCreation = (): React.ReactElement => {
     try {
       setState((prevState) => ({ ...prevState, isSubmitting: true }));
 
-      const account = await createAccount<State>(state);
+      const account = await createAccount<ApiCreateAccountResponse>(state);
 
-      // @ts-ignore
-      if (account.error) throw new Error(account.error.message);
+      if ("error" in account) throw new Error(account.error.message);
 
       setState({
         name: "",
         businessUrl: "",
-        "GSI1-PK": state["GSI1-PK"],
         isSubmitting: false,
-        refresh_url: account.name.toLowerCase().replaceAll(" ", "-"),
+        refresh_url: state.name.toLowerCase().replaceAll(" ", "-"),
+        stripeID: account.stripeID,
       });
     } catch (error) {
       setState({
         name: "",
         businessUrl: "",
-        "GSI1-PK": state["GSI1-PK"],
         isSubmitting: false,
         refresh_url: "",
+        stripeID: "",
       });
       console.error("Error creating new account: ", error);
     }
   };
 
   const isSubmitDisabled = (): boolean => {
-    if (!state.name || !state["GSI1-PK"] || !state.businessUrl) return true;
+    if (!state.name || !state.businessUrl) return true;
 
     return false;
   };
@@ -98,9 +110,9 @@ const CustomerCreation = (): React.ReactElement => {
     setState({
       name: "",
       businessUrl: "",
-      "GSI1-PK": "",
       isSubmitting: false,
       refresh_url: "",
+      stripeID: "",
     });
   };
 
@@ -121,14 +133,6 @@ const CustomerCreation = (): React.ReactElement => {
           placeholder="Company Name"
           type="text"
           value={state.name}
-          onChange={onUpdateFormData}
-        />
-        <Input
-          label="ecwid store id"
-          name={"GSI1-PK"}
-          placeholder="Ecwid Store ID"
-          type="text"
-          value={state["GSI1-PK"]}
           onChange={onUpdateFormData}
         />
         <Input
@@ -236,7 +240,7 @@ const CustomerCreation = (): React.ReactElement => {
             <pre>
               <Code
                 style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
-              >{`                account: "acct_1PTWEkFKygeAChDZ",`}</Code>
+              >{`                account: "${state.stripeID}",`}</Code>
             </pre>
             <pre>
               <Code

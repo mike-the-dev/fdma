@@ -25,7 +25,7 @@ const createConnectedAccount = async (businessUrl: string): Promise<string> => {
     },
     settings: {
       payments: {
-        statement_descriptor: "JOY MD",
+        statement_descriptor: "Instapaytient",
       },
     },
   });

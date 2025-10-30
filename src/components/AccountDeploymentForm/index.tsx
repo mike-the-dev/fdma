@@ -4,8 +4,7 @@ import { Spacer } from "@heroui/spacer";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Select, SelectItem } from "@heroui/select";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify/react";
@@ -74,12 +73,10 @@ const US_STATES = [
 
 const AccountDeploymentForm = (): React.ReactElement => {
   const {
-    register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setValue,
-    watch,
     reset,
+    control,
   } = useForm<AccountDeploymentFormData>({
     resolver: zodResolver(accountDeploymentSchema),
     mode: "onBlur", // Validate on blur for better UX
@@ -90,11 +87,6 @@ const AccountDeploymentForm = (): React.ReactElement => {
       domain: "",
     },
   });
-
-  // State for the Select component
-  const [selectedState, setSelectedState] = useState(new Set<string>());
-
-  const watchedState = watch("state");
 
   const deployAccount = async (
     deployAccountInput: AccountDeploymentFormData
@@ -135,7 +127,6 @@ const AccountDeploymentForm = (): React.ReactElement => {
         state: "",
         domain: "",
       });
-      setSelectedState(new Set()); // Reset Select component state
 
       // Show success toast
       addToast({
@@ -163,7 +154,7 @@ const AccountDeploymentForm = (): React.ReactElement => {
       });
     }
   };
-
+  
   return (
     <Card
       isBlurred
@@ -176,60 +167,89 @@ const AccountDeploymentForm = (): React.ReactElement => {
       <Spacer y={4} />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <div className="flex-1">
-          <Input
-            label="Name"
-            placeholder="Enter name"
-            type="text"
-            {...register("name")}
-            color={errors.name ? "danger" : "default"}
-            errorMessage={errors.name?.message}
-            isInvalid={!!errors.name}
+          <Controller
+            name="name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="Name"
+                placeholder="Enter name"
+                type="text"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
+              />
+            )}
           />
         </div>
         <div className="flex-1">
-          <Input
-            label="Company"
-            placeholder="Enter company name"
-            type="text"
-            {...register("company")}
-            color={errors.company ? "danger" : "default"}
-            errorMessage={errors.company?.message}
-            isInvalid={!!errors.company}
+          <Controller
+            name="company"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="Company"
+                placeholder="Enter company name"
+                type="text"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
+              />
+            )}
           />
         </div>
       </div>
       <Spacer y={4} />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <div className="flex-1">
-          <Select
-            color={errors.state ? "danger" : "default"}
-            errorMessage={errors.state?.message}
-            isInvalid={!!errors.state}
-            label="State"
-            placeholder="Select a state"
-            selectedKeys={selectedState}
-            onSelectionChange={(keys) => {
-              const selectedValue = Array.from(keys)[0] as string;
-              setSelectedState(keys as Set<string>);
-              setValue("state", selectedValue, { shouldValidate: true });
-            }}
-          >
-            {US_STATES.map((state) => (
-              <SelectItem key={state.key}>{`${state.label} (${state.key})`}</SelectItem>
-            ))}
-          </Select>
+          <Controller
+            name="state"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Select
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
+                label="State"
+                placeholder="Select a state"
+                selectedKeys={field.value ? new Set([field.value]) : new Set()}
+                onSelectionChange={(keys) => {
+                  const selectedValue = Array.from(keys)[0] as string | undefined;
+                  field.onChange(selectedValue ?? "");
+                }}
+              >
+                {US_STATES.map((state) => (
+                  <SelectItem key={state.key}>{`${state.label} (${state.key})`}</SelectItem>
+                ))}
+              </Select>
+            )}
+          />
         </div>
         <div className="flex-1">
-          <Input
-            endContent=".instapaytient.com"
-            label="Domain"
-            placeholder="subdomain"
-            startContent="shop."
-            type="text"
-            {...register("domain")}
-            color={errors.domain ? "danger" : "default"}
-            errorMessage={errors.domain?.message}
-            isInvalid={!!errors.domain}
+          <Controller
+            name="domain"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                endContent=".instapaytient.com"
+                label="Domain"
+                placeholder="subdomain"
+                startContent="shop."
+                type="text"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
+              />
+            )}
           />
         </div>
       </div>

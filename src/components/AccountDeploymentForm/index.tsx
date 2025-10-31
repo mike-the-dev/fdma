@@ -103,7 +103,8 @@ const AccountDeploymentForm = (): React.ReactElement => {
 
       const response = await apiClient.post(
         "/api/user/createAccountDeployment",
-        payload
+        payload,
+        { timeout: 20000 }
       );
 
       return response.data;

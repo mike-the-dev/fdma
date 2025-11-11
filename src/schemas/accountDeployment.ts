@@ -111,6 +111,12 @@ export const accountDeploymentSchema = z.object({
       }
     )
     .transform((val) => val.toLowerCase().trim()),
+
+  stripeId: z
+    .string()
+    .trim()
+    .min(1, "Stripe ID is required")
+    .startsWith("acct_", { message: 'Stripe ID must start with "acct_".' }),
 });
 
 // Type inference for TypeScript

@@ -85,6 +85,7 @@ const AccountDeploymentForm = (): React.ReactElement => {
       company: "",
       state: "",
       domain: "",
+      stripeId: "",
     },
   });
 
@@ -127,6 +128,7 @@ const AccountDeploymentForm = (): React.ReactElement => {
         company: "",
         state: "",
         domain: "",
+        stripeId: "",
       });
 
       // Show success toast
@@ -243,6 +245,28 @@ const AccountDeploymentForm = (): React.ReactElement => {
                 label="Domain"
                 placeholder="subdomain"
                 startContent="shop."
+                type="text"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
+              />
+            )}
+          />
+        </div>
+      </div>
+      <Spacer y={4} />
+      <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+        <div className="flex-1">
+          <Controller
+            name="stripeId"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="Stripe ID"
+                placeholder="Enter Stripe ID"
                 type="text"
                 value={field.value ?? ""}
                 onChange={field.onChange}

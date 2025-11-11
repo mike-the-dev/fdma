@@ -16,6 +16,7 @@ interface State {
 }
 
 type ApiCreateAccountSuccess = {
+  name: string;
   businessUrl: string;
   stripeID: string;
 };

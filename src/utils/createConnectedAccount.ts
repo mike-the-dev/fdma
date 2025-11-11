@@ -1,6 +1,11 @@
 import Stripe from "stripe";
 
-const createConnectedAccount = async (businessUrl: string): Promise<string> => {
+type CreateConnectedAccountParams = {
+  businessName: string;
+  businessUrl: string;
+};
+
+const createConnectedAccount = async ({ businessName, businessUrl}: CreateConnectedAccountParams): Promise<string> => {
   const prodSecret = process.env.STRIPE_PROD_SECRET
     ? process.env.STRIPE_PROD_SECRET
     : "";
@@ -18,9 +23,13 @@ const createConnectedAccount = async (businessUrl: string): Promise<string> => {
       transfers: {
         requested: true,
       },
+      affirm_payments: {
+        requested: true,
+      },
     },
     business_type: "individual",
     business_profile: {
+      name: businessName,
       url: businessUrl,
     },
     settings: {

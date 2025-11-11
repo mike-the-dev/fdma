@@ -1,6 +1,7 @@
 import createAccount from "@/utils/createAccount";
 
 type ResponseData = {
+  name: string;
   businessUrl: string;
 };
 
@@ -9,10 +10,12 @@ export async function POST(request: Request) {
     const body: ResponseData = await request.json();
 
     const stripeID = await createAccount({
+      businessName: body.name,
       businessUrl: body.businessUrl,
     });
 
     return Response.json({
+      name: body.name,
       businessUrl: body.businessUrl,
       stripeID: stripeID,
     });

@@ -8,7 +8,7 @@ import axios from "axios";
  * @description Axios instance with request interceptor for injecting access token from sessionStorage into Authorization header.
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL as string;
+export const BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL as string}/api`;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

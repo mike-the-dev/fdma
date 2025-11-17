@@ -13,7 +13,7 @@ import {
   FeatureAccount,
 } from "./_shared/customerInsights.schema";
 
-import axiosInstance from "@/utils/axiosInterceptor";
+import axiosInstance, { BASE_URL } from "@/utils/axiosInterceptor";
 import { handleRequest, getClientDomainHeader } from "@/services/api";
 
 // ============================================================================
@@ -53,7 +53,7 @@ export const fetchAccountsServer = async (
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/listAccounts`,
+      `${BASE_URL}/user/listAccounts`,
       {
         method: "GET",
         headers: {

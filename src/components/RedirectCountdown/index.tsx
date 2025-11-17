@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 interface RedirectCountdownProps {
@@ -16,17 +16,14 @@ const RedirectCountdown = ({
 }: RedirectCountdownProps) => {
   const [countdown, setCountdown] = useState(seconds);
   const router = useRouter();
+  const hasRedirectedRef = useRef(false);
 
+  // Handle countdown timer
   useEffect(() => {
     const countdownInterval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(countdownInterval);
-          if (onRedirect) {
-            onRedirect();
-          }
-          router.push(redirectPath);
-
           return 0;
         }
 
@@ -36,7 +33,22 @@ const RedirectCountdown = ({
 
     // Cleanup interval on unmount
     return () => clearInterval(countdownInterval);
-  }, [seconds, redirectPath, onRedirect]);
+  }, [seconds]);
+
+  // Handle redirect when countdown reaches 0
+  useEffect(() => {
+    if (countdown === 0 && !hasRedirectedRef.current) {
+      hasRedirectedRef.current = true;
+      
+      // Call onRedirect callback if provided
+      if (onRedirect) {
+        onRedirect();
+      }
+      
+      // Perform redirect using router.push
+      router.push(redirectPath);
+    }
+  }, [countdown, redirectPath, onRedirect, router]);
 
   return (
     <p className="text-small text-default-400 mt-2">

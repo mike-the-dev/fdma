@@ -41,6 +41,13 @@ export default () => {
           "user-role",
           response.data.authorization.user.role
         );
+        // Store user email if available
+        if (response.data.authorization.user.emailAddress) {
+          localStorage.setItem(
+            "user-email",
+            response.data.authorization.user.emailAddress
+          );
+        }
       }
 
       return response.data;

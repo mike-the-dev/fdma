@@ -8,15 +8,20 @@ import { usePathname } from "next/navigation";
 
 import JoymdLogo from "../Logos/JoymdLogo";
 import LogoutButton from "../LogoutButton";
+import { getLocalStorageItem } from "@/hooks/useLocalStorage";
 
 interface NavigationProps {}
 
 const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
+    // Get user email from localStorage
+    const email = getLocalStorageItem("user-email");
+    setUserEmail(email);
   }, []);
 
   // Don't show navigation on login, home page, or magic link verification
@@ -35,6 +40,10 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
 
   // Always show navigation for dashboard routes
   // No authentication state dependency - just pathname-based visibility
+
+  // List of emails that can see Customer Insights
+  const allowedEmails = ["michael@instapaytient.com", "henry@instapaytient.com"];
+  const canViewCustomerInsights = userEmail && allowedEmails.includes(userEmail);
 
   return (
     <Navbar isBordered>
@@ -113,6 +122,26 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
             Scheduler
           </NextUILink>
         </NavbarItem>
+        {canViewCustomerInsights && (
+          <NavbarItem
+            isActive={
+              pathname.includes("/dashboard/customer-insights") ? true : false
+            }
+          >
+            <NextUILink
+              aria-current="page"
+              as={Link}
+              color={
+                pathname.includes("/dashboard/customer-insights")
+                  ? "secondary"
+                  : "foreground"
+              }
+              href="/dashboard/customer-insights"
+            >
+              Customer Insights
+            </NextUILink>
+          </NavbarItem>
+        )}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>

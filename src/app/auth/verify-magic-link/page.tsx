@@ -1,23 +1,21 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Card } from "@heroui/card";
 import { Spinner } from "@heroui/spinner";
 
 import { setLocalStorageItem } from "@/hooks/useLocalStorage";
-import { useAuthContext } from "@/context/AuthContext";
 import RedirectCountdown from "@/components/RedirectCountdown";
 import verifyMagicLink from "@/utils/verifyMagicLink";
+import { setAuthCookies } from "@/app/_actions/auth";
 
 export default function VerifyMagicLink() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const hasVerifiedRef = useRef(false); // Use ref to persist across re-renders
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const { recheckAuth } = useAuthContext();
 
   // Configuration for redirect
   const REDIRECT_DELAY = 5; // seconds
@@ -57,9 +55,13 @@ export default function VerifyMagicLink() {
           setLocalStorageItem("refresh-token", tokens.refresh);
           setLocalStorageItem("user-id", user.id || user.userId || "");
           setLocalStorageItem("user-role", user.role);
+          // Store user email if available
+          if (user.emailAddress || user.email) {
+            setLocalStorageItem("user-email", user.emailAddress || user.email);
+          }
 
-          // Update AuthContext to reflect the new authentication state
-          recheckAuth();
+          // Set httpOnly cookies server-side immediately after verification
+          await setAuthCookies(tokens.access, tokens.refresh);
 
           setSuccess(true);
           setLoading(false);
@@ -92,7 +94,7 @@ export default function VerifyMagicLink() {
         </Card>
       </div>
     );
-  }
+  };
 
   if (error) {
     return (
@@ -109,7 +111,7 @@ export default function VerifyMagicLink() {
         </Card>
       </div>
     );
-  }
+  };
 
   if (success) {
     return (
@@ -131,7 +133,7 @@ export default function VerifyMagicLink() {
         </Card>
       </div>
     );
-  }
+  };
 
   return null;
 }

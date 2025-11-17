@@ -19,10 +19,15 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  // Check for user email whenever pathname changes or component mounts
+  useEffect(() => {
+    if (!isMounted) return;
     // Get user email from localStorage
     const email = getLocalStorageItem("user-email");
     setUserEmail(email);
-  }, []);
+  }, [isMounted, pathname]);
 
   // Don't show navigation on login, home page, or magic link verification
   if (
@@ -43,7 +48,9 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
 
   // List of emails that can see Customer Insights
   const allowedEmails = ["michael@instapaytient.com", "henry@instapaytient.com"];
-  const canViewCustomerInsights = userEmail && allowedEmails.includes(userEmail);
+  // Normalize email for comparison (trim and lowercase)
+  const normalizedEmail = userEmail?.trim().toLowerCase();
+  const canViewCustomerInsights = normalizedEmail && allowedEmails.map(e => e.toLowerCase()).includes(normalizedEmail);
 
   return (
     <Navbar isBordered>

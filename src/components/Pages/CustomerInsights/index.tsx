@@ -45,7 +45,7 @@ const CustomerInsights = (): React.ReactElement => {
                   }}
                 >
                   {(accounts ?? []).map((acct) => (
-                    <SelectItem key={acct.id}>
+                    <SelectItem key={acct.id} textValue={`${acct.company} (${acct.name})`}>
                       {acct.company} ({acct.name})
                     </SelectItem>
                   ))}

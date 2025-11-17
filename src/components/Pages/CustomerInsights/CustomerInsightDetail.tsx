@@ -51,7 +51,9 @@ const CustomerInsightDetail = (): React.ReactElement => {
             }}
           >
             {(accounts ?? []).map((acct) => (
-              <SelectItem key={acct.id}>{acct.name}</SelectItem>
+              <SelectItem key={acct.id}>
+                {acct.company} ({acct.name})
+              </SelectItem>
             ))}
           </Select>
         </div>

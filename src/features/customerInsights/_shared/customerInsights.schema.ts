@@ -10,6 +10,7 @@ export interface AccountAnalyticsTargets {
 export type FeatureAccount = {
   id: string;
   name: string;
+  company: string;
 };
 
 // UI Form shape

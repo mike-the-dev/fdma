@@ -8,6 +8,7 @@ import { Icon } from "@iconify/react";
 import {
   CustomerInsightsFormData,
   CustomerInsightsValidators,
+  FeatureAccount,
 } from "../_shared/customerInsights.schema";
 import {
   useUpdateAnalyticsTargets,
@@ -26,7 +27,7 @@ export interface UseCustomerInsightsFormReturn {
   isPending: boolean;
   error: string | null;
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  accounts: { id: string; name: string }[] | undefined;
+  accounts: FeatureAccount[] | undefined;
 }
 
 export const useCustomerInsightsForm = (): UseCustomerInsightsFormReturn => {

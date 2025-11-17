@@ -46,7 +46,7 @@ export async function setAuthCookiesAndRedirect(
  */
 export async function setAuthCookies(
   accessToken: string,
-  refreshToken: string,
+  refreshToken: string
 ) {
   const cookieStore = await cookies();
 
@@ -87,5 +87,3 @@ export async function clearAuthAndRedirect(redirectPath: string = "/login") {
   // Redirect to the specified path
   redirect(redirectPath);
 }
-
-

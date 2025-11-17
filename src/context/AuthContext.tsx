@@ -50,18 +50,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to check auth status
   const checkAuth = () => {
     // Check if we should bypass auth in development
-    const bypassAuth = process.env.NODE_ENV === 'development' && 
-                      process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true';
+    const bypassAuth =
+      process.env.NODE_ENV === "development" &&
+      process.env.NEXT_PUBLIC_BYPASS_AUTH === "true";
 
     if (bypassAuth) {
       // Set mock authenticated state for development
       setAuthState({
         isAuthenticated: true,
         isLoading: false,
-        userId: 'dev-user-123',
-        userRole: 'admin',
+        userId: "dev-user-123",
+        userRole: "admin",
       });
-      
+
       // Handle redirects for bypassed auth
       const isDashboardRoute = pathname.startsWith("/dashboard");
       const isLoginRoute = pathname === "/login";
@@ -70,6 +71,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (isDashboardRoute || isLoginRoute || isRootRoute) {
         router.push("/dashboard/instapaytient");
       }
+
       return;
     }
 
@@ -109,6 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Check if pathname has changed (indicating a navigation)
     const pathnameChanged = lastPathname.current !== pathname;
+
     lastPathname.current = pathname;
 
     // If pathname changed, reset the auth check flag to re-check auth
@@ -120,7 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (hasCheckedAuth.current && !pathnameChanged) {
       return;
     }
-    
+
     hasCheckedAuth.current = true;
     checkAuth();
   }, [pathname]); // Add pathname as dependency

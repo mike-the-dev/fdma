@@ -4,14 +4,18 @@ export const mapAccount = (account: Account): Account => {
   return {
     ...account,
     id: account.id.replace("A#", ""),
-    payout: account.payout ? {
-      ...account.payout,
-      take: (account.payout.take * 100) / 100
-    } : null,
+    payout: account.payout
+      ? {
+          ...account.payout,
+          take: (account.payout.take * 100) / 100,
+        }
+      : null,
   };
 };
 
-export const mapTransaction = (transaction: Transaction): TransactionMappedDTO => {
+export const mapTransaction = (
+  transaction: Transaction
+): TransactionMappedDTO => {
   return {
     ...transaction,
     amount: parseFloat((transaction.amount / 100).toFixed(2)),

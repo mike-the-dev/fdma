@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import CustomerInsights from "@/components/Pages/CustomerInsights";
-import { CustomerInsightDetail } from "@/components/Pages/CustomerInsights/CustomerInsightDetail";
+
 import { cookies } from "next/headers";
 import { HydrationBoundary } from "@tanstack/react-query";
-import { prefetchAccounts } from "@/features/customerInsights/customerInsights.service";
 import { Spacer } from "@heroui/spacer";
+
+import CustomerInsights from "@/components/Pages/CustomerInsights";
+import { CustomerInsightDetail } from "@/components/Pages/CustomerInsights/CustomerInsightDetail";
+import { prefetchAccounts } from "@/features/customerInsights/customerInsights.service";
 
 export const metadata: Metadata = {
   title: "Customer Insights",
@@ -15,6 +17,7 @@ export const metadata: Metadata = {
 export default async function CustomerInsightsPage() {
   const cookieStore = await cookies();
   const dehydratedAccountsState = await prefetchAccounts(cookieStore);
+
   return (
     <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "0 16px" }}>
       <main className="p-6">
@@ -26,4 +29,4 @@ export default async function CustomerInsightsPage() {
       </main>
     </div>
   );
-};
+}

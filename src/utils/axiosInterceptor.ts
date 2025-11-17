@@ -11,13 +11,16 @@ import axios from "axios";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL
+  baseURL: BASE_URL,
 });
 
 // Attach access token to all outgoing requests
 axiosInstance.interceptors.request.use(
   (config) => {
-    const accessToken = typeof window !== "undefined" ? localStorage.getItem("access-token") : null;
+    const accessToken =
+      typeof window !== "undefined"
+        ? localStorage.getItem("access-token")
+        : null;
 
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
@@ -52,6 +55,7 @@ axiosInstance.interceptors.response.use(
       } catch (_e) {
         // no-op
       }
+
       return Promise.reject({
         ...error,
         isTokenExpired: true,
@@ -64,5 +68,3 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
-
-

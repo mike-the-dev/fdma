@@ -11,8 +11,9 @@ import { Card } from "@heroui/card";
 import { Icon } from "@iconify/react";
 import { Spinner } from "@heroui/spinner";
 import Image from "next/image";
-import { TransactionMappedDTO } from "@/features/instapaytient/account/account.schema";
 import { Selection } from "@heroui/table";
+
+import { TransactionMappedDTO } from "@/features/instapaytient/account/account.schema";
 interface TransactionsTableProps {
   transactions?: TransactionMappedDTO[];
   isLoading?: boolean;
@@ -26,9 +27,8 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   isLoading = false,
   error = null,
   selectedKeys,
-  onSelectionChange
+  onSelectionChange,
 }) => {
-
   const renderCell = (transaction: TransactionMappedDTO, columnKey: string) => {
     switch (columnKey) {
       case "amount":
@@ -37,8 +37,8 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
             <span className="font-medium">${transaction.amount}</span>
             <span className="text-gray-500">{transaction.currency}</span>
             <Chip
-              size="sm"
               color={transaction.status === "succeeded" ? "success" : "default"}
+              size="sm"
               variant="flat"
             >
               {transaction.status}
@@ -47,29 +47,35 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         );
       case "paymentMethod":
         const paymentMethodTypes = transaction.payment_method_types;
-        const displayName = paymentMethodTypes?.includes("affirm") ? "Affirm" : paymentMethodTypes?.[0] || "-";
+        const displayName = paymentMethodTypes?.includes("affirm")
+          ? "Affirm"
+          : paymentMethodTypes?.[0] || "-";
         const isAffirm = paymentMethodTypes?.includes("affirm");
-        
+
         return (
           <div className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gray-100">
               {isAffirm ? (
                 <Image
-                  src="/blue_solid_circle_white_bg.svg"
                   alt="Affirm"
-                  width={24}
-                  height={24}
                   className="rounded"
+                  height={24}
+                  src="/blue_solid_circle_white_bg.svg"
+                  width={24}
                 />
               ) : (
-                <Icon icon="lucide:credit-card" className="text-gray-600" />
+                <Icon className="text-gray-600" icon="lucide:credit-card" />
               )}
             </div>
             <span>{displayName}</span>
           </div>
         );
       case "description":
-        return <span className="font-mono text-xs text-gray-600">{transaction.id}</span>;
+        return (
+          <span className="font-mono text-xs text-gray-600">
+            {transaction.id}
+          </span>
+        );
       case "customer":
         return transaction.metadata?.customerEmail || "-";
       case "date":
@@ -79,7 +85,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
       case "actions":
         return (
           <Button isIconOnly size="sm" variant="light">
-            <Icon icon="lucide:more-horizontal" className="text-lg" />
+            <Icon className="text-lg" icon="lucide:more-horizontal" />
           </Button>
         );
       default:
@@ -92,7 +98,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     return (
       <Card className="overflow-visible shadow-sm">
         <div className="flex items-center justify-center p-8">
-          <Spinner size="lg" color="primary" />
+          <Spinner color="primary" size="lg" />
           <span className="ml-3 text-gray-500">Loading transactions...</span>
         </div>
       </Card>
@@ -104,7 +110,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     return (
       <Card className="overflow-visible shadow-sm">
         <div className="flex items-center justify-center p-8">
-          <Icon icon="lucide:alert-circle" className="text-danger mr-3" />
+          <Icon className="text-danger mr-3" icon="lucide:alert-circle" />
           <span className="text-danger">{error}</span>
         </div>
       </Card>
@@ -116,7 +122,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     return (
       <Card className="overflow-visible shadow-sm">
         <div className="flex items-center justify-center p-8">
-          <Icon icon="lucide:file-x" className="text-gray-400 mr-3" />
+          <Icon className="text-gray-400 mr-3" icon="lucide:file-x" />
           <span className="text-gray-500">No transactions found</span>
         </div>
       </Card>
@@ -126,11 +132,11 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   return (
     <Card className="overflow-visible shadow-sm">
       <Table
-        aria-label="Transactions table"
-        selectionMode="multiple"
-        selectedKeys={selectedKeys}
-        onSelectionChange={onSelectionChange}
         removeWrapper
+        aria-label="Transactions table"
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        onSelectionChange={onSelectionChange}
       >
         <TableHeader>
           <TableColumn key="amount">Amount</TableColumn>
@@ -140,13 +146,15 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           <TableColumn key="date">Date</TableColumn>
           <TableColumn key="merchant">Order#</TableColumn>
           <TableColumn key="actions" hideHeader>
-            <span></span>
+            <span />
           </TableColumn>
         </TableHeader>
         <TableBody items={transactions}>
           {(item) => (
             <TableRow key={item.id}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey as string)}</TableCell>}
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey as string)}</TableCell>
+              )}
             </TableRow>
           )}
         </TableBody>

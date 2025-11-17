@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
-import { useAuthContext } from "@/context/AuthContext";
-import { fetchAccountById, fetchTransactionsByStripeAccount, fetchStripeAccountById } from "./account.service";
+
+import {
+  fetchAccountById,
+  fetchTransactionsByStripeAccount,
+  fetchStripeAccountById,
+} from "./account.service";
 import { mapAccount, mapTransaction } from "./account.mappers";
-import { AccountInstapaytient } from "@/types/AccountInstapaytient";
 import { TransactionMappedDTO, StripeAccount } from "./account.schema";
 import { toAccountError } from "./account.errors";
+
+import { AccountInstapaytient } from "@/types/AccountInstapaytient";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface UseAccountReturn {
   account: AccountInstapaytient | null;
@@ -27,23 +33,30 @@ export const useAccount = (id: string): UseAccountReturn => {
   const [account, setAccount] = useState<AccountInstapaytient | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Transaction state
   const [transactions, setTransactions] = useState<TransactionMappedDTO[]>([]);
   const [transactionsLoading, setTransactionsLoading] = useState(false);
-  const [transactionsError, setTransactionsError] = useState<string | null>(null);
-  
+  const [transactionsError, setTransactionsError] = useState<string | null>(
+    null
+  );
+
   // Stripe Account state
-  const [stripeAccount, setStripeAccount] = useState<StripeAccount | null>(null);
+  const [stripeAccount, setStripeAccount] = useState<StripeAccount | null>(
+    null
+  );
   const [stripeAccountLoading, setStripeAccountLoading] = useState(false);
-  const [stripeAccountError, setStripeAccountError] = useState<string | null>(null);
+  const [stripeAccountError, setStripeAccountError] = useState<string | null>(
+    null
+  );
 
   const fetchAccountDetails = async (): Promise<void> => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const data = await fetchAccountById(id);
+
       setAccount(mapAccount(data));
     } catch (err: unknown) {
       const mapped = toAccountError(err);
@@ -53,21 +66,25 @@ export const useAccount = (id: string): UseAccountReturn => {
 
       setError(mapped.message);
 
-      if (process.env.NODE_ENV !== "production") console.error("[useAccount]", err);
+      if (process.env.NODE_ENV !== "production")
+        console.error("[useAccount]", err);
     } finally {
       setIsLoading(false);
-    };
+    }
   };
 
   const fetchTransactions = async (): Promise<void> => {
     if (!account?.payout?.stripeId) return;
-    
+
     try {
       setTransactionsLoading(true);
       setTransactionsError(null);
-      
-      const data = await fetchTransactionsByStripeAccount(account.payout.stripeId);
+
+      const data = await fetchTransactionsByStripeAccount(
+        account.payout.stripeId
+      );
       const mappedTransactions = data.map(mapTransaction);
+
       setTransactions(mappedTransactions);
     } catch (err: unknown) {
       const mapped = toAccountError(err);
@@ -77,20 +94,22 @@ export const useAccount = (id: string): UseAccountReturn => {
 
       setTransactionsError(mapped.message);
 
-      if (process.env.NODE_ENV !== "production") console.error("[useAccount - fetchTransactions]", err);
+      if (process.env.NODE_ENV !== "production")
+        console.error("[useAccount - fetchTransactions]", err);
     } finally {
       setTransactionsLoading(false);
-    };
+    }
   };
 
   const fetchStripeAccount = async (): Promise<void> => {
     if (!account?.payout?.stripeId) return;
-    
+
     try {
       setStripeAccountLoading(true);
       setStripeAccountError(null);
-      
+
       const data = await fetchStripeAccountById(account.payout.stripeId);
+
       setStripeAccount(data);
     } catch (err: unknown) {
       const mapped = toAccountError(err);
@@ -100,10 +119,11 @@ export const useAccount = (id: string): UseAccountReturn => {
 
       setStripeAccountError(mapped.message);
 
-      if (process.env.NODE_ENV !== "production") console.error("[useAccount - fetchStripeAccount]", err);
+      if (process.env.NODE_ENV !== "production")
+        console.error("[useAccount - fetchStripeAccount]", err);
     } finally {
       setStripeAccountLoading(false);
-    };
+    }
   };
 
   useEffect(() => {

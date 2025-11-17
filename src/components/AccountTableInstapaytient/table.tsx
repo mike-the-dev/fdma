@@ -136,7 +136,7 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
         </TableHeader>
         <TableBody items={props.accounts}>
           {(item) => (
-            <TableRow 
+            <TableRow
               key={item.id}
               className="cursor-pointer hover:bg-default-100 transition-colors"
               onClick={handleRowClick(item)}

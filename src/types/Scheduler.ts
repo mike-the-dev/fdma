@@ -18,5 +18,3 @@ export type Scheduler = {
 export type SchedulerHttpResponse = {
   schedulers: Scheduler[];
 };
-
-

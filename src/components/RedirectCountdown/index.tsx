@@ -24,6 +24,7 @@ const RedirectCountdown = ({
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(countdownInterval);
+
           return 0;
         }
 
@@ -39,12 +40,12 @@ const RedirectCountdown = ({
   useEffect(() => {
     if (countdown === 0 && !hasRedirectedRef.current) {
       hasRedirectedRef.current = true;
-      
+
       // Call onRedirect callback if provided
       if (onRedirect) {
         onRedirect();
       }
-      
+
       // Perform redirect using router.push
       router.push(redirectPath);
     }

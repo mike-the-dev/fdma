@@ -115,7 +115,6 @@ const AccountDeploymentForm = (): React.ReactElement => {
     }
   };
 
-
   const onSubmitFormData = async (
     data: AccountDeploymentFormData
   ): Promise<void> => {
@@ -157,7 +156,7 @@ const AccountDeploymentForm = (): React.ReactElement => {
       });
     }
   };
-  
+
   return (
     <Card
       isBlurred
@@ -171,38 +170,38 @@ const AccountDeploymentForm = (): React.ReactElement => {
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <div className="flex-1">
           <Controller
-            name="name"
             control={control}
+            name="name"
             render={({ field, fieldState }) => (
               <Input
                 {...field}
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
                 label="Name"
                 placeholder="Enter name"
                 type="text"
                 value={field.value ?? ""}
                 onChange={field.onChange}
-                color={fieldState.error ? "danger" : "default"}
-                errorMessage={fieldState.error?.message}
-                isInvalid={!!fieldState.error}
               />
             )}
           />
         </div>
         <div className="flex-1">
           <Controller
-            name="company"
             control={control}
+            name="company"
             render={({ field, fieldState }) => (
               <Input
                 {...field}
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
                 label="Company"
                 placeholder="Enter company name"
                 type="text"
                 value={field.value ?? ""}
                 onChange={field.onChange}
-                color={fieldState.error ? "danger" : "default"}
-                errorMessage={fieldState.error?.message}
-                isInvalid={!!fieldState.error}
               />
             )}
           />
@@ -212,8 +211,8 @@ const AccountDeploymentForm = (): React.ReactElement => {
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <div className="flex-1">
           <Controller
-            name="state"
             control={control}
+            name="state"
             render={({ field, fieldState }) => (
               <Select
                 color={fieldState.error ? "danger" : "default"}
@@ -223,12 +222,17 @@ const AccountDeploymentForm = (): React.ReactElement => {
                 placeholder="Select a state"
                 selectedKeys={field.value ? new Set([field.value]) : new Set()}
                 onSelectionChange={(keys) => {
-                  const selectedValue = Array.from(keys)[0] as string | undefined;
+                  const selectedValue = Array.from(keys)[0] as
+                    | string
+                    | undefined;
+
                   field.onChange(selectedValue ?? "");
                 }}
               >
                 {US_STATES.map((state) => (
-                  <SelectItem key={state.key}>{`${state.label} (${state.key})`}</SelectItem>
+                  <SelectItem
+                    key={state.key}
+                  >{`${state.label} (${state.key})`}</SelectItem>
                 ))}
               </Select>
             )}
@@ -236,21 +240,21 @@ const AccountDeploymentForm = (): React.ReactElement => {
         </div>
         <div className="flex-1">
           <Controller
-            name="domain"
             control={control}
+            name="domain"
             render={({ field, fieldState }) => (
               <Input
                 {...field}
+                color={fieldState.error ? "danger" : "default"}
                 endContent=".instapaytient.com"
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
                 label="Domain"
                 placeholder="subdomain"
                 startContent="shop."
                 type="text"
                 value={field.value ?? ""}
                 onChange={field.onChange}
-                color={fieldState.error ? "danger" : "default"}
-                errorMessage={fieldState.error?.message}
-                isInvalid={!!fieldState.error}
               />
             )}
           />
@@ -260,19 +264,19 @@ const AccountDeploymentForm = (): React.ReactElement => {
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <div className="flex-1">
           <Controller
-            name="stripeId"
             control={control}
+            name="stripeId"
             render={({ field, fieldState }) => (
               <Input
                 {...field}
+                color={fieldState.error ? "danger" : "default"}
+                errorMessage={fieldState.error?.message}
+                isInvalid={!!fieldState.error}
                 label="Stripe ID"
                 placeholder="Enter Stripe ID"
                 type="text"
                 value={field.value ?? ""}
                 onChange={field.onChange}
-                color={fieldState.error ? "danger" : "default"}
-                errorMessage={fieldState.error?.message}
-                isInvalid={!!fieldState.error}
               />
             )}
           />

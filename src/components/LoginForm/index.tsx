@@ -152,10 +152,12 @@ const LoginForm = (): React.ReactElement => {
 
       <Spacer y={4} />
 
-      <form onSubmit={(e) => {
-        // Prevent default form submission - we handle everything via onPress
-        e.preventDefault();
-      }}>
+      <form
+        onSubmit={(e) => {
+          // Prevent default form submission - we handle everything via onPress
+          e.preventDefault();
+        }}
+      >
         <div className="flex w-full flex-col gap-4">
           {isRememberedEmail ? (
             <div className="border border-default-200 rounded-medium p-4 flex items-center justify-between bg-content1">
@@ -164,7 +166,9 @@ const LoginForm = (): React.ReactElement => {
                   <Icon className="text-primary text-lg" icon="lucide:mail" />
                 </div>
                 <Tooltip content={rememberedEmail} showArrow={true}>
-                  <span className="font-medium truncate flex-1 min-w-0">{rememberedEmail}</span>
+                  <span className="font-medium truncate flex-1 min-w-0">
+                    {rememberedEmail}
+                  </span>
                 </Tooltip>
               </div>
               <Button

@@ -6,11 +6,19 @@ import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Tabs, Tab } from "@heroui/tabs";
 import { Chip } from "@heroui/chip";
 import { Divider } from "@heroui/divider";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/table";
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@heroui/table";
 import { Button } from "@heroui/button";
 import { Badge } from "@heroui/badge";
 import { Tooltip } from "@heroui/tooltip";
 import { Icon } from "@iconify/react";
+
 import { formatCurrency, formatDate } from "@/utils/formatters";
 import { useAuthContext } from "@/context/AuthContext";
 import apiClient from "@/utils/apiClient";
@@ -18,7 +26,7 @@ import apiClient from "@/utils/apiClient";
 // Define the PaymentIntent interface
 interface PaymentIntent {
   id: string;
-  object: 'payment_intent';
+  object: "payment_intent";
   amount: number;
   amount_capturable: number;
   amount_details?: {
@@ -78,9 +86,10 @@ type PageProps = {
 const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   // Unwrap the params Promise using React.use()
   const { id } = use(params);
-  
+
   const { isAuthenticated, isLoading: authLoading } = useAuthContext();
-  const [paymentIntentData, setPaymentIntentData] = useState<PaymentIntent | null>(null);
+  const [paymentIntentData, setPaymentIntentData] =
+    useState<PaymentIntent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -88,29 +97,34 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   // Get status badge color
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'succeeded':
-        return 'success';
-      case 'processing':
-        return 'primary';
-      case 'requires_action':
-      case 'requires_capture':
-      case 'requires_confirmation':
-      case 'requires_payment_method':
-        return 'warning';
-      case 'canceled':
-        return 'danger';
+      case "succeeded":
+        return "success";
+      case "processing":
+        return "primary";
+      case "requires_action":
+      case "requires_capture":
+      case "requires_confirmation":
+      case "requires_payment_method":
+        return "warning";
+      case "canceled":
+        return "danger";
       default:
-        return 'default';
+        return "default";
     }
   };
 
   const fetchPaymentIntentDetails = async () => {
     try {
       // TODO: Replace with actual API endpoint for payment intent details
-      const response = await apiClient.get<PaymentIntent>(`/api/user/instapaytient/${id}`);
-      
-      console.log("[InstapaytientDetailPage] payment intent response:", response.data);
-      
+      const response = await apiClient.get<PaymentIntent>(
+        `/api/user/instapaytient/${id}`
+      );
+
+      console.log(
+        "[InstapaytientDetailPage] payment intent response:",
+        response.data
+      );
+
       setPaymentIntentData(response.data);
     } catch (err: any) {
       console.error("Error fetching payment intent details:", err);
@@ -142,7 +156,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   if (authLoading || isLoading) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center p-8 gap-4">
-        <Spinner size="lg" color="primary" />
+        <Spinner color="primary" size="lg" />
         <p className="text-default-500">Loading payment details...</p>
       </div>
     );
@@ -152,15 +166,25 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   if (error) {
     return (
       <div className="max-w-6xl mx-auto mt-10">
-        <Card isBlurred className="border-none bg-background/60 dark:bg-default-100/50" shadow="sm">
+        <Card
+          isBlurred
+          className="border-none bg-background/60 dark:bg-default-100/50"
+          shadow="sm"
+        >
           <CardBody className="text-center p-6">
-            <Icon icon="lucide:alert-circle" width={48} className="text-danger mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-danger mb-2">Error Loading Payment Intent</h2>
+            <Icon
+              className="text-danger mx-auto mb-4"
+              icon="lucide:alert-circle"
+              width={48}
+            />
+            <h2 className="text-xl font-semibold text-danger mb-2">
+              Error Loading Payment Intent
+            </h2>
             <p className="text-foreground-500 mb-4">{error}</p>
-            <Button 
-              color="primary" 
-              onClick={() => fetchPaymentIntentDetails()}
+            <Button
+              color="primary"
               startContent={<Icon icon="lucide:refresh-cw" width={18} />}
+              onClick={() => fetchPaymentIntentDetails()}
             >
               Try Again
             </Button>
@@ -174,11 +198,23 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   if (!paymentIntentData) {
     return (
       <div className="max-w-6xl mx-auto mt-10">
-        <Card isBlurred className="border-none bg-background/60 dark:bg-default-100/50" shadow="sm">
+        <Card
+          isBlurred
+          className="border-none bg-background/60 dark:bg-default-100/50"
+          shadow="sm"
+        >
           <CardBody className="text-center p-6">
-            <Icon icon="lucide:file-x" width={48} className="text-foreground-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Payment Intent Not Found</h2>
-            <p className="text-foreground-500">The requested payment intent could not be found.</p>
+            <Icon
+              className="text-foreground-500 mx-auto mb-4"
+              icon="lucide:file-x"
+              width={48}
+            />
+            <h2 className="text-xl font-semibold mb-2">
+              Payment Intent Not Found
+            </h2>
+            <p className="text-foreground-500">
+              The requested payment intent could not be found.
+            </p>
           </CardBody>
         </Card>
       </div>
@@ -191,17 +227,19 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-semibold">Payment Intent Details</h1>
-          <p className="text-default-500">View and manage payment intent information</p>
+          <p className="text-default-500">
+            View and manage payment intent information
+          </p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="flat" 
+          <Button
             color="primary"
             startContent={<Icon icon="lucide:arrow-left" />}
+            variant="flat"
           >
             Back to List
           </Button>
-          <Button 
+          <Button
             color="primary"
             startContent={<Icon icon="lucide:refresh-cw" />}
             onClick={() => fetchPaymentIntentDetails()}
@@ -217,28 +255,46 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-semibold">{paymentIntentData.id}</h2>
-              <Chip 
-                color={getStatusColor(paymentIntentData.status)} 
-                variant="flat"
+              <Chip
                 className="capitalize"
+                color={getStatusColor(paymentIntentData.status)}
+                variant="flat"
               >
                 {paymentIntentData.status}
               </Chip>
               {paymentIntentData.livemode ? (
-                <Badge color="success" variant="flat" content="Live" placement="top-right">
-                  <Icon icon="lucide:zap" className="text-lg" />
+                <Badge
+                  color="success"
+                  content="Live"
+                  placement="top-right"
+                  variant="flat"
+                >
+                  <Icon className="text-lg" icon="lucide:zap" />
                 </Badge>
               ) : (
-                <Badge color="warning" variant="flat" content="Test" placement="top-right">
-                  <Icon icon="lucide:flask-conical" className="text-lg" />
+                <Badge
+                  color="warning"
+                  content="Test"
+                  placement="top-right"
+                  variant="flat"
+                >
+                  <Icon className="text-lg" icon="lucide:flask-conical" />
                 </Badge>
               )}
             </div>
-            <p className="text-default-500">Created {formatDate(new Date(paymentIntentData.created * 1000).toISOString())}</p>
+            <p className="text-default-500">
+              Created{" "}
+              {formatDate(
+                new Date(paymentIntentData.created * 1000).toISOString()
+              )}
+            </p>
           </div>
           <div className="flex flex-col items-end">
             <div className="text-2xl font-semibold">
-              {formatCurrency(paymentIntentData.amount, paymentIntentData.currency)}
+              {formatCurrency(
+                paymentIntentData.amount,
+                paymentIntentData.currency
+              )}
             </div>
             <div className="text-default-500 text-sm uppercase">
               {paymentIntentData.currency}
@@ -251,25 +307,38 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
             <div>
               <p className="text-default-500 text-sm">Payment Method</p>
               <div className="flex items-center gap-2 mt-1">
-                <Icon 
-                  icon="logos:affirm" 
-                  className="h-6 w-auto" 
-                  fallback={<Icon icon="lucide:credit-card" className="text-xl" />} 
+                <Icon
+                  className="h-6 w-auto"
+                  fallback={
+                    <Icon className="text-xl" icon="lucide:credit-card" />
+                  }
+                  icon="logos:affirm"
                 />
-                <span className="capitalize">{paymentIntentData.payment_method_types.join(', ')}</span>
+                <span className="capitalize">
+                  {paymentIntentData.payment_method_types.join(", ")}
+                </span>
               </div>
             </div>
             <div>
               <p className="text-default-500 text-sm">Capture Method</p>
-              <p className="capitalize mt-1">{paymentIntentData.capture_method}</p>
+              <p className="capitalize mt-1">
+                {paymentIntentData.capture_method}
+              </p>
             </div>
             <div>
               <p className="text-default-500 text-sm">Amount Received</p>
-              <p className="mt-1">{formatCurrency(paymentIntentData.amount_received, paymentIntentData.currency)}</p>
+              <p className="mt-1">
+                {formatCurrency(
+                  paymentIntentData.amount_received,
+                  paymentIntentData.currency
+                )}
+              </p>
             </div>
             <div>
               <p className="text-default-500 text-sm">Latest Charge</p>
-              <p className="mt-1 font-mono text-sm">{paymentIntentData.latest_charge}</p>
+              <p className="mt-1 font-mono text-sm">
+                {paymentIntentData.latest_charge}
+              </p>
             </div>
           </div>
         </CardBody>
@@ -277,24 +346,29 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
 
       {/* Tabs */}
       <Card className="overflow-visible">
-        <Tabs 
-          aria-label="Payment Intent Details" 
+        <Tabs
+          aria-label="Payment Intent Details"
+          className="w-full"
           selectedKey={activeTab}
           onSelectionChange={(key: React.Key) => setActiveTab(key as string)}
-          className="w-full"
         >
-          <Tab key="overview" title={
-            <div className="flex items-center gap-2">
-              <Icon icon="lucide:layout-dashboard" />
-              <span>Overview</span>
-            </div>
-          }>
+          <Tab
+            key="overview"
+            title={
+              <div className="flex items-center gap-2">
+                <Icon icon="lucide:layout-dashboard" />
+                <span>Overview</span>
+              </div>
+            }
+          >
             <div className="p-4 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Customer Information */}
                 <Card shadow="sm">
                   <CardHeader className="flex justify-between">
-                    <h3 className="text-lg font-semibold">Customer Information</h3>
+                    <h3 className="text-lg font-semibold">
+                      Customer Information
+                    </h3>
                   </CardHeader>
                   <Divider />
                   <CardBody>
@@ -302,7 +376,10 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                       <div className="space-y-4">
                         <div>
                           <p className="text-default-500 text-sm">Name</p>
-                          <p>{paymentIntentData.metadata.customerFirstName} {paymentIntentData.metadata.customerLastName}</p>
+                          <p>
+                            {paymentIntentData.metadata.customerFirstName}{" "}
+                            {paymentIntentData.metadata.customerLastName}
+                          </p>
                         </div>
                         <div>
                           <p className="text-default-500 text-sm">Email</p>
@@ -319,7 +396,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                         <p>{paymentIntentData.customer}</p>
                       </div>
                     ) : (
-                      <p className="text-default-500">No customer information available</p>
+                      <p className="text-default-500">
+                        No customer information available
+                      </p>
                     )}
                   </CardBody>
                 </Card>
@@ -327,7 +406,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                 {/* Billing Information */}
                 <Card shadow="sm">
                   <CardHeader className="flex justify-between">
-                    <h3 className="text-lg font-semibold">Billing Information</h3>
+                    <h3 className="text-lg font-semibold">
+                      Billing Information
+                    </h3>
                   </CardHeader>
                   <Divider />
                   <CardBody>
@@ -335,15 +416,23 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                       <div className="space-y-4">
                         <div>
                           <p className="text-default-500 text-sm">Address</p>
-                          <p>{paymentIntentData.metadata.billingAddressStreet}</p>
                           <p>
-                            {paymentIntentData.metadata.billingAddressCity}, {paymentIntentData.metadata.billingAddressState} {paymentIntentData.metadata.billingAddressZip}
+                            {paymentIntentData.metadata.billingAddressStreet}
                           </p>
-                          <p>{paymentIntentData.metadata.billingAddressCountry}</p>
+                          <p>
+                            {paymentIntentData.metadata.billingAddressCity},{" "}
+                            {paymentIntentData.metadata.billingAddressState}{" "}
+                            {paymentIntentData.metadata.billingAddressZip}
+                          </p>
+                          <p>
+                            {paymentIntentData.metadata.billingAddressCountry}
+                          </p>
                         </div>
                       </div>
                     ) : (
-                      <p className="text-default-500">No billing information available</p>
+                      <p className="text-default-500">
+                        No billing information available
+                      </p>
                     )}
                   </CardBody>
                 </Card>
@@ -354,7 +443,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                 <CardHeader className="flex justify-between">
                   <h3 className="text-lg font-semibold">Order Details</h3>
                   {paymentIntentData.metadata?.orderNumber && (
-                    <Chip variant="flat">Order #{paymentIntentData.metadata.orderNumber}</Chip>
+                    <Chip variant="flat">
+                      Order #{paymentIntentData.metadata.orderNumber}
+                    </Chip>
                   )}
                 </CardHeader>
                 <Divider />
@@ -367,17 +458,26 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                         <TableColumn>PRICE</TableColumn>
                       </TableHeader>
                       <TableBody>
-                        {JSON.parse(paymentIntentData.metadata.cartItems).map((item: any, index: number) => (
-                          <TableRow key={index}>
-                            <TableCell>{item.serviceID}</TableCell>
-                            <TableCell>{item.quantity}</TableCell>
-                            <TableCell>{formatCurrency(item.total, paymentIntentData.currency)}</TableCell>
-                          </TableRow>
-                        ))}
+                        {JSON.parse(paymentIntentData.metadata.cartItems).map(
+                          (item: any, index: number) => (
+                            <TableRow key={index}>
+                              <TableCell>{item.serviceID}</TableCell>
+                              <TableCell>{item.quantity}</TableCell>
+                              <TableCell>
+                                {formatCurrency(
+                                  item.total,
+                                  paymentIntentData.currency
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          )
+                        )}
                       </TableBody>
                     </Table>
                   ) : (
-                    <p className="text-default-500">No order details available</p>
+                    <p className="text-default-500">
+                      No order details available
+                    </p>
                   )}
                 </CardBody>
               </Card>
@@ -392,74 +492,133 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-default-500">Subtotal</span>
-                      <span>{formatCurrency(paymentIntentData.amount, paymentIntentData.currency)}</span>
+                      <span>
+                        {formatCurrency(
+                          paymentIntentData.amount,
+                          paymentIntentData.currency
+                        )}
+                      </span>
                     </div>
-                    {paymentIntentData.amount_details?.shipping?.amount !== undefined && (
+                    {paymentIntentData.amount_details?.shipping?.amount !==
+                      undefined && (
                       <div className="flex justify-between">
                         <span className="text-default-500">Shipping</span>
-                        <span>{formatCurrency(paymentIntentData.amount_details.shipping.amount, paymentIntentData.currency)}</span>
+                        <span>
+                          {formatCurrency(
+                            paymentIntentData.amount_details.shipping.amount,
+                            paymentIntentData.currency
+                          )}
+                        </span>
                       </div>
                     )}
-                    {paymentIntentData.amount_details?.tax?.total_tax_amount !== undefined && (
+                    {paymentIntentData.amount_details?.tax?.total_tax_amount !==
+                      undefined && (
                       <div className="flex justify-between">
                         <span className="text-default-500">Tax</span>
-                        <span>{formatCurrency(paymentIntentData.amount_details.tax.total_tax_amount, paymentIntentData.currency)}</span>
+                        <span>
+                          {formatCurrency(
+                            paymentIntentData.amount_details.tax
+                              .total_tax_amount,
+                            paymentIntentData.currency
+                          )}
+                        </span>
                       </div>
                     )}
-                    {paymentIntentData.amount_details?.tip?.amount !== undefined && (
+                    {paymentIntentData.amount_details?.tip?.amount !==
+                      undefined && (
                       <div className="flex justify-between">
                         <span className="text-default-500">Tip</span>
-                        <span>{formatCurrency(paymentIntentData.amount_details.tip.amount, paymentIntentData.currency)}</span>
+                        <span>
+                          {formatCurrency(
+                            paymentIntentData.amount_details.tip.amount,
+                            paymentIntentData.currency
+                          )}
+                        </span>
                       </div>
                     )}
                     <Divider />
                     <div className="flex justify-between font-semibold">
                       <span>Total</span>
-                      <span>{formatCurrency(paymentIntentData.amount, paymentIntentData.currency)}</span>
+                      <span>
+                        {formatCurrency(
+                          paymentIntentData.amount,
+                          paymentIntentData.currency
+                        )}
+                      </span>
                     </div>
                     <div className="flex justify-between text-success">
                       <span>Amount Received</span>
-                      <span>{formatCurrency(paymentIntentData.amount_received, paymentIntentData.currency)}</span>
+                      <span>
+                        {formatCurrency(
+                          paymentIntentData.amount_received,
+                          paymentIntentData.currency
+                        )}
+                      </span>
                     </div>
                   </div>
                 </CardBody>
               </Card>
             </div>
           </Tab>
-          
-          <Tab key="payment-details" title={
-            <div className="flex items-center gap-2">
-              <Icon icon="lucide:credit-card" />
-              <span>Payment Details</span>
-            </div>
-          }>
+
+          <Tab
+            key="payment-details"
+            title={
+              <div className="flex items-center gap-2">
+                <Icon icon="lucide:credit-card" />
+                <span>Payment Details</span>
+              </div>
+            }
+          >
             <div className="p-4 space-y-6">
               <Card shadow="sm">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold">Payment Method Details</h3>
+                  <h3 className="text-lg font-semibold">
+                    Payment Method Details
+                  </h3>
                 </CardHeader>
                 <Divider />
                 <CardBody>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <p className="text-default-500 text-sm">Payment Method ID</p>
-                      <p className="font-mono text-sm mt-1">{paymentIntentData.payment_method}</p>
+                      <p className="text-default-500 text-sm">
+                        Payment Method ID
+                      </p>
+                      <p className="font-mono text-sm mt-1">
+                        {paymentIntentData.payment_method}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-default-500 text-sm">Payment Method Types</p>
+                      <p className="text-default-500 text-sm">
+                        Payment Method Types
+                      </p>
                       <div className="flex flex-wrap gap-2 mt-1">
-                        {paymentIntentData.payment_method_types.map((type, index) => (
-                          <Chip key={index} variant="flat" className="capitalize">{type}</Chip>
-                        ))}
+                        {paymentIntentData.payment_method_types.map(
+                          (type, index) => (
+                            <Chip
+                              key={index}
+                              className="capitalize"
+                              variant="flat"
+                            >
+                              {type}
+                            </Chip>
+                          )
+                        )}
                       </div>
                     </div>
                     <div>
-                      <p className="text-default-500 text-sm">Confirmation Method</p>
-                      <p className="capitalize mt-1">{paymentIntentData.confirmation_method}</p>
+                      <p className="text-default-500 text-sm">
+                        Confirmation Method
+                      </p>
+                      <p className="capitalize mt-1">
+                        {paymentIntentData.confirmation_method}
+                      </p>
                     </div>
                     <div>
                       <p className="text-default-500 text-sm">Capture Method</p>
-                      <p className="capitalize mt-1">{paymentIntentData.capture_method}</p>
+                      <p className="capitalize mt-1">
+                        {paymentIntentData.capture_method}
+                      </p>
                     </div>
                   </div>
                 </CardBody>
@@ -468,15 +627,21 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
               {/* Payment Method Options */}
               <Card shadow="sm">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold">Payment Method Options</h3>
+                  <h3 className="text-lg font-semibold">
+                    Payment Method Options
+                  </h3>
                 </CardHeader>
                 <Divider />
                 <CardBody>
                   {paymentIntentData.payment_method_options ? (
                     <div className="space-y-4">
-                      {Object.entries(paymentIntentData.payment_method_options).map(([key, value]) => (
+                      {Object.entries(
+                        paymentIntentData.payment_method_options
+                      ).map(([key, value]) => (
                         <div key={key}>
-                          <p className="text-default-500 text-sm capitalize">{key}</p>
+                          <p className="text-default-500 text-sm capitalize">
+                            {key}
+                          </p>
                           <pre className="bg-content2 p-3 rounded-medium mt-1 overflow-auto text-sm">
                             {JSON.stringify(value, null, 2)}
                           </pre>
@@ -484,7 +649,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-default-500">No payment method options available</p>
+                    <p className="text-default-500">
+                      No payment method options available
+                    </p>
                   )}
                 </CardBody>
               </Card>
@@ -499,13 +666,15 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   <div className="space-y-4">
                     <div>
                       <p className="text-default-500 text-sm">Charge ID</p>
-                      <p className="font-mono text-sm mt-1">{paymentIntentData.latest_charge}</p>
+                      <p className="font-mono text-sm mt-1">
+                        {paymentIntentData.latest_charge}
+                      </p>
                     </div>
                     <div className="flex justify-end">
-                      <Button 
-                        color="primary" 
-                        variant="flat"
+                      <Button
+                        color="primary"
                         startContent={<Icon icon="lucide:external-link" />}
+                        variant="flat"
                       >
                         View Charge Details
                       </Button>
@@ -515,13 +684,16 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
               </Card>
             </div>
           </Tab>
-          
-          <Tab key="metadata" title={
-            <div className="flex items-center gap-2">
-              <Icon icon="lucide:tag" />
-              <span>Metadata</span>
-            </div>
-          }>
+
+          <Tab
+            key="metadata"
+            title={
+              <div className="flex items-center gap-2">
+                <Icon icon="lucide:tag" />
+                <span>Metadata</span>
+              </div>
+            }
+          >
             <div className="p-4">
               <Card shadow="sm">
                 <CardHeader>
@@ -536,32 +708,48 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                         <TableColumn>VALUE</TableColumn>
                       </TableHeader>
                       <TableBody>
-                        {Object.entries(paymentIntentData.metadata || {}).map(([key, value]) => (
-                          <TableRow key={key}>
-                            <TableCell className="font-medium">{key}</TableCell>
-                            <TableCell>
-                              {typeof value === 'string' && value.startsWith('[') && value.endsWith(']') ? (
-                                <Tooltip content="View JSON">
-                                  <Button 
-                                    size="sm" 
-                                    variant="light"
-                                    onPress={() => {
-                                      try {
-                                        alert(JSON.stringify(JSON.parse(value as string), null, 2));
-                                      } catch (e) {
-                                        alert(value);
-                                      }
-                                    }}
-                                  >
-                                    <Icon icon="lucide:code" className="mr-1" /> View JSON
-                                  </Button>
-                                </Tooltip>
-                              ) : (
-                                <span>{value as string}</span>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {Object.entries(paymentIntentData.metadata || {}).map(
+                          ([key, value]) => (
+                            <TableRow key={key}>
+                              <TableCell className="font-medium">
+                                {key}
+                              </TableCell>
+                              <TableCell>
+                                {typeof value === "string" &&
+                                value.startsWith("[") &&
+                                value.endsWith("]") ? (
+                                  <Tooltip content="View JSON">
+                                    <Button
+                                      size="sm"
+                                      variant="light"
+                                      onPress={() => {
+                                        try {
+                                          alert(
+                                            JSON.stringify(
+                                              JSON.parse(value as string),
+                                              null,
+                                              2
+                                            )
+                                          );
+                                        } catch (e) {
+                                          alert(value);
+                                        }
+                                      }}
+                                    >
+                                      <Icon
+                                        className="mr-1"
+                                        icon="lucide:code"
+                                      />{" "}
+                                      View JSON
+                                    </Button>
+                                  </Tooltip>
+                                ) : (
+                                  <span>{value as string}</span>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          )
+                        )}
                       </TableBody>
                     </Table>
                   ) : (
@@ -571,17 +759,22 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
               </Card>
             </div>
           </Tab>
-          
-          <Tab key="raw" title={
-            <div className="flex items-center gap-2">
-              <Icon icon="lucide:code" />
-              <span>Raw Data</span>
-            </div>
-          }>
+
+          <Tab
+            key="raw"
+            title={
+              <div className="flex items-center gap-2">
+                <Icon icon="lucide:code" />
+                <span>Raw Data</span>
+              </div>
+            }
+          >
             <div className="p-4">
               <Card shadow="sm">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold">Raw Payment Intent Data</h3>
+                  <h3 className="text-lg font-semibold">
+                    Raw Payment Intent Data
+                  </h3>
                 </CardHeader>
                 <Divider />
                 <CardBody>

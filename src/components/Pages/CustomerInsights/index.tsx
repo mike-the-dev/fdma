@@ -6,10 +6,12 @@ import { Button } from "@heroui/button";
 import { Select, SelectItem } from "@heroui/select";
 import { Slider } from "@heroui/slider";
 import { NumberInput } from "@heroui/number-input";
+
 import { useCustomerInsightsForm } from "@/features/customerInsights/create/useCustomerInsightsForm";
 
 const CustomerInsights = (): React.ReactElement => {
-  const { form, validators, isPending, handleFormSubmit, accounts } = useCustomerInsightsForm();
+  const { form, validators, isPending, handleFormSubmit, accounts } =
+    useCustomerInsightsForm();
 
   return (
     <Card
@@ -22,30 +24,33 @@ const CustomerInsights = (): React.ReactElement => {
       <p>Set analytics targets for an account.</p>
       <Spacer y={4} />
 
-      <form onSubmit={handleFormSubmit} autoComplete="off">
+      <form autoComplete="off" onSubmit={handleFormSubmit}>
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
           <div className="flex-1">
-            <form.Field
-              name="accountId"
-              validators={validators.accountId}
-              children={(field: any) => (
+            <form.Field name="accountId" validators={validators.accountId}>
+              {(field: any) => (
                 <Select
+                  errorMessage={field.state.meta.errors[0]}
+                  isInvalid={!!field.state.meta.errors.length}
                   label="Account"
                   placeholder="Select an account"
-                  selectedKeys={field.state.value ? new Set([field.state.value]) : new Set()}
+                  selectedKeys={
+                    field.state.value ? new Set([field.state.value]) : new Set()
+                  }
                   onSelectionChange={(keys) => {
-                    const selectedValue = Array.from(keys)[0] as string | undefined;
+                    const selectedValue = Array.from(keys)[0] as
+                      | string
+                      | undefined;
+
                     field.handleChange(selectedValue ?? "");
                   }}
-                  isInvalid={!!field.state.meta.errors.length}
-                  errorMessage={field.state.meta.errors[0]}
                 >
                   {(accounts ?? []).map((acct) => (
                     <SelectItem key={acct.id}>{acct.name}</SelectItem>
                   ))}
                 </Select>
               )}
-            />
+            </form.Field>
           </div>
         </div>
 
@@ -56,28 +61,37 @@ const CustomerInsights = (): React.ReactElement => {
             <form.Field
               name="avgSpentDollars"
               validators={validators.avgSpentDollars}
-              children={(field: any) => (
+            >
+              {(field: any) => (
                 <NumberInput
-                  label="Average Spent Target"
-                  value={field.state.value && field.state.value.trim() !== "" ? Number(field.state.value) : 0}
-                  onValueChange={(value) => {
-                    // Update with the value, converting to string for form state
-                    if (value !== null && value !== undefined && !isNaN(value)) {
-                      field.handleChange(String(value));
-                    } else {
-                      field.handleChange("");
-                    }
-                  }}
+                  className="w-full"
+                  errorMessage={field.state.meta.errors[0]}
                   formatOptions={{
                     style: "currency",
                     currency: "USD",
                   }}
                   isInvalid={!!field.state.meta.errors.length}
-                  errorMessage={field.state.meta.errors[0]}
-                  className="w-full"
+                  label="Average Spent Target"
+                  value={
+                    field.state.value && field.state.value.trim() !== ""
+                      ? Number(field.state.value)
+                      : 0
+                  }
+                  onValueChange={(value) => {
+                    // Update with the value, converting to string for form state
+                    if (
+                      value !== null &&
+                      value !== undefined &&
+                      !isNaN(value)
+                    ) {
+                      field.handleChange(String(value));
+                    } else {
+                      field.handleChange("");
+                    }
+                  }}
                 />
               )}
-            />
+            </form.Field>
           </div>
         </div>
 
@@ -88,59 +102,67 @@ const CustomerInsights = (): React.ReactElement => {
             <form.Field
               name="subscriptionRatePercent"
               validators={validators.subscriptionRatePercent}
-              children={(field: any) => (
+            >
+              {(field: any) => (
                 <Card className="p-4">
                   <Slider
-                    label="Subscription Email Rate Target (%)"
-                    value={field.state.value ? Number(field.state.value) : 0}
-                    onChange={(value) => {
-                      const numValue = Array.isArray(value) ? value[0] : value;
-                      field.handleChange(String(numValue));
-                    }}
-                    minValue={0}
-                    maxValue={100}
-                    step={1}
                     showTooltip
                     className="w-full"
                     classNames={{
                       base: "max-w-full",
                     }}
+                    label="Subscription Email Rate Target (%)"
+                    maxValue={100}
+                    minValue={0}
+                    step={1}
+                    value={field.state.value ? Number(field.state.value) : 0}
+                    onChange={(value) => {
+                      const numValue = Array.isArray(value) ? value[0] : value;
+
+                      field.handleChange(String(numValue));
+                    }}
                   />
                   {field.state.meta.errors.length > 0 && (
-                    <p className="text-danger text-sm mt-1">{field.state.meta.errors[0]}</p>
+                    <p className="text-danger text-sm mt-1">
+                      {field.state.meta.errors[0]}
+                    </p>
                   )}
                 </Card>
               )}
-            />
+            </form.Field>
           </div>
           <div className="flex-1">
             <form.Field
               name="repeatRatePercent"
               validators={validators.repeatRatePercent}
-              children={(field: any) => (
+            >
+              {(field: any) => (
                 <Card className="p-4">
                   <Slider
-                    label="Repeat Customer Rate Target (%)"
-                    value={field.state.value ? Number(field.state.value) : 0}
-                    onChange={(value) => {
-                      const numValue = Array.isArray(value) ? value[0] : value;
-                      field.handleChange(String(numValue));
-                    }}
-                    minValue={0}
-                    maxValue={100}
-                    step={1}
                     showTooltip
                     className="w-full"
                     classNames={{
                       base: "max-w-full",
                     }}
+                    label="Repeat Customer Rate Target (%)"
+                    maxValue={100}
+                    minValue={0}
+                    step={1}
+                    value={field.state.value ? Number(field.state.value) : 0}
+                    onChange={(value) => {
+                      const numValue = Array.isArray(value) ? value[0] : value;
+
+                      field.handleChange(String(numValue));
+                    }}
                   />
                   {field.state.meta.errors.length > 0 && (
-                    <p className="text-danger text-sm mt-1">{field.state.meta.errors[0]}</p>
+                    <p className="text-danger text-sm mt-1">
+                      {field.state.meta.errors[0]}
+                    </p>
                   )}
                 </Card>
               )}
-            />
+            </form.Field>
           </div>
         </div>
 
@@ -151,30 +173,34 @@ const CustomerInsights = (): React.ReactElement => {
             <form.Field
               name="retentionRatePercent"
               validators={validators.retentionRatePercent}
-              children={(field: any) => (
+            >
+              {(field: any) => (
                 <Card className="p-4">
                   <Slider
-                    label="Retention Customer Rate Target (%)"
-                    value={field.state.value ? Number(field.state.value) : 0}
-                    onChange={(value) => {
-                      const numValue = Array.isArray(value) ? value[0] : value;
-                      field.handleChange(String(numValue));
-                    }}
-                    minValue={0}
-                    maxValue={100}
-                    step={1}
                     showTooltip
                     className="w-full"
                     classNames={{
                       base: "max-w-full",
                     }}
+                    label="Retention Customer Rate Target (%)"
+                    maxValue={100}
+                    minValue={0}
+                    step={1}
+                    value={field.state.value ? Number(field.state.value) : 0}
+                    onChange={(value) => {
+                      const numValue = Array.isArray(value) ? value[0] : value;
+
+                      field.handleChange(String(numValue));
+                    }}
                   />
                   {field.state.meta.errors.length > 0 && (
-                    <p className="text-danger text-sm mt-1">{field.state.meta.errors[0]}</p>
+                    <p className="text-danger text-sm mt-1">
+                      {field.state.meta.errors[0]}
+                    </p>
                   )}
                 </Card>
               )}
-            />
+            </form.Field>
           </div>
         </div>
 
@@ -183,8 +209,8 @@ const CustomerInsights = (): React.ReactElement => {
         <div>
           <Button
             color="primary"
-            type="submit"
             isDisabled={isPending}
+            type="submit"
             variant="shadow"
           >
             {isPending ? "Saving..." : "Save Targets"}

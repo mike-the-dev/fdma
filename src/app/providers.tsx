@@ -7,7 +7,11 @@ import { HeroUIProvider } from "@heroui/system";
 import { ToastProvider } from "@heroui/toast";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  isServer,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -35,7 +39,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   }, []);
 
   // singleton on the client
-  const browserQueryClientRef = React.useRef<QueryClient | undefined>(undefined);
+  const browserQueryClientRef = React.useRef<QueryClient | undefined>(
+    undefined
+  );
   const getQueryClient = React.useCallback(() => {
     if (isServer) {
       return makeQueryClient();
@@ -43,6 +49,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       if (!browserQueryClientRef.current) {
         browserQueryClientRef.current = makeQueryClient();
       }
+
       return browserQueryClientRef.current;
     }
   }, [makeQueryClient]);

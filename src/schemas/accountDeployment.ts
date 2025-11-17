@@ -90,16 +90,16 @@ export const accountDeploymentSchema = z.object({
     .min(1, "Subdomain is required")
     .min(2, "Subdomain must be at least 2 characters")
     .max(63, "Subdomain must be less than 63 characters")
-    .regex(/^[a-zA-Z0-9-]+$/, "Subdomain can only contain letters, numbers, and hyphens")
+    .regex(
+      /^[a-zA-Z0-9-]+$/,
+      "Subdomain can only contain letters, numbers, and hyphens"
+    )
     .refine((val) => !val.startsWith("-") && !val.endsWith("-"), {
       message: "Subdomain cannot start or end with hyphen",
     })
-    .refine(
-      (val) => !val.includes("--"),
-      {
-        message: "Subdomain cannot contain consecutive hyphens",
-      }
-    )
+    .refine((val) => !val.includes("--"), {
+      message: "Subdomain cannot contain consecutive hyphens",
+    })
     .transform((val) => val.toLowerCase().trim()),
 
   stripeId: z

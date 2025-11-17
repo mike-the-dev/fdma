@@ -45,5 +45,3 @@ export type PayoutPayload = {
   };
   customer_name: string;
 };
-
-

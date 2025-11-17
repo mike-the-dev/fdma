@@ -1,9 +1,11 @@
+import type { PayoutPayload } from "@/types/Payout";
+
 import React from "react";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Divider } from "@heroui/divider";
 import { Chip } from "@heroui/chip";
 import { Icon } from "@iconify/react";
-import type { PayoutPayload } from "@/types/Payout";
+
 import { formatDate } from "@/utils/formatters";
 
 interface TransactionDetailsProps {
@@ -11,19 +13,23 @@ interface TransactionDetailsProps {
   orderId?: string;
 }
 
-export const TransactionDetails: React.FC<TransactionDetailsProps> = ({ payout, orderId }) => {
+export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
+  payout,
+  orderId,
+}) => {
   const {
     tenderTransaction_id,
     tenderTransaction_paymentMethod,
     tenderTransaction_processedAt,
     tenderTransaction_remoteReference,
     tenderTransaction_test,
-    tenderTransaction_transactionDetails
+    tenderTransaction_transactionDetails,
   } = payout;
 
-  const paymentMethodIcon = tenderTransaction_paymentMethod === "CREDIT_CARD" 
-    ? "lucide:credit-card" 
-    : "lucide:wallet";
+  const paymentMethodIcon =
+    tenderTransaction_paymentMethod === "CREDIT_CARD"
+      ? "lucide:credit-card"
+      : "lucide:wallet";
 
   const creditCardCompany = "Visa"; // Hardcoded for now, will be dynamic later
 
@@ -39,7 +45,11 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({ payout, 
           <div className="flex items-center gap-2">
             <span className="font-medium">{tenderTransaction_id || "N/A"}</span>
             {tenderTransaction_id && (
-              <Icon icon="lucide:copy" className="text-foreground-400 cursor-pointer" width={16} />
+              <Icon
+                className="text-foreground-400 cursor-pointer"
+                icon="lucide:copy"
+                width={16}
+              />
             )}
           </div>
         </div>
@@ -47,12 +57,14 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({ payout, 
         <div className="flex items-center justify-between">
           <span className="text-foreground-500">Payment Method</span>
           <div className="flex items-center gap-2">
-            <Icon icon={paymentMethodIcon} className="text-foreground-500" />
+            <Icon className="text-foreground-500" icon={paymentMethodIcon} />
             <span className="capitalize">
-              {tenderTransaction_paymentMethod ? tenderTransaction_paymentMethod.replace('_', ' ') : "N/A"}
+              {tenderTransaction_paymentMethod
+                ? tenderTransaction_paymentMethod.replace("_", " ")
+                : "N/A"}
             </span>
             {creditCardCompany && (
-              <Chip size="sm" variant="flat" color="default">
+              <Chip color="default" size="sm" variant="flat">
                 {creditCardCompany}
               </Chip>
             )}
@@ -61,12 +73,18 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({ payout, 
 
         <div className="flex items-center justify-between">
           <span className="text-foreground-500">Processed Date</span>
-          <span>{tenderTransaction_processedAt ? formatDate(tenderTransaction_processedAt, true) : "N/A"}</span>
+          <span>
+            {tenderTransaction_processedAt
+              ? formatDate(tenderTransaction_processedAt, true)
+              : "N/A"}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
           <span className="text-foreground-500">Reference</span>
-          <span className="font-mono text-sm">{tenderTransaction_remoteReference || "N/A"}</span>
+          <span className="font-mono text-sm">
+            {tenderTransaction_remoteReference || "N/A"}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
@@ -76,12 +94,12 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({ payout, 
 
         {tenderTransaction_test && (
           <div className="flex items-center justify-end mt-2">
-            <Chip color="warning" size="sm" variant="flat">Test Transaction</Chip>
+            <Chip color="warning" size="sm" variant="flat">
+              Test Transaction
+            </Chip>
           </div>
         )}
       </CardBody>
     </Card>
   );
 };
-
-

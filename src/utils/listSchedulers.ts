@@ -1,3 +1,5 @@
+import type { Scheduler } from "@/types/Scheduler";
+
 import {
   EventBridgeClient,
   ListRulesCommand,
@@ -10,7 +12,6 @@ import {
   GetScheduleCommand,
   GetScheduleCommandOutput,
 } from "@aws-sdk/client-scheduler";
-import type { Scheduler } from "@/types/Scheduler";
 
 const eventBridgeClient = new EventBridgeClient({
   region: process.env.AWS_PROD_REGION || "us-east-1",

@@ -8,7 +8,7 @@ const updateStripeAccount = async (
     ? process.env.STRIPE_PROD_SECRET
     : "";
   const stripe = new Stripe(prodSecret, {
-    apiVersion: "2025-09-30.clover",
+    apiVersion: "2025-10-29.clover",
   });
 
   const account = await stripe.accounts.update(stripeID, {

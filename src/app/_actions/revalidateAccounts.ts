@@ -16,17 +16,18 @@ type RevalidateAccountsArgs = {
   shouldRedirect?: boolean; // optional, defaults to false
 };
 
-export const revalidateAccountsCache = async (args: RevalidateAccountsArgs = {}): Promise<void> => {
+export const revalidateAccountsCache = async (
+  args: RevalidateAccountsArgs = {}
+): Promise<void> => {
   // Revalidate the "accounts" tag that matches fetchAccountsServer pattern
   revalidateTag("accounts");
-  
+
   // Optionally revalidate a specific path if provided
   if (args.nextUrl) {
     revalidatePath(args.nextUrl);
   }
-  
+
   // Note: We don't redirect here by default since this is typically called
   // after a mutation where we want to stay on the current page with fresh data
   // If redirect is needed, it should be handled by the calling code
 };
-

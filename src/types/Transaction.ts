@@ -1,3 +1,3 @@
-import Stripe from 'stripe';
+import Stripe from "stripe";
 
 export type PaymentIntentStripe = Stripe.PaymentIntent;

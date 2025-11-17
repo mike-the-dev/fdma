@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 
 import JoymdLogo from "../Logos/JoymdLogo";
 import LogoutButton from "../LogoutButton";
+
 import { getLocalStorageItem } from "@/hooks/useLocalStorage";
 
 interface NavigationProps {}
@@ -26,6 +27,7 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
     if (!isMounted) return;
     // Get user email from localStorage
     const email = getLocalStorageItem("user-email");
+
     setUserEmail(email);
   }, [isMounted, pathname]);
 
@@ -47,10 +49,15 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
   // No authentication state dependency - just pathname-based visibility
 
   // List of emails that can see Customer Insights
-  const allowedEmails = ["michael@instapaytient.com", "henry@instapaytient.com"];
+  const allowedEmails = [
+    "michael@instapaytient.com",
+    "henry@instapaytient.com",
+  ];
   // Normalize email for comparison (trim and lowercase)
   const normalizedEmail = userEmail?.trim().toLowerCase();
-  const canViewCustomerInsights = normalizedEmail && allowedEmails.map(e => e.toLowerCase()).includes(normalizedEmail);
+  const canViewCustomerInsights =
+    normalizedEmail &&
+    allowedEmails.map((e) => e.toLowerCase()).includes(normalizedEmail);
 
   return (
     <Navbar isBordered>

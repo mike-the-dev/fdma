@@ -1,5 +1,6 @@
-import React from "react";
 import type { Scheduler } from "@/types/Scheduler";
+
+import React from "react";
 
 import Table from "./table";
 

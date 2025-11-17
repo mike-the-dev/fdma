@@ -94,7 +94,7 @@ export default function VerifyMagicLink() {
         </Card>
       </div>
     );
-  };
+  }
 
   if (error) {
     return (
@@ -111,7 +111,7 @@ export default function VerifyMagicLink() {
         </Card>
       </div>
     );
-  };
+  }
 
   if (success) {
     return (
@@ -133,7 +133,7 @@ export default function VerifyMagicLink() {
         </Card>
       </div>
     );
-  };
+  }
 
   return null;
 }

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
 import type { Scheduler } from "@/types/Scheduler";
+
+import React from "react";
 import {
   Table as NextUITable,
   TableHeader,
@@ -60,6 +61,7 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
     try {
       if (schedule.Target?.Input) {
         const inputData = JSON.parse(schedule.Target.Input);
+
         console.log("inputData:", inputData);
         // Check for Ecwid structure: payload.data.orderId
         if (inputData.payload?.data?.orderId) {
@@ -92,10 +94,13 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
   const formatName = (schedule: Scheduler): string => {
     const name = schedule.Name || "N/A";
     const prefix = "payout-";
+
     if (name.startsWith(prefix)) {
       const last4 = name.slice(-4);
+
       return `${prefix}${last4}`;
     }
+
     return name;
   };
 
@@ -159,11 +164,13 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
         const inputData = JSON.parse(schedule.Target.Input);
 
         const amountCents = inputData.payload?.current_subtotal_price;
+
         if (typeof amountCents === "number") {
           const currency =
-            inputData.payload?.tenderTransaction_amount?.
-              tenderTransaction_amount_currencyCode || "USD";
+            inputData.payload?.tenderTransaction_amount
+              ?.tenderTransaction_amount_currencyCode || "USD";
           const amount = amountCents / 100; // convert cents to currency units
+
           try {
             return new Intl.NumberFormat(undefined, {
               style: "currency",
@@ -312,6 +319,7 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
       onRowAction={(key) => {
         // Navigate to the scheduler detail page using the row key (scheduler Name)
         const id = String(key);
+
         router.push(`/dashboard/scheduler/${encodeURIComponent(id)}`);
       }}
     >

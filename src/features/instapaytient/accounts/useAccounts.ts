@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { useAuthContext } from "@/context/AuthContext";
+
 import { fetchAccounts } from "./account.service";
 import { mapAccounts } from "./account.mappers";
-import { AccountInstapaytient } from "@/types/AccountInstapaytient";
 import { toAccountsError } from "./account.errors";
+
+import { AccountInstapaytient } from "@/types/AccountInstapaytient";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface UseAccountsReturn {
   accounts: AccountInstapaytient[];
@@ -22,8 +24,9 @@ export const useAccounts = (): UseAccountsReturn => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const data = await fetchAccounts();
+
       setAccounts(mapAccounts(data));
     } catch (err: unknown) {
       const mapped = toAccountsError(err);
@@ -33,10 +36,11 @@ export const useAccounts = (): UseAccountsReturn => {
 
       setError(mapped.message);
 
-      if (process.env.NODE_ENV !== "production") console.error("[useAccounts]", err);
+      if (process.env.NODE_ENV !== "production")
+        console.error("[useAccounts]", err);
     } finally {
       setIsLoading(false);
-    };
+    }
   };
 
   useEffect(() => {

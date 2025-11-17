@@ -10,8 +10,7 @@ import { NumberInput } from "@heroui/number-input";
 import { useCustomerInsightsForm } from "@/features/customerInsights/create/useCustomerInsightsForm";
 
 const CustomerInsights = (): React.ReactElement => {
-  const { form, validators, isPending, handleFormSubmit, accounts } =
-    useCustomerInsightsForm();
+  const { form, validators, isPending, handleFormSubmit, accounts } = useCustomerInsightsForm();
 
   return (
     <Card

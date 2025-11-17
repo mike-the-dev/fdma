@@ -53,7 +53,7 @@ export const fetchAccountsServer = async (
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/listAccounts`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/listAccounts`,
       {
         method: "GET",
         headers: {

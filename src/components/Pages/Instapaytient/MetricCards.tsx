@@ -81,25 +81,27 @@ const formatCurrency = (cents: number | undefined): string => {
 };
 
 export const MetricCards = ({ analytics }: MetricCardsProps) => {
+  const payoutStats = analytics?.payoutStats;
+  
   return (
     <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <MetricCard
         title="Affirm Total"
-        value={formatCurrency(analytics?.affirmTotalCents)}
+        value={formatCurrency(payoutStats?.affirmTotalCents)}
         icon="lucide:credit-card"
         trend={{ value: "12.5%", isPositive: true }}
         color="primary"
       />
       <MetricCard
         title="Overall Total"
-        value={formatCurrency(analytics?.grandTotalCents)}
+        value={formatCurrency(payoutStats?.grandTotalCents)}
         icon="lucide:bar-chart-2"
         trend={{ value: "8.2%", isPositive: true }}
         color="success"
       />
       <MetricCard
         title="Authorize Total"
-        value={formatCurrency(analytics?.normalTotalCents)}
+        value={formatCurrency(payoutStats?.normalTotalCents)}
         icon="lucide:check-circle"
         trend={{ value: "3.1%", isPositive: false }}
         color="warning"

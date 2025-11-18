@@ -55,7 +55,7 @@ export const useAccount = (id: string): UseAccountReturn => {
       setIsLoading(true);
       setError(null);
 
-      const data = await fetchAccountById(id);
+      const data = await fetchAccountById();
 
       setAccount(mapAccount(data));
     } catch (err: unknown) {

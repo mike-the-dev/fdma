@@ -31,9 +31,9 @@ export const postAnalyticsTargets = async (
   );
 };
 
-export const fetchAccount = async (accountId: string): Promise<any> => {
+export const fetchAccount = async (): Promise<any> => {
   return handleRequest(
-    axiosInstance.get(`/user/account/${accountId}`)
+    axiosInstance.get(`/user/account`)
   );
 };
 
@@ -111,7 +111,7 @@ export const useUpdateAnalyticsTargets = () => {
 export const useAccount = (accountId?: string) => {
   return useQuery({
     queryKey: ["account", accountId],
-    queryFn: () => fetchAccount(accountId as string),
+    queryFn: () => fetchAccount(),
     enabled: !!accountId,
   });
 };

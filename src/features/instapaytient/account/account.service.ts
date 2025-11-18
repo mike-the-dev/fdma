@@ -3,7 +3,7 @@ import { Account, Transaction, StripeAccount } from "./account.schema";
 import apiClient from "@/utils/apiClient";
 
 export const fetchAccountById = async (): Promise<Account> => {
-  const res = await apiClient.get<Account>(`/user/account`);
+  const res = await apiClient.get<Account>(`/api/user/account`);
 
   return res.data;
 };

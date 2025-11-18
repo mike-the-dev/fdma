@@ -9,11 +9,14 @@ import styles from "../../page.module.css";
 
 import AccountTableInstapaytient from "@/components/AccountTableInstapaytient";
 import { useAccounts } from "@/features/instapaytient/accounts/useAccounts";
+import { useGlobalAnalytics } from "@/features/instapaytient/accounts/useGlobalAnalytics";
+import { MetricCards } from "@/components/Pages/Instapaytient/MetricCards";
 
 interface HomeProps {}
 
 const Home = (): React.ReactElement => {
   const { accounts, isLoading, error, refetch } = useAccounts();
+  const { analytics } = useGlobalAnalytics();
 
   if (isLoading) {
     return (
@@ -58,6 +61,7 @@ const Home = (): React.ReactElement => {
     <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "0 16px" }}>
       <div className={styles.row}>
         <div className={styles.column}>
+          <MetricCards analytics={analytics} />
           <Card
             isBlurred
             className="border-none bg-background/60 dark:bg-default-100/50"

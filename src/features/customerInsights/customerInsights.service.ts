@@ -33,7 +33,7 @@ export const postAnalyticsTargets = async (
 
 export const fetchAccount = async (accountId: string): Promise<any> => {
   return handleRequest(
-    axiosInstance.get(`/user/account/${encodeURIComponent(accountId)}`)
+    axiosInstance.get(`/user/account/${accountId}`)
   );
 };
 

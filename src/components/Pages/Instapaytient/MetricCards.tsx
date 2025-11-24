@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardBody } from "@heroui/card";
 import { Icon } from "@iconify/react";
 import { GlobalAnalytics } from "@/features/instapaytient/accounts/analytics.schema";
+import { formatCurrency } from "@/utils/formatters";
 
 type MetricCardProps = {
   title: string;
@@ -72,14 +73,6 @@ type MetricCardsProps = {
   analytics: GlobalAnalytics | null;
 };
 
-const formatCurrency = (cents: number | undefined): string => {
-  if (cents === undefined || cents === null) return "$0.00";
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(cents / 100);
-};
-
 export const MetricCards = ({ analytics }: MetricCardsProps) => {
   const payoutStats = analytics?.payoutStats;
   
@@ -87,21 +80,21 @@ export const MetricCards = ({ analytics }: MetricCardsProps) => {
     <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <MetricCard
         title="Affirm Total"
-        value={formatCurrency(payoutStats?.affirmTotalCents)}
+        value={formatCurrency(payoutStats?.affirmTotalCents ?? 0)}
         icon="lucide:credit-card"
         trend={{ value: "12.5%", isPositive: true }}
         color="primary"
       />
       <MetricCard
         title="Overall Total"
-        value={formatCurrency(payoutStats?.grandTotalCents)}
+        value={formatCurrency(payoutStats?.grandTotalCents ?? 0)}
         icon="lucide:bar-chart-2"
         trend={{ value: "8.2%", isPositive: true }}
         color="success"
       />
       <MetricCard
         title="Authorize Total"
-        value={formatCurrency(payoutStats?.normalTotalCents)}
+        value={formatCurrency(payoutStats?.normalTotalCents ?? 0)}
         icon="lucide:check-circle"
         trend={{ value: "3.1%", isPositive: false }}
         color="warning"

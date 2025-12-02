@@ -170,7 +170,6 @@ export const prefetchSummaryMetrics = async (
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery<SummaryMetricsResponse | null>({
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: analyticsKeys.summaryMetrics(from, to),
     queryFn: () => fetchSummaryMetricsServer(cookies, from, to),
   });

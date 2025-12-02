@@ -97,7 +97,9 @@ export default defineConfig([globalIgnores([
         "jsx-a11y/click-events-have-key-events": "warn",
         "jsx-a11y/interactive-supports-focus": "warn",
         "jsx-a11y/anchor-is-valid": "off", // Allow placeholder hrefs
-        "prettier/prettier": "warn",
+        // Disable Prettier formatting enforcement in ESLint so formatting differences
+        // don't surface as warnings/errors during build.
+        "prettier/prettier": "off",
         "no-unused-vars": "off",
         "unused-imports/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "warn",
@@ -108,48 +110,11 @@ export default defineConfig([globalIgnores([
             argsIgnorePattern: "^_.*?$",
         }],
 
-        "import/order": ["warn", {
-            groups: [
-                "type",
-                "builtin",
-                "object",
-                "external",
-                "internal",
-                "parent",
-                "sibling",
-                "index",
-            ],
-
-            pathGroups: [{
-                pattern: "~/**",
-                group: "external",
-                position: "after",
-            }],
-
-            "newlines-between": "always",
-        }],
-
+        // Disable import ordering and prop sorting rules; these are stylistic
+        // preferences that can be noisy during development.
+        "import/order": "off",
         "react/self-closing-comp": "warn",
-
-        "react/jsx-sort-props": ["warn", {
-            callbacksLast: true,
-            shorthandFirst: true,
-            noSortAlphabetically: false,
-            reservedFirst: true,
-        }],
-
-        "padding-line-between-statements": ["warn", {
-            blankLine: "always",
-            prev: "*",
-            next: "return",
-        }, {
-            blankLine: "always",
-            prev: ["const", "let", "var"],
-            next: "*",
-        }, {
-            blankLine: "any",
-            prev: ["const", "let", "var"],
-            next: ["const", "let", "var"],
-        }],
+        "react/jsx-sort-props": "off",
+        "padding-line-between-statements": "off",
     },
 }]);

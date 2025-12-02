@@ -61,7 +61,6 @@ const Home = (): React.ReactElement => {
     <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "0 16px" }}>
       <div className={styles.row}>
         <div className={styles.column}>
-          {/* <MetricCards analytics={analytics} /> */}
           <Card
             isBlurred
             className="border-none bg-background/60 dark:bg-default-100/50"
@@ -78,12 +77,7 @@ const Home = (): React.ReactElement => {
               refetchAccounts={refetch}
             />
             <Spacer y={6} />
-            {/* <UserForm heading={"CREATE NEW USER"} /> */}
           </Card>
-          {/* <Spacer y={10} /> */}
-          {/* <Divider /> */}
-          {/* <Spacer y={4} /> */}
-          {/* <EmployeeTable accounts={accounts} employees={employees} /> */}
         </div>
       </div>
     </div>

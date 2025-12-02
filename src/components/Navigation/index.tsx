@@ -38,12 +38,12 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
     pathname.startsWith("/auth/")
   ) {
     return <></>;
-  }
+  };
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!isMounted) {
     return <></>;
-  }
+  };
 
   // Always show navigation for dashboard routes
   // No authentication state dependency - just pathname-based visibility
@@ -134,6 +134,22 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
             href="/dashboard/scheduler"
           >
             Scheduler
+          </NextUILink>
+        </NavbarItem>
+        <NavbarItem
+          isActive={pathname.includes("/dashboard/analytics") ? true : false}
+        >
+          <NextUILink
+            aria-current="page"
+            as={Link}
+            color={
+              pathname.includes("/dashboard/analytics")
+                ? "secondary"
+                : "foreground"
+            }
+            href="/dashboard/analytics"
+          >
+            Analytics
           </NextUILink>
         </NavbarItem>
         {canViewCustomerInsights && (

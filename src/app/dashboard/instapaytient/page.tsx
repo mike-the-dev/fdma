@@ -61,7 +61,7 @@ const Home = (): React.ReactElement => {
     <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "0 16px" }}>
       <div className={styles.row}>
         <div className={styles.column}>
-          <MetricCards analytics={analytics} />
+          {/* <MetricCards analytics={analytics} /> */}
           <Card
             isBlurred
             className="border-none bg-background/60 dark:bg-default-100/50"

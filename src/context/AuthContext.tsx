@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       return;
-    }
+    };
 
     // Check auth status only on client - using safe localStorage utilities
     const authToken = getLocalStorageItem("auth-public-token");

@@ -10,6 +10,7 @@ import { Select, SelectItem } from "@heroui/select";
 import { MCC_CODES_ALL } from "@/utils/mccCodes.all";
 import { Button } from "@heroui/button";
 import { useBusinessProfileForm } from "@/features/instapaytient/businessProfile/update/useBusinessProfileForm";
+import { Spacer } from "@heroui/spacer";
 
 interface BusinessProfileProps {
   stripeAccount: StripeAccount | null;
@@ -128,7 +129,7 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                     <span className="text-sm text-gray-600 dark:text-gray-300">
                       Update MCC
                     </span>
-                    <div>
+                    <div className="flex flex-row md:flex-col items-end">
                       <form.Field name="mccCode" validators={validators.mccCode}>
                         {(field: any) => (
                           <Select
@@ -155,6 +156,7 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                           </Select>
                         )}
                       </form.Field>
+                      <Spacer y={2} />
                       <Button color="primary" variant="shadow" type="submit" isDisabled={isPending}>
                         {isPending ? "Updating..." : "Update MCC"}
                       </Button>

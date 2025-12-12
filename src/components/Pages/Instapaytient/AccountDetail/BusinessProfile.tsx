@@ -96,7 +96,7 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
       </CardHeader>
       <Divider />
       <CardBody>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
           <div className="space-y-4">
             <div>
               <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">

@@ -128,35 +128,37 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                     <span className="text-sm text-gray-600 dark:text-gray-300">
                       Update MCC
                     </span>
-                    <form.Field name="mccCode" validators={validators.mccCode}>
-                      {(field: any) => (
-                        <Select
-                          className="max-w-xs"
-                          errorMessage={field.state.meta.errors[0]}
-                          isInvalid={!!field.state.meta.errors.length}
-                          label="Select MCC CODE"
-                          selectedKeys={
-                            field.state.value ? new Set([field.state.value]) : new Set()
-                          }
-                          onSelectionChange={(keys) => {
-                            const selectedValue = Array.from(keys)[0] as
-                              | string
-                              | undefined;
+                    <div>
+                      <form.Field name="mccCode" validators={validators.mccCode}>
+                        {(field: any) => (
+                          <Select
+                            className="max-w-xs"
+                            errorMessage={field.state.meta.errors[0]}
+                            isInvalid={!!field.state.meta.errors.length}
+                            label="Select MCC CODE"
+                            selectedKeys={
+                              field.state.value ? new Set([field.state.value]) : new Set()
+                            }
+                            onSelectionChange={(keys) => {
+                              const selectedValue = Array.from(keys)[0] as
+                                | string
+                                | undefined;
 
-                            field.handleChange(selectedValue ?? "");
-                          }}
-                        >
-                          {MCC_CODES_ALL.map((mcc) => (
-                            <SelectItem key={mcc.code} textValue={`${mcc.code} - ${mcc.description}`}>
-                              {`${mcc.code} - ${mcc.description}`}
-                            </SelectItem>
-                          ))}
-                        </Select>
-                      )}
-                    </form.Field>
-                    <Button color="primary" variant="shadow" type="submit" isDisabled={isPending}>
-                      {isPending ? "Updating..." : "Update MCC"}
-                    </Button>
+                              field.handleChange(selectedValue ?? "");
+                            }}
+                          >
+                            {MCC_CODES_ALL.map((mcc) => (
+                              <SelectItem key={mcc.code} textValue={`${mcc.code} - ${mcc.description}`}>
+                                {`${mcc.code} - ${mcc.description}`}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        )}
+                      </form.Field>
+                      <Button color="primary" variant="shadow" type="submit" isDisabled={isPending}>
+                        {isPending ? "Updating..." : "Update MCC"}
+                      </Button>
+                    </div>
                   </div>
                 </form>
               </div>

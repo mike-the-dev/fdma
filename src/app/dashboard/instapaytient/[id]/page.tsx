@@ -13,6 +13,7 @@ import { AccountReadiness } from "@/components/Pages/Instapaytient/AccountDetail
 import { AccountReadinessSkeleton } from "@/components/Pages/Instapaytient/AccountDetail/AccountReadinessSkeleton";
 import { BankAccountDetails } from "@/components/Pages/Instapaytient/AccountDetail/BankAccountDetails";
 import { BankAccountDetailsSkeleton } from "@/components/Pages/Instapaytient/AccountDetail/BankAccountDetailsSkeleton";
+import { BusinessProfile } from "@/components/Pages/Instapaytient/AccountDetail/BusinessProfile";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -142,6 +143,14 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
               stripeAccountLoading={stripeAccountLoading}
             />
           )}
+
+          <div className="mt-12" />
+
+          <BusinessProfile 
+            stripeAccount={stripeAccount}
+            stripeAccountError={stripeAccountError}
+            stripeAccountLoading={stripeAccountLoading}
+          />
 
           <div className="mt-12" />
 

@@ -22,6 +22,30 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
   stripeAccountLoading,
   stripeAccountError,
 }) => {
+  const formOpts = formOptions({
+    defaultValues: {
+      mccCode: stripeAccount?.business_profile?.mcc ?? "",
+    },
+  });
+
+  const form = useForm({
+    ...formOpts,
+    onSubmit: async ({ value }: { value: { mccCode: string } }) => {
+      console.log("UPDATE_MCC_HANDLER_CALLED", value);
+      // TODO: Implement MCC update logic
+    },
+  });
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    e.stopPropagation();
+    form.handleSubmit();
+  };
+
+  const getMccByCode = (mccCodes: readonly { code: string; description: string }[], code: string): { code: string; description: string } | undefined => {
+    return mccCodes.find((mcc) => mcc.code === code);
+  };
+
   // Handle loading state
   if (stripeAccountLoading) {
     return (
@@ -75,36 +99,10 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
     );
   };
 
-  const getMccByCode = (mccCodes: readonly { code: string; description: string }[], code: string): { code: string; description: string } | undefined => {
-    return mccCodes.find((mcc) => mcc.code === code);
-  };
-
   const mcc = getMccByCode(
     MCC_CODES_ALL,
     stripeAccount?.business_profile?.mcc ?? "",
   );
-
-  console.log("STRIPE ACCOUNT BUSINESS PROFILE:", stripeAccount);
-
-  const formOpts = formOptions({
-    defaultValues: {
-      mccCode: stripeAccount?.business_profile?.mcc ?? "",
-    },
-  });
-
-  const form = useForm({
-    ...formOpts,
-    onSubmit: async ({ value }: { value: { mccCode: string } }) => {
-      console.log("UPDATE_MCC_HANDLER_CALLED", value);
-      // TODO: Implement MCC update logic
-    },
-  });
-
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    e.stopPropagation();
-    form.handleSubmit();
-  };
 
   return (
     <Card className="mb-8">

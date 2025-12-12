@@ -1,7 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
 import { Divider } from "@heroui/divider";
 
 import { StripeAccount } from "@/features/instapaytient/account/account.schema";
@@ -13,7 +12,7 @@ interface BusinessProfileProps {
   stripeAccount: StripeAccount | null;
   stripeAccountLoading: boolean;
   stripeAccountError: string | null;
-}
+};
 
 export const BusinessProfile: React.FC<BusinessProfileProps> = ({
   stripeAccount,
@@ -73,6 +72,15 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
     );
   };
 
+  const getMccByCode = (mccCodes: readonly { code: string; description: string }[], code: string): { code: string; description: string } | undefined => {
+    return mccCodes.find((mcc) => mcc.code === code);
+  };
+
+  const mcc = getMccByCode(
+    MCC_CODES_ALL,
+    stripeAccount?.business_profile?.mcc ?? "",
+  );
+
   console.log("STRIPE ACCOUNT BUSINESS PROFILE:", stripeAccount);
 
   return (
@@ -100,7 +108,12 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                     MCC
                   </span>
                   <span className="font-medium">
-                    {stripeAccount?.business_profile?.mcc || "Not specified"}
+                    {mcc
+                      ? `${mcc.code} — ${mcc.description.length > 40
+                        ? `${mcc.description.slice(0, 40)}...`
+                        : mcc.description
+                      }`
+                      : "Not specified"}
                   </span>
                 </div>
                 <Divider className="my-2" />

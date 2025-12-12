@@ -138,8 +138,8 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                   </span>
                 </div>
                 <Divider className="my-2" />
-                <div className="flex items-center justify-between">
-                  <form autoComplete="off" onSubmit={handleFormSubmit}>
+                <form autoComplete="off" onSubmit={handleFormSubmit}>
+                  <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600 dark:text-gray-300">
                       Update MCC
                     </span>
@@ -172,8 +172,8 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                     <Button color="primary" variant="shadow" type="submit">
                       Update MCC
                     </Button>
-                  </form>
-                </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

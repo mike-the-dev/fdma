@@ -1,4 +1,5 @@
 import { Account, Transaction, StripeAccount } from "./account.schema";
+import { useQuery } from "@tanstack/react-query";
 
 import apiClient from "@/utils/apiClient";
 
@@ -23,6 +24,29 @@ export const fetchStripeAccountById = async (
 ): Promise<StripeAccount> => {
   const res = await apiClient.get<StripeAccount>(
     `/api/user/stripe/connected-account/${id}`
+  );
+
+  return res.data;
+};
+
+// ============================================================================
+// TanStack Query Hooks
+// ============================================================================
+export const useStripeAccountById = (id?: string) => {
+  return useQuery<StripeAccount, Error>({
+    queryKey: ["stripeAccount", id],
+    queryFn: () => fetchStripeAccountById(id!),
+    enabled: !!id,
+  });
+};
+
+export const setStripeAccountMcc = async (
+  id: string,
+  mcc: string
+): Promise<StripeAccount> => {
+  const res = await apiClient.post<StripeAccount>(
+    `/api/user/stripe/connected-account/${id}/mcc`,
+    { mcc: mcc }
   );
 
   return res.data;

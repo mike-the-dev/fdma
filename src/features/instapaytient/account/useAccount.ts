@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import {
   fetchAccountById,
   fetchTransactionsByStripeAccount,
-  fetchStripeAccountById,
+  useStripeAccountById,
 } from "./account.service";
 import { mapAccount, mapTransaction } from "./account.mappers";
 import { TransactionMappedDTO, StripeAccount } from "./account.schema";
@@ -41,14 +41,24 @@ export const useAccount = (id: string): UseAccountReturn => {
     null
   );
 
-  // Stripe Account state
-  const [stripeAccount, setStripeAccount] = useState<StripeAccount | null>(
-    null
-  );
-  const [stripeAccountLoading, setStripeAccountLoading] = useState(false);
-  const [stripeAccountError, setStripeAccountError] = useState<string | null>(
-    null
-  );
+  // Stripe Account - using React Query
+  const stripeAccountId = account?.payout?.stripeId;
+  const {
+    data: stripeAccount,
+    isLoading: stripeAccountLoading,
+    error: stripeAccountQueryError,
+    refetch: refetchStripeAccountQuery,
+  } = useStripeAccountById(stripeAccountId);
+
+  // Map React Query error to string for backward compatibility
+  const stripeAccountError = stripeAccountQueryError
+    ? toAccountError(stripeAccountQueryError).message
+    : null;
+
+  // Wrapper function for refetch to maintain interface
+  const refetchStripeAccount = async (): Promise<void> => {
+    await refetchStripeAccountQuery();
+  };
 
   const fetchAccountDetails = async (): Promise<void> => {
     try {
@@ -101,30 +111,6 @@ export const useAccount = (id: string): UseAccountReturn => {
     }
   };
 
-  const fetchStripeAccount = async (): Promise<void> => {
-    if (!account?.payout?.stripeId) return;
-
-    try {
-      setStripeAccountLoading(true);
-      setStripeAccountError(null);
-
-      const data = await fetchStripeAccountById(account.payout.stripeId);
-
-      setStripeAccount(data);
-    } catch (err: unknown) {
-      const mapped = toAccountError(err);
-
-      // TOKEN_EXPIRED handled by global auth (redirect). No local error UI.
-      if (mapped.code === "TOKEN_EXPIRED") return;
-
-      setStripeAccountError(mapped.message);
-
-      if (process.env.NODE_ENV !== "production")
-        console.error("[useAccount - fetchStripeAccount]", err);
-    } finally {
-      setStripeAccountLoading(false);
-    }
-  };
 
   useEffect(() => {
     // Only fetch account details when authentication is complete and user is authenticated
@@ -136,11 +122,6 @@ export const useAccount = (id: string): UseAccountReturn => {
     if (account?.payout?.stripeId) fetchTransactions();
   }, [account?.payout?.stripeId]);
 
-  useEffect(() => {
-    // Fetch Stripe account when account data is available and has stripeId
-    if (account?.payout?.stripeId) fetchStripeAccount();
-  }, [account?.payout?.stripeId]);
-
   return {
     account,
     isLoading,
@@ -150,9 +131,9 @@ export const useAccount = (id: string): UseAccountReturn => {
     transactionsLoading,
     transactionsError,
     refetchTransactions: fetchTransactions,
-    stripeAccount,
+    stripeAccount: stripeAccount ?? null,
     stripeAccountLoading,
     stripeAccountError,
-    refetchStripeAccount: fetchStripeAccount,
+    refetchStripeAccount,
   };
 };

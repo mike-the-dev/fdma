@@ -4,12 +4,12 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Divider } from "@heroui/divider";
-import { formOptions, useForm } from "@tanstack/react-form";
 
 import { StripeAccount } from "@/features/instapaytient/account/account.schema";
 import { Select, SelectItem } from "@heroui/select";
 import { MCC_CODES_ALL } from "@/utils/mccCodes.all";
 import { Button } from "@heroui/button";
+import { useBusinessProfileForm } from "@/features/instapaytient/businessProfile/update/useBusinessProfileForm";
 
 interface BusinessProfileProps {
   stripeAccount: StripeAccount | null;
@@ -22,25 +22,10 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
   stripeAccountLoading,
   stripeAccountError,
 }) => {
-  const formOpts = formOptions({
-    defaultValues: {
-      mccCode: stripeAccount?.business_profile?.mcc ?? "",
-    },
+  const { form, validators, isPending, handleFormSubmit } = useBusinessProfileForm({
+    stripeAccountId: stripeAccount?.id ?? "",
+    initialMccCode: stripeAccount?.business_profile?.mcc ?? "",
   });
-
-  const form = useForm({
-    ...formOpts,
-    onSubmit: async ({ value }: { value: { mccCode: string } }) => {
-      console.log("UPDATE_MCC_HANDLER_CALLED", value);
-      // TODO: Implement MCC update logic
-    },
-  });
-
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    e.stopPropagation();
-    form.handleSubmit();
-  };
 
   const getMccByCode = (mccCodes: readonly { code: string; description: string }[], code: string): { code: string; description: string } | undefined => {
     return mccCodes.find((mcc) => mcc.code === code);
@@ -143,7 +128,7 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                     <span className="text-sm text-gray-600 dark:text-gray-300">
                       Update MCC
                     </span>
-                    <form.Field name="mccCode">
+                    <form.Field name="mccCode" validators={validators.mccCode}>
                       {(field: any) => (
                         <Select
                           className="max-w-xs"
@@ -169,8 +154,8 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                         </Select>
                       )}
                     </form.Field>
-                    <Button color="primary" variant="shadow" type="submit">
-                      Update MCC
+                    <Button color="primary" variant="shadow" type="submit" isDisabled={isPending}>
+                      {isPending ? "Updating..." : "Update MCC"}
                     </Button>
                   </div>
                 </form>

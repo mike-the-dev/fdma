@@ -1,6 +1,6 @@
 import type { ParsedScheduleTime } from "./scheduler.schema";
 
-import { CalendarDate } from "@heroui/calendar";
+import { CalendarDate } from "@internationalized/date";
 import { DateTime } from "luxon";
 
 /**

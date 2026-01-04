@@ -26,7 +26,16 @@ import { TransactionDetails } from "@/components/TransactionDetails";
 import { AccountDetails } from "@/components/AccountDetails";
 import { useAuthContext } from "@/context/AuthContext";
 import apiClient from "@/utils/apiClient";
+import { SchedulerTimeUpdateCard } from "@/components/Pages/Scheduler/SchedulerTimeUpdateCard";
+import { parseScheduleExpressionToLocal } from "@/features/scheduler/_shared/scheduler.mappers";
 
+/**
+ * @author mike-the-dev (Michael Camacho)
+ * @editor mike-the-dev (Michael Camacho)
+ * @lastUpdated 2025-01-13
+ * @name SchedulerDetailPage
+ * @description Scheduler payout detail view with editable payout time.
+ */
 type PageProps = {
   params: Promise<{ id: string }>;
 };
@@ -265,6 +274,9 @@ const SchedulerDetailPage = ({ params }: PageProps): React.ReactElement => {
   const platformFeePercentage: number = customTakeRate + 2.9; // Custom take in % + 2.9%
   const currency: string =
     tenderTransaction_amount?.tenderTransaction_amount_currencyCode ?? "USD";
+  const currentSchedule = parseScheduleExpressionToLocal(
+    schedulerData?.ScheduleExpression
+  );
 
   return (
     <div className="max-w-6xl mx-auto mt-10">
@@ -323,6 +335,11 @@ const SchedulerDetailPage = ({ params }: PageProps): React.ReactElement => {
             platformFeePercentage={platformFeePercentage}
             processedDate={tenderTransaction_processedAt ?? ""}
             subtotal={current_subtotal_price ?? 0}
+          />
+
+          <SchedulerTimeUpdateCard
+            currentSchedule={currentSchedule}
+            schedulerId={id}
           />
 
           {/* Transaction and Account Details */}

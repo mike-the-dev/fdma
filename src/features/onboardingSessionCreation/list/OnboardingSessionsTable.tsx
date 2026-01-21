@@ -15,6 +15,7 @@ import { Spinner } from "@heroui/spinner";
 
 import { useOnboardingSessions } from "../onboardingSessionCreation.service";
 import { OnboardingSessionListItem } from "../_shared/onboardingSessionCreation.types";
+import { formatDate } from "@/utils/formatters";
 
 const columns: { key: keyof OnboardingSessionListItem; label: string }[] = [
   { key: "companyName", label: "COMPANY" },
@@ -91,9 +92,17 @@ const OnboardingSessionsTable = (): React.ReactElement => {
         <TableBody items={data}>
           {(item) => (
             <TableRow key={item.sessionId}>
-              {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
+              {(columnKey) => {
+                if (columnKey === "createdAt" || columnKey === "expiresAt") {
+                  return (
+                    <TableCell>
+                      {formatDate(String(getKeyValue(item, columnKey)), true)}
+                    </TableCell>
+                  );
+                }
+
+                return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+              }}
             </TableRow>
           )}
         </TableBody>

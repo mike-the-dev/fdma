@@ -27,3 +27,14 @@ export type CreateOnboardingSessionResponse = {
   onboardingUrl: string;
   expiresAt: string;
 };
+
+export type OnboardingSessionListItem = {
+  sessionId: string;
+  customerName?: string;
+  companyName?: string;
+  email?: string;
+  status: string;
+  stage: string;
+  createdAt: string;
+  expiresAt: string;
+};

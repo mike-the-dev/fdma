@@ -86,18 +86,18 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
         </NavbarItem>
         <NavbarItem
           isActive={
-            pathname.includes("/dashboard/instapaytient/session-creation") ? true : false
+            pathname === "/dashboard/session-creation"
           }
         >
           <NextUILink
             aria-current="page"
             as={Link}
             color={
-              pathname.includes("/dashboard/instapaytient/session-creation")
+              pathname === "/dashboard/session-creation"
                 ? "secondary"
                 : "foreground"
             }
-            href="/dashboard/instapaytient/session-creation"
+            href="/dashboard/session-creation"
           >
             Session Creation
           </NextUILink>

@@ -2,9 +2,9 @@
 
 import React from "react";
 
-import styles from "../../../page.module.css";
+import styles from "../page.module.css";
 
-import { CreateOnboardingSession } from "@/features/onboardingSessionCreation";
+import { CreateOnboardingSession, OnboardingSessionsTable } from "@/features/onboardingSessionCreation";
 
 const SessionCreationPage: React.FC = (): React.ReactElement => {
   return (
@@ -12,6 +12,9 @@ const SessionCreationPage: React.FC = (): React.ReactElement => {
       <div className={styles.row}>
         <div className={styles.column}>
           <CreateOnboardingSession />
+          <div style={{ marginTop: "24px" }}>
+            <OnboardingSessionsTable />
+          </div>
         </div>
       </div>
     </div>

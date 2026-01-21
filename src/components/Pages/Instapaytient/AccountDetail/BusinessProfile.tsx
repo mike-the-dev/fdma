@@ -129,7 +129,7 @@ export const BusinessProfile: React.FC<BusinessProfileProps> = ({
                     <span className="text-sm text-gray-600 dark:text-gray-300">
                       Update MCC
                     </span>
-                    <div className="flex flex-row md:flex-col items-end">
+                    <div className="flex md:flex-col items-end">
                       <form.Field name="mccCode" validators={validators.mccCode}>
                         {(field: any) => (
                           <Select

@@ -10,7 +10,6 @@ import styles from "../../page.module.css";
 import AccountTableInstapaytient from "@/components/AccountTableInstapaytient";
 import { useAccounts } from "@/features/instapaytient/accounts/useAccounts";
 import { useGlobalAnalytics } from "@/features/instapaytient/accounts/useGlobalAnalytics";
-import { MetricCards } from "@/components/Pages/Instapaytient/MetricCards";
 
 interface HomeProps {}
 

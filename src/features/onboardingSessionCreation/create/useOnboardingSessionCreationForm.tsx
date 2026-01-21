@@ -61,6 +61,8 @@ export const useOnboardingSessionCreationForm = (): UseOnboardingSessionCreation
           color: "success",
           timeout: 5000,
         });
+
+        form.reset();
       } catch (error: any) {
         console.error("Error creating onboarding session: ", error);
 

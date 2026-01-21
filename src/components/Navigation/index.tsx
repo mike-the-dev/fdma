@@ -68,7 +68,7 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem
           isActive={
-            pathname.includes("/dashboard/instapaytient") ? true : false
+            pathname === "/dashboard/instapaytient"
           }
         >
           <NextUILink

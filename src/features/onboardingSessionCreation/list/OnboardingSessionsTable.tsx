@@ -10,6 +10,7 @@ import {
   getKeyValue,
 } from "@heroui/table";
 import { Card } from "@heroui/card";
+import { Chip } from "@heroui/chip";
 import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
 
@@ -29,6 +30,19 @@ const formatSessionDate = (dateString: string): string => {
     minute: "2-digit",
     hour12: true,
   }).format(date);
+};
+
+type StageChipConfig = {
+  label: string;
+  color: "default" | "primary" | "secondary" | "success" | "warning" | "danger";
+};
+
+const stageChipConfig: Record<string, StageChipConfig> = {
+  collect_stripe: { label: "Collect Stripe", color: "primary" },
+  confirm_stripe: { label: "Confirm Stripe", color: "secondary" },
+  collect_deployment: { label: "Collect Deployment", color: "warning" },
+  confirm_deployment: { label: "Confirm Deployment", color: "warning" },
+  complete: { label: "Complete", color: "success" },
 };
 
 const columns: { key: keyof OnboardingSessionListItem; label: string }[] = [
@@ -111,6 +125,22 @@ const OnboardingSessionsTable = (): React.ReactElement => {
                   return (
                     <TableCell>
                       {formatSessionDate(String(getKeyValue(item, columnKey)))}
+                    </TableCell>
+                  );
+                }
+
+                if (columnKey === "stage") {
+                  const stage = String(getKeyValue(item, columnKey));
+                  const config = stageChipConfig[stage] || {
+                    label: stage,
+                    color: "default",
+                  };
+
+                  return (
+                    <TableCell>
+                      <Chip color={config.color} size="sm" variant="flat">
+                        {config.label}
+                      </Chip>
                     </TableCell>
                   );
                 }

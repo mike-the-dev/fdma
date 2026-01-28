@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import axiosInstance from "@/utils/axiosInterceptor";
 import { handleRequest } from "@/services/api";
@@ -30,9 +30,17 @@ export const fetchOnboardingSessions = async (): Promise<
 // TanStack Query Mutation Hook
 // ============================================================================
 export const useCreateOnboardingSession = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (payload: CreateOnboardingSessionRequest) =>
       postCreateOnboardingSession(payload),
+    onSuccess: async () => {
+      // Refresh sessions list after creating a new one.
+      await queryClient.invalidateQueries({
+        queryKey: ["onboardingSessions"],
+      });
+    },
   });
 };
 

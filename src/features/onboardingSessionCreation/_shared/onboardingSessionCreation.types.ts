@@ -38,3 +38,12 @@ export type OnboardingSessionListItem = {
   createdAt: string;
   expiresAt: string;
 };
+
+export type RefreshOnboardingSessionRequest = {
+  sessionId: string;
+};
+
+export type RefreshOnboardingSessionResponseDto = {
+  redirectUrl: string;
+  expiresAt: string;
+};

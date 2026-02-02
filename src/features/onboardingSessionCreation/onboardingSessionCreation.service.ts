@@ -7,6 +7,8 @@ import {
   CreateOnboardingSessionRequest,
   CreateOnboardingSessionResponse,
   OnboardingSessionListItem,
+  RefreshOnboardingSessionRequest,
+  RefreshOnboardingSessionResponseDto,
 } from "./_shared/onboardingSessionCreation.types";
 
 // ============================================================================
@@ -24,6 +26,14 @@ export const fetchOnboardingSessions = async (): Promise<
   OnboardingSessionListItem[]
 > => {
   return handleRequest(axiosInstance.get("/user/onboarding/sessions"));
+};
+
+export const postRefreshOnboardingSession = async (
+  payload: RefreshOnboardingSessionRequest
+): Promise<RefreshOnboardingSessionResponseDto> => {
+  return handleRequest(
+    axiosInstance.post("/user/onboarding/session/refresh", payload)
+  );
 };
 
 // ============================================================================
@@ -48,5 +58,19 @@ export const useOnboardingSessions = () => {
   return useQuery<OnboardingSessionListItem[], Error>({
     queryKey: ["onboardingSessions"],
     queryFn: () => fetchOnboardingSessions(),
+  });
+};
+
+export const useRefreshOnboardingSession = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: RefreshOnboardingSessionRequest) =>
+      postRefreshOnboardingSession(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["onboardingSessions"],
+      });
+    },
   });
 };

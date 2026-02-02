@@ -14,6 +14,7 @@ import { Button } from "@heroui/button";
 import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
 import { User } from "@heroui/user";
+import { Tooltip } from "@heroui/tooltip";
 import {
   Dropdown,
   DropdownTrigger,
@@ -254,20 +255,22 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                 if (columnKey === "customerName") {
                   return (
                     <TableCell>
-                      <User
-                        avatarProps={{
-                          radius: "full",
-                          size: "sm",
-                          name: item.customerName,
-                        }}
-                        classNames={{
-                          description: "text-default-500",
-                        }}
-                        description={item.email}
-                        name={item.companyName}
-                      >
-                        {item.email}
-                      </User>
+                      <Tooltip content={item.customerName} showArrow={true}>
+                        <User
+                          avatarProps={{
+                            radius: "full",
+                            size: "sm",
+                            name: item.customerName,
+                          }}
+                          classNames={{
+                            description: "text-default-500",
+                          }}
+                          description={item.email}
+                          name={item.companyName}
+                        >
+                          {item.email}
+                        </User>
+                      </Tooltip>
                     </TableCell>
                   );
                 }

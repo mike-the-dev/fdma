@@ -14,6 +14,7 @@ import { Chip } from "@heroui/chip";
 import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
 import { User } from "@heroui/user";
+import { Tooltip } from "@heroui/tooltip";
 
 import { useOnboardingSessions } from "../onboardingSessionCreation.service";
 import { OnboardingSessionListItem } from "../_shared/onboardingSessionCreation.types";
@@ -165,20 +166,22 @@ const OnboardingSessionsTable = (): React.ReactElement => {
                 if (columnKey === "customerName") {
                   return (
                     <TableCell>
-                      <User
-                        avatarProps={{
-                          radius: "full",
-                          size: "sm",
-                          name: item.customerName,
-                        }}
-                        classNames={{
-                          description: "text-default-500",
-                        }}
-                        description={item.email}
-                        name={item.companyName}
-                      >
-                        {item.email}
-                      </User>
+                      <Tooltip content={item.customerName} showArrow={true}>
+                        <User
+                          avatarProps={{
+                            radius: "full",
+                            size: "sm",
+                            name: item.customerName,
+                          }}
+                          classNames={{
+                            description: "text-default-500",
+                          }}
+                          description={item.email}
+                          name={item.companyName}
+                        >
+                          {item.email}
+                        </User>
+                      </Tooltip>
                     </TableCell>
                   );
                 }

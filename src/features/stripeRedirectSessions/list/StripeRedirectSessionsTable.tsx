@@ -15,6 +15,7 @@ import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
 import { User } from "@heroui/user";
 import { Tooltip } from "@heroui/tooltip";
+import { Input } from "@heroui/input";
 import {
   Dropdown,
   DropdownTrigger,
@@ -26,6 +27,7 @@ import {
 import { useStripeRedirectSessions } from "../stripeRedirectSessions.service";
 import { StripeRedirectSessionDto } from "../_shared/stripeRedirectSessions.types";
 import { useStripeRedirectSessionRefresh } from "./useStripeRedirectSessionRefresh";
+import { useStripeRedirectSessionEmailUpdate } from "./useStripeRedirectSessionEmailUpdate";
 
 const formatSessionDate = (dateString: string): string => {
   if (!dateString) return "N/A";
@@ -154,6 +156,13 @@ const columns: ColumnConfig[] = [
 const StripeRedirectSessionsTable = (): React.ReactElement => {
   const { data, isLoading, error } = useStripeRedirectSessions();
   const { handleRefresh, isRefreshing } = useStripeRedirectSessionRefresh();
+  const {
+    getEmailValue,
+    getEmailError,
+    setEmailValue,
+    handleUpdateEmail,
+    isUpdating,
+  } = useStripeRedirectSessionEmailUpdate();
 
   if (isLoading) {
     return (
@@ -291,6 +300,53 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Stripe session actions" variant="faded">
                           <DropdownSection showDivider title="Actions">
+                            <DropdownItem
+                              key={`update-email-${item.sessionId}`}
+                              textValue="Update email"
+                              closeOnSelect={false}
+                              className="cursor-default"
+                            >
+                              <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-1">
+                                  <p className="text-sm font-medium">Update email</p>
+                                  <p className="text-xs text-default-500">
+                                    Update the email for session.
+                                  </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    size="sm"
+                                    type="email"
+                                    value={getEmailValue(
+                                      item.sessionId,
+                                      item.email
+                                    )}
+                                    onValueChange={(value) =>
+                                      setEmailValue(item.sessionId, value)
+                                    }
+                                    isInvalid={Boolean(
+                                      getEmailError(item.sessionId)
+                                    )}
+                                    errorMessage={getEmailError(item.sessionId) ?? undefined}
+                                  />
+                                  <Button
+                                    size="sm"
+                                    color="primary"
+                                    isLoading={isUpdating(item.sessionId)}
+                                    isDisabled={isUpdating(item.sessionId)}
+                                    onPress={() =>
+                                      handleUpdateEmail(
+                                        item.sessionId,
+                                        item.email,
+                                        item.companyName
+                                      )
+                                    }
+                                  >
+                                    Save
+                                  </Button>
+                                </div>
+                              </div>
+                            </DropdownItem>
                             <DropdownItem
                               key="refresh-session"
                               description="Refresh the redirect session"

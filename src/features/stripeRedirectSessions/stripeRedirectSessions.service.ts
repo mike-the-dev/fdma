@@ -7,6 +7,8 @@ import {
   RefreshStripeRedirectSessionRequest,
   RefreshStripeRedirectSessionResponseDto,
   StripeRedirectSessionDto,
+  UpdateStripeRedirectSessionEmailRequest,
+  UpdateStripeRedirectSessionEmailResponseDto,
 } from "./_shared/stripeRedirectSessions.types";
 
 // ============================================================================
@@ -26,6 +28,14 @@ export const postRefreshStripeRedirectSession = async (
   );
 };
 
+export const postUpdateStripeRedirectSessionEmail = async (
+  payload: UpdateStripeRedirectSessionEmailRequest
+): Promise<UpdateStripeRedirectSessionEmailResponseDto> => {
+  return handleRequest(
+    axiosInstance.post("/user/stripe/redirect-session/email", payload)
+  );
+};
+
 // ============================================================================
 // TanStack Query Hook
 // ============================================================================
@@ -42,6 +52,20 @@ export const useRefreshStripeRedirectSession = () => {
   return useMutation({
     mutationFn: (payload: RefreshStripeRedirectSessionRequest) =>
       postRefreshStripeRedirectSession(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["stripeRedirectSessions"],
+      });
+    },
+  });
+};
+
+export const useUpdateStripeRedirectSessionEmail = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: UpdateStripeRedirectSessionEmailRequest) =>
+      postUpdateStripeRedirectSessionEmail(payload),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["stripeRedirectSessions"],

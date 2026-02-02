@@ -17,3 +17,13 @@ export type RefreshStripeRedirectSessionResponseDto = {
   redirectUrl: string;
   expiresAt: string;
 };
+
+export type UpdateStripeRedirectSessionEmailRequest = {
+  sessionId: string;
+  email: string;
+};
+
+export type UpdateStripeRedirectSessionEmailResponseDto = {
+  sessionId: string;
+  email: string;
+};

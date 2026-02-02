@@ -341,12 +341,15 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                               textValue="Update email"
                               closeOnSelect={false}
                               className="cursor-default"
-                              description="Update the email for session"
-                              startContent={<EditDocumentIcon className={iconClasses} />}
                             >
                               <div className="flex flex-col gap-2">
-                                <div className="flex flex-col gap-1">
+                                <div className="flex items-start gap-2">
+                                  <EditDocumentIcon className={iconClasses} />
                                   <p className="text-sm font-medium">Update email</p>
+                                </div>
+                                <p className="text-xs text-default-500">
+                                  Update the email for session.
+                                </p>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <Input

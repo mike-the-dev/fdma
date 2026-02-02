@@ -13,6 +13,7 @@ import { Card } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
+import { User } from "@heroui/user";
 
 import { useOnboardingSessions } from "../onboardingSessionCreation.service";
 import { OnboardingSessionListItem } from "../_shared/onboardingSessionCreation.types";
@@ -46,9 +47,7 @@ const stageChipConfig: Record<string, StageChipConfig> = {
 };
 
 const columns: { key: keyof OnboardingSessionListItem; label: string }[] = [
-  { key: "companyName", label: "COMPANY" },
-  { key: "customerName", label: "CUSTOMER" },
-  { key: "email", label: "EMAIL" },
+  { key: "customerName", label: "BUSINESS" },
   { key: "stage", label: "STAGE" },
   { key: "status", label: "STATUS" },
   { key: "createdAt", label: "CREATED" },
@@ -141,6 +140,45 @@ const OnboardingSessionsTable = (): React.ReactElement => {
                       <Chip color={config.color} size="sm" variant="flat">
                         {config.label}
                       </Chip>
+                    </TableCell>
+                  );
+                }
+
+                if (columnKey === "status") {
+                  return (
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block rounded-full"
+                          style={{
+                            width: "8px",
+                            height: "8px",
+                            backgroundColor: "#17C964",
+                          }}
+                        />
+                        <span>{String(getKeyValue(item, columnKey))}</span>
+                      </div>
+                    </TableCell>
+                  );
+                }
+
+                if (columnKey === "customerName") {
+                  return (
+                    <TableCell>
+                      <User
+                        avatarProps={{
+                          radius: "full",
+                          size: "sm",
+                          name: item.customerName,
+                        }}
+                        classNames={{
+                          description: "text-default-500",
+                        }}
+                        description={item.email}
+                        name={item.companyName}
+                      >
+                        {item.email}
+                      </User>
                     </TableCell>
                   );
                 }

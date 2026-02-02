@@ -323,7 +323,14 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                             <VerticalDotsIcon className="text-default-500" />
                           </Button>
                         </DropdownTrigger>
-                        <DropdownMenu aria-label="Stripe session actions" variant="faded">
+                        <DropdownMenu
+                          aria-label="Stripe session actions"
+                          variant="faded"
+                          closeOnSelect={false}
+                          shouldCloseOnInteractOutside={(element) =>
+                            !element.closest("[data-email-editor='true']")
+                          }
+                        >
                           <DropdownSection showDivider title="Actions">
                             <DropdownItem
                               key="refresh-session"
@@ -342,7 +349,10 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                               closeOnSelect={false}
                               className="cursor-default"
                             >
-                              <div className="flex flex-col gap-2">
+                              <div
+                                className="flex flex-col gap-2"
+                                data-email-editor="true"
+                              >
                                 <div className="flex items-center gap-2">
                                   <EditDocumentIcon className={iconClasses} />
                                   <div className="flex flex-col gap-1">

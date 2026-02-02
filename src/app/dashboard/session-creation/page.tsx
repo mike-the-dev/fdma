@@ -1,10 +1,15 @@
 "use client";
 
 import React from "react";
+import { Tabs, Tab } from "@heroui/tabs";
 
 import styles from "../../page.module.css";
 
-import { CreateOnboardingSession, OnboardingSessionsTable } from "@/features/onboardingSessionCreation";
+import {
+  CreateOnboardingSession,
+  OnboardingSessionsTable,
+} from "@/features/onboardingSessionCreation";
+import { StripeRedirectSessionsTable } from "@/features/stripeRedirectSessions";
 
 const SessionCreationPage: React.FC = (): React.ReactElement => {
   return (
@@ -13,7 +18,18 @@ const SessionCreationPage: React.FC = (): React.ReactElement => {
         <div className={styles.column}>
           <CreateOnboardingSession />
           <div style={{ marginTop: "24px" }}>
-            <OnboardingSessionsTable />
+            <Tabs aria-label="Session tables" radius="full">
+              <Tab key="onboarding" title="Onboarding Sessions">
+                <div style={{ marginTop: "16px" }}>
+                  <OnboardingSessionsTable />
+                </div>
+              </Tab>
+              <Tab key="stripe" title="Stripe Redirect Sessions">
+                <div style={{ marginTop: "16px" }}>
+                  <StripeRedirectSessionsTable />
+                </div>
+              </Tab>
+            </Tabs>
           </div>
         </div>
       </div>

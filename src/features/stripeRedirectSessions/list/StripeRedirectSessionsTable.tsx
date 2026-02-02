@@ -37,11 +37,14 @@ type ColumnConfig = {
 };
 
 const columns: ColumnConfig[] = [
-  { key: "sessionId", label: "SESSION" },
-  { key: "stripeId", label: "STRIPE ID" },
+  { key: "companyName", label: "COMPANY" },
+  { key: "customerName", label: "CUSTOMER" },
+  { key: "email", label: "EMAIL" },
   { key: "status", label: "STATUS" },
   { key: "createdAt", label: "CREATED" },
   { key: "expiresAt", label: "EXPIRES" },
+  { key: "sessionId", label: "SESSION" },
+  { key: "stripeId", label: "STRIPE ID" },
 ];
 
 const StripeRedirectSessionsTable = (): React.ReactElement => {

@@ -13,6 +13,13 @@ import { Card } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownSection,
+  DropdownItem,
+} from "@heroui/dropdown";
 
 import { useStripeRedirectSessions } from "../stripeRedirectSessions.service";
 import { StripeRedirectSessionDto } from "../_shared/stripeRedirectSessions.types";
@@ -39,7 +46,7 @@ const formatSessionId = (value: string): string => {
 };
 
 type ColumnConfig = {
-  key: keyof StripeRedirectSessionDto | "refresh";
+  key: keyof StripeRedirectSessionDto | "actions";
   label: string;
 };
 
@@ -50,7 +57,7 @@ const columns: ColumnConfig[] = [
   { key: "status", label: "STATUS" },
   { key: "sessionId", label: "SESSION" },
   { key: "stripeId", label: "STRIPE ID" },
-  { key: "refresh", label: "REFRESH" },
+  { key: "actions", label: "ACTIONS" },
   { key: "createdAt", label: "CREATED" },
   { key: "expiresAt", label: "EXPIRES" },
 ];
@@ -138,21 +145,38 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                   );
                 }
 
-                if (columnKey === "refresh") {
+                if (columnKey === "actions") {
                   return (
                     <TableCell>
-                      <Button
-                        size="sm"
-                        variant="flat"
-                        color="primary"
-                        isLoading={isRefreshing(item.sessionId)}
-                        isDisabled={isRefreshing(item.sessionId)}
-                        onPress={() =>
-                          handleRefresh(item.sessionId, item.companyName)
-                        }
-                      >
-                        Refresh
-                      </Button>
+                      <Dropdown>
+                        <DropdownTrigger>
+                          <Button size="sm" variant="flat">
+                            Actions
+                          </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Stripe session actions" variant="faded">
+                          <DropdownSection showDivider title="Actions">
+                            <DropdownItem
+                              key={`refresh-${item.sessionId}`}
+                              onPress={() =>
+                                handleRefresh(item.sessionId, item.companyName)
+                              }
+                            >
+                              Refresh session
+                            </DropdownItem>
+                          </DropdownSection>
+                          <DropdownSection title="Danger zone">
+                            <DropdownItem
+                              key={`revoke-${item.sessionId}`}
+                              color="danger"
+                              className="text-danger"
+                              isDisabled
+                            >
+                              Revoke session (coming soon)
+                            </DropdownItem>
+                          </DropdownSection>
+                        </DropdownMenu>
+                      </Dropdown>
                     </TableCell>
                   );
                 }

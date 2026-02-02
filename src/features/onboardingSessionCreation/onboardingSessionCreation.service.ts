@@ -9,6 +9,8 @@ import {
   OnboardingSessionListItem,
   RefreshOnboardingSessionRequest,
   RefreshOnboardingSessionResponseDto,
+  UpdateOnboardingSessionEmailRequest,
+  UpdateOnboardingSessionEmailResponseDto,
 } from "./_shared/onboardingSessionCreation.types";
 
 // ============================================================================
@@ -33,6 +35,14 @@ export const postRefreshOnboardingSession = async (
 ): Promise<RefreshOnboardingSessionResponseDto> => {
   return handleRequest(
     axiosInstance.post("/user/onboarding/session/refresh", payload)
+  );
+};
+
+export const postUpdateOnboardingSessionEmail = async (
+  payload: UpdateOnboardingSessionEmailRequest
+): Promise<UpdateOnboardingSessionEmailResponseDto> => {
+  return handleRequest(
+    axiosInstance.post("/user/onboarding/session/email", payload)
   );
 };
 
@@ -67,6 +77,20 @@ export const useRefreshOnboardingSession = () => {
   return useMutation({
     mutationFn: (payload: RefreshOnboardingSessionRequest) =>
       postRefreshOnboardingSession(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["onboardingSessions"],
+      });
+    },
+  });
+};
+
+export const useUpdateOnboardingSessionEmail = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: UpdateOnboardingSessionEmailRequest) =>
+      postUpdateOnboardingSessionEmail(payload),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["onboardingSessions"],

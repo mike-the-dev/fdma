@@ -47,3 +47,13 @@ export type RefreshOnboardingSessionResponseDto = {
   redirectUrl: string;
   expiresAt: string;
 };
+
+export type UpdateOnboardingSessionEmailRequest = {
+  sessionId: string;
+  email: string;
+};
+
+export type UpdateOnboardingSessionEmailResponseDto = {
+  sessionId: string;
+  email: string;
+};

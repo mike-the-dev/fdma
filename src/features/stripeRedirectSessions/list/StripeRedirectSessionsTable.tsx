@@ -13,6 +13,7 @@ import { Card } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
+import { User } from "@heroui/user";
 import {
   Dropdown,
   DropdownTrigger,
@@ -140,9 +141,7 @@ type ColumnConfig = {
 };
 
 const columns: ColumnConfig[] = [
-  { key: "companyName", label: "COMPANY" },
-  { key: "customerName", label: "CUSTOMER" },
-  { key: "email", label: "EMAIL" },
+  { key: "customerName", label: "BUSINESS" },
   { key: "status", label: "STATUS" },
   { key: "sessionId", label: "SESSION" },
   { key: "stripeId", label: "STRIPE ID" },
@@ -234,12 +233,38 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                   );
                 }
 
+                if (columnKey === "customerName") {
+                  return (
+                    <TableCell>
+                      <User
+                        avatarProps={{
+                          radius: "full",
+                          size: "sm",
+                          name: item.customerName,
+                        }}
+                        classNames={{
+                          description: "text-default-500",
+                        }}
+                        description={item.email}
+                        name={item.companyName}
+                      >
+                        {item.email}
+                      </User>
+                    </TableCell>
+                  );
+                }
+
                 if (columnKey === "actions") {
                   return (
                     <TableCell>
                       <Dropdown>
                         <DropdownTrigger>
-                          <Button isIconOnly size="sm" variant="light">
+                          <Button
+                            isIconOnly
+                            size="sm"
+                            variant="light"
+                            className="mx-auto"
+                          >
                             <VerticalDotsIcon className="text-default-500" />
                           </Button>
                         </DropdownTrigger>

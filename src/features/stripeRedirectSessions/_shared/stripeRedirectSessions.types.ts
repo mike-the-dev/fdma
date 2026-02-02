@@ -8,3 +8,12 @@ export type StripeRedirectSessionDto = {
   createdAt: string;
   expiresAt: string;
 };
+
+export type RefreshStripeRedirectSessionRequest = {
+  sessionId: string;
+};
+
+export type RefreshStripeRedirectSessionResponseDto = {
+  redirectUrl: string;
+  expiresAt: string;
+};

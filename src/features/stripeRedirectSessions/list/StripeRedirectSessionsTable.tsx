@@ -10,11 +10,13 @@ import {
   getKeyValue,
 } from "@heroui/table";
 import { Card } from "@heroui/card";
+import { Button } from "@heroui/button";
 import { Spacer } from "@heroui/spacer";
 import { Spinner } from "@heroui/spinner";
 
 import { useStripeRedirectSessions } from "../stripeRedirectSessions.service";
 import { StripeRedirectSessionDto } from "../_shared/stripeRedirectSessions.types";
+import { useStripeRedirectSessionRefresh } from "./useStripeRedirectSessionRefresh";
 
 const formatSessionDate = (dateString: string): string => {
   if (!dateString) return "N/A";
@@ -37,7 +39,7 @@ const formatSessionId = (value: string): string => {
 };
 
 type ColumnConfig = {
-  key: keyof StripeRedirectSessionDto;
+  key: keyof StripeRedirectSessionDto | "refresh";
   label: string;
 };
 
@@ -48,12 +50,14 @@ const columns: ColumnConfig[] = [
   { key: "status", label: "STATUS" },
   { key: "sessionId", label: "SESSION" },
   { key: "stripeId", label: "STRIPE ID" },
+  { key: "refresh", label: "REFRESH" },
   { key: "createdAt", label: "CREATED" },
   { key: "expiresAt", label: "EXPIRES" },
 ];
 
 const StripeRedirectSessionsTable = (): React.ReactElement => {
   const { data, isLoading, error } = useStripeRedirectSessions();
+  const { handleRefresh, isRefreshing } = useStripeRedirectSessionRefresh();
 
   if (isLoading) {
     return (
@@ -130,6 +134,25 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                   return (
                     <TableCell>
                       {formatSessionId(String(getKeyValue(item, columnKey)))}
+                    </TableCell>
+                  );
+                }
+
+                if (columnKey === "refresh") {
+                  return (
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="flat"
+                        color="primary"
+                        isLoading={isRefreshing(item.sessionId)}
+                        isDisabled={isRefreshing(item.sessionId)}
+                        onPress={() =>
+                          handleRefresh(item.sessionId, item.companyName)
+                        }
+                      >
+                        Refresh
+                      </Button>
                     </TableCell>
                   );
                 }

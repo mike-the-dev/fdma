@@ -233,6 +233,24 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                   );
                 }
 
+                if (columnKey === "status") {
+                  return (
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block rounded-full"
+                          style={{
+                            width: "8px",
+                            height: "8px",
+                            backgroundColor: "#17C964",
+                          }}
+                        />
+                        <span>{String(getKeyValue(item, columnKey))}</span>
+                      </div>
+                    </TableCell>
+                  );
+                }
+
                 if (columnKey === "customerName") {
                   return (
                     <TableCell>

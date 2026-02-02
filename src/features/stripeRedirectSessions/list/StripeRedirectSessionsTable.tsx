@@ -343,7 +343,7 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                               className="cursor-default"
                             >
                               <div className="flex flex-col gap-2">
-                                <div className="flex items-start gap-2">
+                                <div className="flex items-center gap-2">
                                   <EditDocumentIcon className={iconClasses} />
                                   <div className="flex flex-col gap-1">
                                     <p className="text-sm font-medium">

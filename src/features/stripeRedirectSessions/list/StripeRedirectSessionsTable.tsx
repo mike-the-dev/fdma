@@ -31,6 +31,11 @@ const formatSessionDate = (dateString: string): string => {
   }).format(date);
 };
 
+const formatSessionId = (value: string): string => {
+  const raw = value.split("#").pop() ?? value;
+  return raw.slice(0, 10);
+};
+
 type ColumnConfig = {
   key: keyof StripeRedirectSessionDto;
   label: string;
@@ -41,10 +46,10 @@ const columns: ColumnConfig[] = [
   { key: "customerName", label: "CUSTOMER" },
   { key: "email", label: "EMAIL" },
   { key: "status", label: "STATUS" },
-  { key: "createdAt", label: "CREATED" },
-  { key: "expiresAt", label: "EXPIRES" },
   { key: "sessionId", label: "SESSION" },
   { key: "stripeId", label: "STRIPE ID" },
+  { key: "createdAt", label: "CREATED" },
+  { key: "expiresAt", label: "EXPIRES" },
 ];
 
 const StripeRedirectSessionsTable = (): React.ReactElement => {
@@ -117,6 +122,14 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                   return (
                     <TableCell>
                       {formatSessionDate(String(getKeyValue(item, columnKey)))}
+                    </TableCell>
+                  );
+                }
+
+                if (columnKey === "sessionId") {
+                  return (
+                    <TableCell>
+                      {formatSessionId(String(getKeyValue(item, columnKey)))}
                     </TableCell>
                   );
                 }

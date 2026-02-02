@@ -107,6 +107,33 @@ const DeleteDocumentIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
+const VerticalDotsIcon = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}: React.SVGProps<SVGSVGElement> & {
+  size?: number;
+}) => {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      focusable="false"
+      height={size || height}
+      role="presentation"
+      viewBox="0 0 24 24"
+      width={size || width}
+      {...props}
+    >
+      <path
+        d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
 type ColumnConfig = {
   key: keyof StripeRedirectSessionDto | "actions";
   label: string;
@@ -212,8 +239,8 @@ const StripeRedirectSessionsTable = (): React.ReactElement => {
                     <TableCell>
                       <Dropdown>
                         <DropdownTrigger>
-                          <Button size="sm" variant="flat">
-                            Actions
+                          <Button isIconOnly size="sm" variant="light">
+                            <VerticalDotsIcon className="text-default-500" />
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Stripe session actions" variant="faded">

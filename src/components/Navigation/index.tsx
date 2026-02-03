@@ -103,42 +103,6 @@ const Navigation: React.FC<NavigationProps> = (): React.ReactElement => {
           </NextUILink>
         </NavbarItem>
         <NavbarItem
-          isActive={
-            pathname.includes("/dashboard/account-creation") ? true : false
-          }
-        >
-          <NextUILink
-            aria-current="page"
-            as={Link}
-            color={
-              pathname.includes("/dashboard/account-creation")
-                ? "secondary"
-                : "foreground"
-            }
-            href="/dashboard/account-creation"
-          >
-            Account Creation
-          </NextUILink>
-        </NavbarItem>
-        <NavbarItem
-          isActive={
-            pathname.includes("/dashboard/account-deployment") ? true : false
-          }
-        >
-          <NextUILink
-            aria-current="page"
-            as={Link}
-            color={
-              pathname.includes("/dashboard/account-deployment")
-                ? "secondary"
-                : "foreground"
-            }
-            href="/dashboard/account-deployment"
-          >
-            Account Deployment
-          </NextUILink>
-        </NavbarItem>
-        <NavbarItem
           isActive={pathname.includes("/dashboard/scheduler") ? true : false}
         >
           <NextUILink

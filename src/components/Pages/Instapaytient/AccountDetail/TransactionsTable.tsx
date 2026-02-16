@@ -20,6 +20,7 @@ interface TransactionsTableProps {
   error?: string | null;
   selectedKeys: Set<string>;
   onSelectionChange: (keys: Selection) => void;
+  onRefund: (transactionId: string) => void;
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -28,6 +29,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   error = null,
   selectedKeys,
   onSelectionChange,
+  onRefund,
 }) => {
   const renderCell = (transaction: TransactionMappedDTO, columnKey: string) => {
     switch (columnKey) {
@@ -84,8 +86,13 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         return transaction.metadata?.orderNumber || "-";
       case "actions":
         return (
-          <Button isIconOnly size="sm" variant="light">
-            <Icon className="text-lg" icon="lucide:more-horizontal" />
+          <Button
+            color="secondary"
+            size="sm"
+            variant="flat"
+            onPress={() => onRefund(transaction.id)}
+          >
+            Refund
           </Button>
         );
       default:

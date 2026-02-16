@@ -21,6 +21,7 @@ interface UseAccountReturn {
   transactionsLoading: boolean;
   transactionsError: string | null;
   refetchTransactions: () => Promise<void>;
+  handleRefundTransaction: (transactionId: string) => void;
   stripeAccount: StripeAccount | null;
   stripeAccountLoading: boolean;
   stripeAccountError: string | null;
@@ -111,6 +112,10 @@ export const useAccount = (id: string): UseAccountReturn => {
     }
   };
 
+  const handleRefundTransaction = (transactionId: string): void => {
+    console.log("[useAccount - handleRefundTransaction] Refund clicked:", transactionId);
+  };
+
 
   useEffect(() => {
     // Only fetch account details when authentication is complete and user is authenticated
@@ -131,6 +136,7 @@ export const useAccount = (id: string): UseAccountReturn => {
     transactionsLoading,
     transactionsError,
     refetchTransactions: fetchTransactions,
+    handleRefundTransaction,
     stripeAccount: stripeAccount ?? null,
     stripeAccountLoading,
     stripeAccountError,

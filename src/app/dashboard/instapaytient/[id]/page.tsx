@@ -31,6 +31,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     transactions,
     transactionsLoading,
     transactionsError,
+    handleRefundTransaction,
     stripeAccount,
     stripeAccountLoading,
     stripeAccountError,
@@ -179,6 +180,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
               selectedKeys={new Set()}
               transactions={transactions}
               onSelectionChange={() => {}}
+              onRefund={handleRefundTransaction}
             />
           </div>
         </Card>

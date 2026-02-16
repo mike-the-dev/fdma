@@ -16,7 +16,16 @@ const SessionCreationPage: React.FC = (): React.ReactElement => {
     <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "0 16px" }}>
       <div className={styles.row}>
         <div className={styles.column}>
-          <CreateOnboardingSession />
+          <Tabs aria-label="Session form tabs" radius="full">
+            <Tab key="onboarding-link" title="Onbarding Link">
+              <div style={{ marginTop: "16px" }}>
+                <CreateOnboardingSession />
+              </div>
+            </Tab>
+            <Tab key="stripe-link" title="Stripe Link">
+              <div style={{ marginTop: "16px" }} />
+            </Tab>
+          </Tabs>
           <div style={{ marginTop: "24px" }}>
             <Tabs aria-label="Session tables" radius="full">
               <Tab key="onboarding" title="Onboarding Sessions">

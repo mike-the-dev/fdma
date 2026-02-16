@@ -34,6 +34,12 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   const renderCell = (transaction: TransactionMappedDTO, columnKey: string) => {
     switch (columnKey) {
       case "amount":
+        const amountLatestCharge = transaction.latest_charge;
+        const isAmountRefunded =
+          typeof amountLatestCharge === "string"
+            ? false
+            : !!amountLatestCharge?.refunded;
+
         return (
           <div className="flex items-center gap-2">
             <span className="font-medium">${transaction.amount}</span>
@@ -45,6 +51,11 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
             >
               {transaction.status}
             </Chip>
+            {isAmountRefunded ? (
+              <Chip color="warning" size="sm" variant="flat">
+                Refunded
+              </Chip>
+            ) : null}
           </div>
         );
       case "paymentMethod":
@@ -85,14 +96,26 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
       case "merchant":
         return transaction.metadata?.orderNumber || "-";
       case "actions":
+        const latestCharge = transaction.latest_charge;
+        const chargeId =
+          typeof latestCharge === "string"
+            ? latestCharge
+            : latestCharge?.id;
+        const isRefunded =
+          typeof latestCharge === "string"
+            ? false
+            : !!latestCharge?.refunded;
+        const disableRefund = !chargeId || isRefunded;
+
         return (
           <Button
             color="secondary"
             size="sm"
             variant="flat"
+            isDisabled={disableRefund}
             onPress={() => onRefund(transaction.id)}
           >
-            Refund
+            {isRefunded ? "Refunded" : "Refund"}
           </Button>
         );
       default:

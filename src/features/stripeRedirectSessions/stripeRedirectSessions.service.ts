@@ -20,7 +20,7 @@ export const postCreateStripeRedirectSession = async (
   payload: CreateStripeRedirectSessionRequest
 ): Promise<CreateStripeRedirectSessionResponse> => {
   return handleRequest(
-    axiosInstance.post("/user/stripe/redirect-session", payload)
+    axiosInstance.post("/user/stripe/redirect-session/admin", payload)
   );
 };
 

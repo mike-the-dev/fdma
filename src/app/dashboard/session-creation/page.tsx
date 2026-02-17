@@ -9,7 +9,10 @@ import {
   CreateOnboardingSession,
   OnboardingSessionsTable,
 } from "@/features/onboardingSessionCreation";
-import { StripeRedirectSessionsTable } from "@/features/stripeRedirectSessions";
+import {
+  CreateStripeRedirectSession,
+  StripeRedirectSessionsTable,
+} from "@/features/stripeRedirectSessions";
 
 const SessionCreationPage: React.FC = (): React.ReactElement => {
   return (
@@ -23,7 +26,9 @@ const SessionCreationPage: React.FC = (): React.ReactElement => {
               </div>
             </Tab>
             <Tab key="stripe-link" title="Stripe Link">
-              <div style={{ marginTop: "16px" }} />
+              <div style={{ marginTop: "16px" }}>
+                <CreateStripeRedirectSession />
+              </div>
             </Tab>
           </Tabs>
           <div style={{ marginTop: "24px" }}>

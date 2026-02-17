@@ -4,6 +4,8 @@ import axiosInstance from "@/utils/axiosInterceptor";
 import { handleRequest } from "@/services/api";
 
 import {
+  CreateStripeRedirectSessionRequest,
+  CreateStripeRedirectSessionResponse,
   RefreshStripeRedirectSessionRequest,
   RefreshStripeRedirectSessionResponseDto,
   StripeRedirectSessionDto,
@@ -14,6 +16,14 @@ import {
 // ============================================================================
 // Client-side API Call Functions
 // ============================================================================
+export const postCreateStripeRedirectSession = async (
+  payload: CreateStripeRedirectSessionRequest
+): Promise<CreateStripeRedirectSessionResponse> => {
+  return handleRequest(
+    axiosInstance.post("/user/stripe/redirect-session", payload)
+  );
+};
+
 export const fetchStripeRedirectSessions = async (): Promise<
   StripeRedirectSessionDto[]
 > => {
@@ -39,6 +49,20 @@ export const postUpdateStripeRedirectSessionEmail = async (
 // ============================================================================
 // TanStack Query Hook
 // ============================================================================
+export const useCreateStripeRedirectSession = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: CreateStripeRedirectSessionRequest) =>
+      postCreateStripeRedirectSession(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["stripeRedirectSessions"],
+      });
+    },
+  });
+};
+
 export const useStripeRedirectSessions = () => {
   return useQuery<StripeRedirectSessionDto[], Error>({
     queryKey: ["stripeRedirectSessions"],

@@ -38,8 +38,8 @@ const CreateStripeRedirectSession = (): React.ReactElement => {
       <Spacer y={4} />
 
       <form autoComplete="off" onSubmit={handleFormSubmit}>
-        <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-          <div className="flex-1">
+        <div className="w-full md:max-w-[320px]">
+          <div>
             <form.Field name="stripeId" validators={validators.stripeId}>
               {(field: any) => (
                 <Input
@@ -56,7 +56,7 @@ const CreateStripeRedirectSession = (): React.ReactElement => {
 
         <Spacer y={4} />
 
-        <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+        <div className="flex w-full flex-col gap-4 md:flex-row">
           <div className="flex-1">
             <form.Field name="customerName" validators={validators.customerName}>
               {(field: any) => (
@@ -70,11 +70,6 @@ const CreateStripeRedirectSession = (): React.ReactElement => {
               )}
             </form.Field>
           </div>
-        </div>
-
-        <Spacer y={4} />
-
-        <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
           <div className="flex-1">
             <form.Field name="companyName" validators={validators.companyName}>
               {(field: any) => (

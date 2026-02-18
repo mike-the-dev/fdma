@@ -38,10 +38,6 @@ export const useOnboardingSessionRefresh = (): UseOnboardingSessionRefreshReturn
     } catch (error: any) {
       console.error("Error refreshing onboarding session: ", error);
 
-      if (error?.isTokenExpired) {
-        return;
-      }
-
       addToast({
         title: "Refresh Failed",
         description: `Failed to refresh onboarding session for ${companyName}. Please try again.`,

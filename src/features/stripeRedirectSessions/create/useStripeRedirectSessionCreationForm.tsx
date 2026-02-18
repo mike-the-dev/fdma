@@ -74,8 +74,6 @@ export const useStripeRedirectSessionCreationForm = (): UseStripeRedirectSession
       } catch (error: any) {
         console.error("Error creating Stripe redirect session: ", error);
 
-        if (error.isTokenExpired) return;
-
         addToast({
           title: "Creation Failed",
           description: "Failed to create Stripe redirect session. Please try again.",

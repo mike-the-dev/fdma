@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import axiosInstance from "@/utils/axiosInterceptor";
+import apiClient from "@/utils/apiClient";
 import { handleRequest } from "@/services/api";
 
 import {
@@ -20,21 +20,21 @@ export const postCreateOnboardingSession = async (
   payload: CreateOnboardingSessionRequest
 ): Promise<CreateOnboardingSessionResponse> => {
   return handleRequest(
-    axiosInstance.post("/user/onboarding/session", payload)
+    apiClient.post("/api/user/onboarding/session", payload)
   );
 };
 
 export const fetchOnboardingSessions = async (): Promise<
   OnboardingSessionListItem[]
 > => {
-  return handleRequest(axiosInstance.get("/user/onboarding/sessions"));
+  return handleRequest(apiClient.get("/api/user/onboarding/sessions"));
 };
 
 export const postRefreshOnboardingSession = async (
   payload: RefreshOnboardingSessionRequest
 ): Promise<RefreshOnboardingSessionResponseDto> => {
   return handleRequest(
-    axiosInstance.post("/user/onboarding/session/refresh", payload)
+    apiClient.post("/api/user/onboarding/session/refresh", payload)
   );
 };
 
@@ -42,7 +42,7 @@ export const postUpdateOnboardingSessionEmail = async (
   payload: UpdateOnboardingSessionEmailRequest
 ): Promise<UpdateOnboardingSessionEmailResponseDto> => {
   return handleRequest(
-    axiosInstance.post("/user/onboarding/session/email", payload)
+    apiClient.post("/api/user/onboarding/session/email", payload)
   );
 };
 

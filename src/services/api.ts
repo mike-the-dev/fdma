@@ -24,7 +24,6 @@ export const handleRequest = async <T>(request: Promise<any>): Promise<T> => {
       }
       if (status === 400)
         throw new Error("Invalid request. Please check your inputs.");
-      if (status === 401) throw new Error("Unauthorized. Please log in again.");
       if (status === 404) throw new Error("Resource not found.");
       if (status === 500)
         throw new Error("Server error. Please try again later.");

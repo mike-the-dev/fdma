@@ -150,11 +150,6 @@ const ModalInstapaytient: React.FC<ModalInstapaytientProps> = (
     } catch (error: any) {
       console.error("Error updating account: ", error);
 
-      // If it's a token expiration error, don't show error message as user will be logged out
-      if (error.isTokenExpired) {
-        return;
-      }
-
       addToast({
         title: "Update Failed",
         description: `Failed to update ${state.name}. Please try again.`,

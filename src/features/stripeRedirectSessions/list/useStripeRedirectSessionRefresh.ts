@@ -38,10 +38,6 @@ export const useStripeRedirectSessionRefresh = (): UseStripeRedirectSessionRefre
     } catch (error: any) {
       console.error("Error refreshing Stripe redirect session: ", error);
 
-      if (error?.isTokenExpired) {
-        return;
-      }
-
       addToast({
         title: "Refresh Failed",
         description: `Failed to refresh Stripe redirect session for ${companyName}. Please try again.`,

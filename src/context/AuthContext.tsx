@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
-import { setGlobalLogout } from "@/utils/apiClient";
+import { setAuthExpiredHandler } from "@/utils/authExpiration";
 import {
   getLocalStorageItem,
   removeLocalStorageItem,
@@ -152,9 +152,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     router.push("/login");
   };
 
-  // Set the global logout function for axios interceptor
+  // Register auth expiration handler used by HTTP interceptors.
   useEffect(() => {
-    setGlobalLogout(logout);
+    setAuthExpiredHandler(logout);
   }, []);
 
   // Always render children to prevent blank pages

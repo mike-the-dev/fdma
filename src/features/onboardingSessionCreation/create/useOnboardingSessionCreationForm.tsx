@@ -66,10 +66,6 @@ export const useOnboardingSessionCreationForm = (): UseOnboardingSessionCreation
       } catch (error: any) {
         console.error("Error creating onboarding session: ", error);
 
-        if (error.isTokenExpired) {
-          return;
-        }
-
         addToast({
           title: "Creation Failed",
           description: "Failed to create onboarding session. Please try again.",

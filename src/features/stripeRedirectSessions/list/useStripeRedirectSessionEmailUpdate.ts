@@ -105,10 +105,6 @@ export const useStripeRedirectSessionEmailUpdate = (): UseStripeRedirectSessionE
     } catch (error: any) {
       console.error("Error updating Stripe redirect session email: ", error);
 
-      if (error?.isTokenExpired) {
-        return;
-      }
-
       addToast({
         title: "Update Failed",
         description: `Failed to update email for ${companyName}. Please try again.`,

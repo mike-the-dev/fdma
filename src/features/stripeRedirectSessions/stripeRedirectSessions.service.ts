@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import axiosInstance from "@/utils/axiosInterceptor";
+import apiClient from "@/utils/apiClient";
 import { handleRequest } from "@/services/api";
 
 import {
@@ -20,21 +20,21 @@ export const postCreateStripeRedirectSession = async (
   payload: CreateStripeRedirectSessionRequest
 ): Promise<CreateStripeRedirectSessionResponse> => {
   return handleRequest(
-    axiosInstance.post("/user/stripe/redirect-session/admin", payload)
+    apiClient.post("/api/user/stripe/redirect-session/admin", payload)
   );
 };
 
 export const fetchStripeRedirectSessions = async (): Promise<
   StripeRedirectSessionDto[]
 > => {
-  return handleRequest(axiosInstance.get("/user/stripe/redirect-sessions"));
+  return handleRequest(apiClient.get("/api/user/stripe/redirect-sessions"));
 };
 
 export const postRefreshStripeRedirectSession = async (
   payload: RefreshStripeRedirectSessionRequest
 ): Promise<RefreshStripeRedirectSessionResponseDto> => {
   return handleRequest(
-    axiosInstance.post("/user/stripe/redirect-session/refresh", payload)
+    apiClient.post("/api/user/stripe/redirect-session/refresh", payload)
   );
 };
 
@@ -42,7 +42,7 @@ export const postUpdateStripeRedirectSessionEmail = async (
   payload: UpdateStripeRedirectSessionEmailRequest
 ): Promise<UpdateStripeRedirectSessionEmailResponseDto> => {
   return handleRequest(
-    axiosInstance.post("/user/stripe/redirect-session/email", payload)
+    apiClient.post("/api/user/stripe/redirect-session/email", payload)
   );
 };
 

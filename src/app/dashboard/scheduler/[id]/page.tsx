@@ -73,11 +73,6 @@ const SchedulerDetailPage = ({ params }: PageProps): React.ReactElement => {
     } catch (err: any) {
       console.error("Error fetching payout details:", err);
 
-      // If it's a token expiration error, don't show error message as user will be logged out
-      if (err.isTokenExpired) {
-        return;
-      }
-
       const errorMessage =
         err.response?.data?.message ||
         err.message ||

@@ -5,7 +5,7 @@ import type {
 
 import { useMutation } from "@tanstack/react-query";
 
-import axiosInstance from "@/utils/axiosInterceptor";
+import apiClient from "@/utils/apiClient";
 import { handleRequest } from "@/services/api";
 
 /**
@@ -23,7 +23,7 @@ export const updateSchedulerExecutionTime = async (
   input: SchedulerTimeUpdateInput
 ): Promise<SchedulerTimeUpdateResponse> => {
   return handleRequest(
-    axiosInstance.patch("/user/schedulers/update-time", {
+    apiClient.patch("/api/user/schedulers/update-time", {
       schedulerId: input.schedulerId,
       scheduledAtUtc: input.scheduledAtUtc,
     })

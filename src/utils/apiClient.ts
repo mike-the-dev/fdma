@@ -3,13 +3,9 @@ import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
 } from "axios";
+import { buildSessionExpiredError, handleAuthExpired } from "@/utils/authExpiration";
 
-// Global logout function that will be set by the AuthContext
-let globalLogout: (() => void) | null = null;
-
-export const setGlobalLogout = (logoutFn: () => void) => {
-  globalLogout = logoutFn;
-};
+export const BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL as string}/api`;
 
 // Create axios instance with default config
 const apiClient: AxiosInstance = axios.create({
@@ -50,24 +46,10 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       console.warn("Authentication error detected, logging out user");
 
-      // Clear localStorage tokens
-      localStorage.removeItem("auth-public-token");
-      localStorage.removeItem("access-token");
-      localStorage.removeItem("refresh-token");
-      localStorage.removeItem("user-id");
-      localStorage.removeItem("user-role");
-
-      // Call global logout function if available
-      if (globalLogout) {
-        globalLogout();
-      }
+      handleAuthExpired();
 
       // Return a specific error that components can handle
-      return Promise.reject({
-        ...error,
-        isTokenExpired: true,
-        message: "Your session has expired. Please log in again.",
-      });
+      return Promise.reject(buildSessionExpiredError(error));
     }
 
     // Handle network errors or other issues

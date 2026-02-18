@@ -113,10 +113,6 @@ export const useSchedulerTimeUpdate = (
     } catch (error: any) {
       console.error("Error updating schedule time:", error);
 
-      if (error.isTokenExpired) {
-        return;
-      };
-
       addToast({
         title: "Update Failed",
         description: "Failed to update the payout time. Please try again.",

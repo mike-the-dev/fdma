@@ -13,7 +13,7 @@ import {
   FeatureAccount,
 } from "./_shared/customerInsights.schema";
 
-import axiosInstance, { BASE_URL } from "@/utils/axiosInterceptor";
+import apiClient, { BASE_URL } from "@/utils/apiClient";
 import { handleRequest, getClientDomainHeader } from "@/services/api";
 
 // ============================================================================
@@ -24,8 +24,8 @@ export const postAnalyticsTargets = async (
   payload: AccountAnalyticsTargets
 ): Promise<{ success: boolean }> => {
   return handleRequest(
-    axiosInstance.post(
-      `/superadmin/account/${encodeURIComponent(accountId)}/analytics-targets`,
+    apiClient.post(
+      `/api/superadmin/account/${encodeURIComponent(accountId)}/analytics-targets`,
       payload
     )
   );
@@ -33,12 +33,12 @@ export const postAnalyticsTargets = async (
 
 export const fetchAccount = async (accountId: string): Promise<any> => {
   return handleRequest(
-    axiosInstance.get(`/user/account/${encodeURIComponent(accountId)}`)
+    apiClient.get(`/api/user/account/${encodeURIComponent(accountId)}`)
   );
 };
 
 export const fetchAccounts = async (): Promise<FeatureAccount[]> => {
-  return handleRequest(axiosInstance.get(`/user/listAccounts`));
+  return handleRequest(apiClient.get(`/api/user/listAccounts`));
 };
 
 // ============================================================================

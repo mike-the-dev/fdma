@@ -64,11 +64,6 @@ export const useBusinessProfileForm = (
       } catch (error: any) {
         console.error("Error updating MCC: ", error);
 
-        // If it's a token expiration error, don't show error message as user will be logged out
-        if (error.isTokenExpired) {
-          return;
-        }
-
         // Show error toast
         addToast({
           title: "Update Failed",
@@ -107,4 +102,3 @@ export const useBusinessProfileForm = (
     handleFormSubmit,
   };
 };
-

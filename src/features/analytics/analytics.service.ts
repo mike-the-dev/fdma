@@ -1,6 +1,6 @@
 import { useQuery, QueryClient, dehydrate, type DehydratedState } from "@tanstack/react-query";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
-import axiosInstance, { BASE_URL } from "@/utils/axiosInterceptor";
+import apiClient, { BASE_URL } from "@/utils/apiClient";
 import { handleRequest } from "@/services/api";
 import { analyticsKeys } from "./_shared/analytics.keys";
 import { QueryCacheTime } from "@/types/QueryConfig";
@@ -20,7 +20,7 @@ import {
 // ============================================================================
 export const fetchSummaryMetricsClient = async (from: string, to: string): Promise<SummaryMetricsResponse> => {
   return handleRequest<SummaryMetricsResponse>(
-    axiosInstance.get("/analytics/payouts/summary-metrics", {
+    apiClient.get("/api/analytics/payouts/summary-metrics", {
       params: {
         from: from,
         to: to,
@@ -31,7 +31,7 @@ export const fetchSummaryMetricsClient = async (from: string, to: string): Promi
 
 export const fetchPeriodComparisonClient = async (to: string): Promise<PeriodComparisonResponse> => {
   return handleRequest<PeriodComparisonResponse>(
-    axiosInstance.get("/analytics/payouts/period-comparison", {
+    apiClient.get("/api/analytics/payouts/period-comparison", {
       params: {
         to: to,
       },
@@ -44,7 +44,7 @@ export const fetchPaymentMethodMixClient = async (
   to: string,
 ): Promise<PaymentMethodMixResponse> => {
   return handleRequest<PaymentMethodMixResponse>(
-    axiosInstance.get("/analytics/payouts/payment-methods", {
+    apiClient.get("/api/analytics/payouts/payment-methods", {
       params: {
         from: from,
         to: to,
@@ -58,7 +58,7 @@ export const fetchAccountSizeDistributionClient = async (
   to: string,
 ): Promise<AccountSizeDistributionResponse> => {
   return handleRequest<AccountSizeDistributionResponse>(
-    axiosInstance.get("/analytics/payouts/accounts/distribution", {
+    apiClient.get("/api/analytics/payouts/accounts/distribution", {
       params: {
         from: from,
         to: to,
@@ -73,7 +73,7 @@ export const fetchMerchantAccountsLeaderboardClient = async (
   limit: number = 10,
 ): Promise<MerchantAccountsLeaderboardResponse> => {
   return handleRequest<MerchantAccountsLeaderboardResponse>(
-    axiosInstance.get("/analytics/payouts/accounts/leaderboard", {
+    apiClient.get("/api/analytics/payouts/accounts/leaderboard", {
       params: {
         from: from,
         to: to,
@@ -88,7 +88,7 @@ export const fetchVolumeStabilityClient = async (
   to: string,
 ): Promise<VolumeStabilityResponse> => {
   return handleRequest<VolumeStabilityResponse>(
-    axiosInstance.get("/analytics/payouts/volume-stability", {
+    apiClient.get("/api/analytics/payouts/volume-stability", {
       params: {
         from: from,
         to: to,
@@ -102,7 +102,7 @@ export const fetchCashFlowTimingClient = async (
   to: string,
 ): Promise<CashFlowTimingResponse> => {
   return handleRequest<CashFlowTimingResponse>(
-    axiosInstance.get("/analytics/payouts/cash-flow-timing", {
+    apiClient.get("/api/analytics/payouts/cash-flow-timing", {
       params: {
         from: from,
         to: to,
@@ -113,7 +113,7 @@ export const fetchCashFlowTimingClient = async (
 
 export const fetchOperationalHealthClient = async (): Promise<OperationalHealthResponse> => {
   return handleRequest<OperationalHealthResponse>(
-    axiosInstance.get("/analytics/payouts/health"),
+    apiClient.get("/api/analytics/payouts/health"),
   );
 };
 

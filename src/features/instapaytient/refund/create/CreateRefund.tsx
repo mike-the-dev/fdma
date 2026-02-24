@@ -10,15 +10,24 @@ import { useRefundCreationForm } from "./useRefundCreationForm";
 
 interface CreateRefundProps {
   accountId: string;
+  initialChargeId?: string;
+  initialAmount?: number;
   onRefundCreated?: () => Promise<void> | void;
 }
 
 const CreateRefund = ({
   accountId,
+  initialChargeId,
+  initialAmount,
   onRefundCreated,
 }: CreateRefundProps): React.ReactElement => {
   const { form, validators, isPending, error, refund, handleFormSubmit } =
-    useRefundCreationForm(accountId, onRefundCreated);
+    useRefundCreationForm(
+      accountId,
+      initialChargeId,
+      initialAmount,
+      onRefundCreated
+    );
 
   return (
     <Card

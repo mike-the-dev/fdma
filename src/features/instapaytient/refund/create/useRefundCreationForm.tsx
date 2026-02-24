@@ -1,7 +1,7 @@
 "use client";
 
 import { formOptions, useForm } from "@tanstack/react-form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify/react";
 
@@ -30,6 +30,8 @@ export interface UseRefundCreationFormReturn {
 
 export const useRefundCreationForm = (
   accountId: string,
+  initialChargeId?: string,
+  initialAmount?: number,
   onRefundCreated?: () => Promise<void> | void
 ): UseRefundCreationFormReturn => {
   const mutation = useProcessRefund();
@@ -39,8 +41,11 @@ export const useRefundCreationForm = (
   const formOpts = formOptions({
     defaultValues: {
       accountId,
-      chargeId: "",
-      amount: "",
+      chargeId: initialChargeId ?? "",
+      amount:
+        typeof initialAmount === "number" && Number.isFinite(initialAmount)
+          ? initialAmount.toFixed(2)
+          : "",
     },
   });
 
@@ -116,6 +121,17 @@ export const useRefundCreationForm = (
     e.stopPropagation();
     form.handleSubmit();
   };
+
+  useEffect(() => {
+    form.reset({
+      accountId,
+      chargeId: initialChargeId ?? "",
+      amount:
+        typeof initialAmount === "number" && Number.isFinite(initialAmount)
+          ? initialAmount.toFixed(2)
+          : "",
+    });
+  }, [accountId, form, initialAmount, initialChargeId]);
 
   return {
     form,

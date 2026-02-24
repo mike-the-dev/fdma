@@ -1,9 +1,16 @@
 "use client";
 
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { Card, CardBody } from "@heroui/card";
 import { Spinner } from "@heroui/spinner";
 import { Tabs, Tab } from "@heroui/tabs";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  useDisclosure,
+} from "@heroui/modal";
 import { Icon } from "@iconify/react";
 
 import { useAccount } from "@/features/instapaytient/account/useAccount";
@@ -34,11 +41,28 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     transactionsLoading,
     transactionsError,
     refetchTransactions,
-    handleRefundTransaction,
     stripeAccount,
     stripeAccountLoading,
     stripeAccountError,
   } = useAccount(id);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectedChargeId, setSelectedChargeId] = useState<string>("");
+  const [selectedAmount, setSelectedAmount] = useState<number | undefined>(
+    undefined
+  );
+
+  const handleOpenRefundModal = (transactionId: string): void => {
+    const selectedTransaction = transactions.find(
+      (transaction) => transaction.id === transactionId
+    );
+    const latestCharge = selectedTransaction?.latest_charge;
+    const chargeId =
+      typeof latestCharge === "string" ? latestCharge : latestCharge?.id;
+
+    setSelectedChargeId(chargeId ?? "");
+    setSelectedAmount(selectedTransaction?.amount);
+    onOpen();
+  };
 
   // Readiness data
   const readinessData = {
@@ -183,22 +207,34 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                     selectedKeys={new Set()}
                     transactions={transactions}
                     onSelectionChange={() => {}}
-                    onRefund={handleRefundTransaction}
+                    onRefund={handleOpenRefundModal}
                   />
                 </div>
               </Tab>
               <Tab key="refunds" title="Refunds">
-                <div className="mt-4">
-                  <CreateRefund
-                    accountId={id}
-                    onRefundCreated={refetchTransactions}
-                  />
-                </div>
+                {null}
               </Tab>
             </Tabs>
           </div>
         </Card>
       </div>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader>Create Refund</ModalHeader>
+              <ModalBody className="pb-6">
+                <CreateRefund
+                  accountId={id}
+                  initialAmount={selectedAmount}
+                  initialChargeId={selectedChargeId}
+                  onRefundCreated={refetchTransactions}
+                />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

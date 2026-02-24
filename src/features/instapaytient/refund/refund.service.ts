@@ -1,17 +1,39 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import apiClient from "@/utils/apiClient";
+import { handleRequest } from "@/services/api";
 
 import {
-  ProcessRefundRequest,
-  ProcessRefundResponse,
-} from "./refund.schema";
+  CreateRefundRequest,
+  CreateRefundResponse,
+} from "./_shared/refund.types";
 
+// ============================================================================
+// Client-side API Call Functions
+// ============================================================================
 export const processRefund = async (
-  payload: ProcessRefundRequest
-): Promise<ProcessRefundResponse> => {
-  const res = await apiClient.post<ProcessRefundResponse>(
-    "/api/user/refunds",
-    payload
+  payload: CreateRefundRequest
+): Promise<CreateRefundResponse> => {
+  return handleRequest(
+    apiClient.post<CreateRefundResponse>("/api/user/refunds", payload)
   );
+};
 
-  return res.data;
+// ============================================================================
+// TanStack Query Hooks
+// ============================================================================
+export const useProcessRefund = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: CreateRefundRequest) => processRefund(payload),
+    onSuccess: async (_, payload) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["refunds"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["refunds", payload.accountId],
+      });
+    },
+  });
 };

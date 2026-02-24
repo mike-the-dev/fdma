@@ -11,7 +11,7 @@ import { mapAccount, mapTransaction } from "./account.mappers";
 import { TransactionMappedDTO, StripeAccount } from "./account.schema";
 import { toAccountError } from "./account.errors";
 import { processRefund } from "../refund/refund.service";
-import { toRefundError } from "../refund/refund.errors";
+import { toRefundError } from "../refund/_shared/refund.errors";
 
 import { AccountInstapaytient } from "@/types/AccountInstapaytient";
 import { useAuthContext } from "@/context/AuthContext";

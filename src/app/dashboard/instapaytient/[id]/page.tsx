@@ -15,6 +15,7 @@ import { AccountReadinessSkeleton } from "@/components/Pages/Instapaytient/Accou
 import { BankAccountDetails } from "@/components/Pages/Instapaytient/AccountDetail/BankAccountDetails";
 import { BankAccountDetailsSkeleton } from "@/components/Pages/Instapaytient/AccountDetail/BankAccountDetailsSkeleton";
 import { BusinessProfile } from "@/components/Pages/Instapaytient/AccountDetail/BusinessProfile";
+import { CreateRefund } from "@/features/instapaytient/refund";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -32,6 +33,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     transactions,
     transactionsLoading,
     transactionsError,
+    refetchTransactions,
     handleRefundTransaction,
     stripeAccount,
     stripeAccountLoading,
@@ -186,7 +188,12 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                 </div>
               </Tab>
               <Tab key="refunds" title="Refunds">
-                {null}
+                <div className="mt-4">
+                  <CreateRefund
+                    accountId={id}
+                    onRefundCreated={refetchTransactions}
+                  />
+                </div>
               </Tab>
             </Tabs>
           </div>

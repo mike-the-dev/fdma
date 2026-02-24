@@ -24,5 +24,10 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/affirm_script.js"],
-  "exclude": ["node_modules", "next-heroui-app-template"]
+  "exclude": [
+    "node_modules",
+    "next-heroui-app-template",
+    "vitest.config.ts",
+    "vitest.setup.ts"
+  ]
 }

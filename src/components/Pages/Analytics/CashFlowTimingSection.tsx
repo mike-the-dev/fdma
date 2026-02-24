@@ -106,7 +106,7 @@ export const CashFlowTimingSection: React.FC<CashFlowTimingProps> = ({ fullWidth
                   stroke="#a1a1aa"
                 />
                 <RechartsTooltip
-                  formatter={(value: number) => [value, "Payouts"]}
+                  formatter={(value) => [Number(value ?? 0), "Payouts"]}
                   labelFormatter={(label) => `${label} days bucket`}
                   contentStyle={{
                     backgroundColor: "#1E2235",

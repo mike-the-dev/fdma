@@ -130,9 +130,10 @@ export const VolumeStabilitySection: React.FC<VolumeStabilityProps> = ({ fullWid
                   }}
                 />
                 <RechartsTooltip
-                  formatter={(value: number, name: string) => {
-                    if (name === "volume") return [formatCurrency(value), "Volume"];
-                    return [value, "Count"];
+                  formatter={(value, name) => {
+                    const numericValue = Number(value ?? 0);
+                    if (name === "volume") return [formatCurrency(numericValue), "Volume"];
+                    return [numericValue, "Count"];
                   }}
                   labelFormatter={(label) => `Date: ${label}`}
                   contentStyle={{ backgroundColor: '#1E2235', border: 'none', borderRadius: '8px' }}

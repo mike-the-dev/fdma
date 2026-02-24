@@ -114,7 +114,7 @@ export const PaymentMethodMixSection: React.FC<PaymentMethodMixSectionProps> = (
                       ))}
                     </Pie>
                     <RechartsTooltip
-                      formatter={(value: number) => [formatCurrency(value), "Volume"]}
+                      formatter={(value) => [formatCurrency(Number(value ?? 0)), "Volume"]}
                       contentStyle={{
                         backgroundColor: "#1E2235",
                         border: "none",
@@ -179,8 +179,8 @@ export const PaymentMethodMixSection: React.FC<PaymentMethodMixSectionProps> = (
                       ))}
                     </Pie>
                     <RechartsTooltip
-                      formatter={(value: number) => [
-                        (value as number).toLocaleString(),
+                      formatter={(value) => [
+                        Number(value ?? 0).toLocaleString(),
                         "Payouts",
                       ]}
                       contentStyle={{
@@ -248,8 +248,8 @@ export const PaymentMethodMixSection: React.FC<PaymentMethodMixSectionProps> = (
                     tickFormatter={(value: number) => `${(value * 100).toFixed(0)}%`}
                   />
                   <RechartsTooltip
-                    formatter={(value: number) => [
-                      `${((value as number) * 100).toFixed(1)}%`,
+                    formatter={(value) => [
+                      `${(Number(value ?? 0) * 100).toFixed(1)}%`,
                       "",
                     ]}
                     contentStyle={{

@@ -225,9 +225,10 @@ export const AccountLeaderboardSection: React.FC<AccountLeaderboardSectionProps>
                   }}
                 />
                 <RechartsTooltip
-                  formatter={(value: number, name: string) => {
-                    if (name === "Volume") return [formatCurrency(value), "Volume"];
-                    return [value, "Accounts"];
+                  formatter={(value, name) => {
+                    const numericValue = Number(value ?? 0);
+                    if (name === "Volume") return [formatCurrency(numericValue), "Volume"];
+                    return [numericValue, "Accounts"];
                   }}
                   contentStyle={{
                     backgroundColor: "#1E2235",

@@ -146,7 +146,7 @@ export const PeriodComparisonSection: React.FC<PeriodComparisonSectionProps> = (
                 }}
               />
               <RechartsTooltip
-                formatter={(value: number) => [formatCurrency(value), ""]}
+                formatter={(value) => [formatCurrency(Number(value ?? 0)), ""]}
                 labelFormatter={(label) => `${label} Comparison`}
                 contentStyle={{ backgroundColor: "#1E2235", border: "none", borderRadius: "8px" }}
               />

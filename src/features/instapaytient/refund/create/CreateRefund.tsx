@@ -61,6 +61,21 @@ const CreateRefund = ({
               )}
             </form.Field>
           </div>
+          <div className="flex-1">
+            <form.Field name="amount" validators={validators.amount}>
+              {(field: any) => (
+                <Input
+                  label="Amount"
+                  placeholder="0.00"
+                  type="number"
+                  errorMessage={field.state.meta.errors[0]}
+                  isInvalid={!!field.state.meta.errors.length}
+                  value={field.state.value}
+                  onValueChange={(value) => field.handleChange(value)}
+                />
+              )}
+            </form.Field>
+          </div>
         </div>
 
         <Spacer y={4} />

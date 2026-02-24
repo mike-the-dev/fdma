@@ -15,7 +15,7 @@ export const processRefund = async (
   payload: CreateRefundRequest
 ): Promise<CreateRefundResponse> => {
   return handleRequest(
-    apiClient.post<CreateRefundResponse>("/api/user/refunds", payload)
+    apiClient.post<CreateRefundResponse>("/api/user/refunds/trigger-flow", payload)
   );
 };
 

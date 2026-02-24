@@ -134,11 +134,22 @@ export const useAccount = (id: string): UseAccountReturn => {
       );
       return;
     }
+    const amount = selectedTransaction?.amount;
+
+    if (typeof amount !== "number" || amount <= 0) {
+      console.error(
+        "[useAccount - handleRefundTransaction] Missing valid amount for refund:",
+        transactionId
+      );
+      return;
+    }
+    const amountInCents = Math.round(amount * 100);
 
     try {
       await processRefund({
         accountId: normalizedAccountId,
         chargeId,
+        amount: amountInCents,
       });
       console.log(
         "[useAccount - handleRefundTransaction] Refund created:",

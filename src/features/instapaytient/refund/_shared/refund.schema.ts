@@ -10,6 +10,11 @@ export const refundCreationSchema = z.object({
     .trim()
     .min(1, "Charge ID is required")
     .startsWith("ch_", { message: 'Charge ID must start with "ch_".' }),
+  amount: z.coerce
+    .number({
+      invalid_type_error: "Amount is required",
+    })
+    .positive("Amount must be greater than 0"),
 });
 
 export type RefundCreationSchema = z.infer<typeof refundCreationSchema>;

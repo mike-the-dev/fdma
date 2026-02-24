@@ -13,6 +13,7 @@ import {
 import { refundCreationSchema } from "../_shared/refund.schema";
 import {
   validateAccountId,
+  validateAmount,
   validateChargeId,
 } from "../_shared/refund.validators";
 import { toRefundError } from "../_shared/refund.errors";
@@ -39,6 +40,7 @@ export const useRefundCreationForm = (
     defaultValues: {
       accountId,
       chargeId: "",
+      amount: "",
     },
   });
 
@@ -51,10 +53,12 @@ export const useRefundCreationForm = (
         const normalizedAccountId = payload.accountId.startsWith("A#")
           ? payload.accountId
           : `A#${payload.accountId}`;
+        const amountInCents = Math.round(payload.amount * 100);
 
         const response = await mutation.mutateAsync({
           accountId: normalizedAccountId,
           chargeId: payload.chargeId,
+          amount: amountInCents,
         });
 
         setRefund(response);
@@ -101,6 +105,9 @@ export const useRefundCreationForm = (
     },
     chargeId: {
       onChange: ({ value }: { value: string }) => validateChargeId(value),
+    },
+    amount: {
+      onChange: ({ value }: { value: string }) => validateAmount(value),
     },
   };
 

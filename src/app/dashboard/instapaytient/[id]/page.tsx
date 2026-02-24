@@ -3,6 +3,7 @@
 import React, { use } from "react";
 import { Card, CardBody } from "@heroui/card";
 import { Spinner } from "@heroui/spinner";
+import { Tabs, Tab } from "@heroui/tabs";
 import { Icon } from "@iconify/react";
 
 import { useAccount } from "@/features/instapaytient/account/useAccount";
@@ -171,17 +172,23 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
           <AccountSummary />
 
           <div className="mt-8">
-            <h2 className="mb-4 text-xl font-medium text-white">
-              Transactions
-            </h2>
-            <TransactionsTable
-              error={transactionsError}
-              isLoading={transactionsLoading}
-              selectedKeys={new Set()}
-              transactions={transactions}
-              onSelectionChange={() => {}}
-              onRefund={handleRefundTransaction}
-            />
+            <Tabs aria-label="Account transaction tabs" radius="full">
+              <Tab key="transactions" title="Transactions">
+                <div className="mt-4">
+                  <TransactionsTable
+                    error={transactionsError}
+                    isLoading={transactionsLoading}
+                    selectedKeys={new Set()}
+                    transactions={transactions}
+                    onSelectionChange={() => {}}
+                    onRefund={handleRefundTransaction}
+                  />
+                </div>
+              </Tab>
+              <Tab key="refunds" title="Refunds">
+                {null}
+              </Tab>
+            </Tabs>
           </div>
         </Card>
       </div>

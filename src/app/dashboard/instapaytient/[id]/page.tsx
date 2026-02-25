@@ -50,6 +50,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   const [selectedAmount, setSelectedAmount] = useState<number | undefined>(
     undefined
   );
+  const [selectedOrderNumber, setSelectedOrderNumber] = useState<string>("");
 
   const handleOpenRefundModal = (transactionId: string): void => {
     const selectedTransaction = transactions.find(
@@ -61,6 +62,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
 
     setSelectedChargeId(chargeId ?? "");
     setSelectedAmount(selectedTransaction?.amount);
+    setSelectedOrderNumber(selectedTransaction?.metadata?.orderNumber ?? "");
     onOpen();
   };
 
@@ -199,7 +201,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
 
           <div className="mt-8">
             <Tabs aria-label="Account transaction tabs" radius="full">
-              <Tab key="transactions" title="Transactions">
+              <Tab key="transactions" title="Affirm">
                 <div className="mt-4">
                   <TransactionsTable
                     error={transactionsError}
@@ -211,7 +213,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   />
                 </div>
               </Tab>
-              <Tab key="refunds" title="Refunds">
+              <Tab key="refunds" title="Authorize.net">
                 {null}
               </Tab>
             </Tabs>
@@ -228,6 +230,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   accountId={id}
                   initialAmount={selectedAmount}
                   initialChargeId={selectedChargeId}
+                  initialOrderNumber={selectedOrderNumber}
                   onRefundCreated={refetchTransactions}
                 />
               </ModalBody>

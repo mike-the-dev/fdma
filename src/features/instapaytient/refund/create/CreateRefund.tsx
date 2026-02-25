@@ -79,7 +79,7 @@ const CreateRefund = ({
             <p className="text-sm font-medium">{accountId || "-"}</p>
           </div>
           <div>
-            <p className="text-xs text-foreground-500">Charge ID</p>
+            <p className="text-xs text-foreground-500">Payment ID</p>
             <p className="text-sm font-medium">{initialChargeId || "-"}</p>
           </div>
           <div>

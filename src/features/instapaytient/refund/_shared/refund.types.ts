@@ -4,7 +4,7 @@ export type RefundReason = "duplicate" | "fraudulent" | "requested_by_customer";
 
 export type RefundCreationFormData = {
   accountId: string;
-  chargeId: string;
+  paymentId: string;
   amount: string;
   orderNumber: string;
   reason: RefundReason | "";
@@ -15,7 +15,7 @@ export type RefundCreationValidators = {
   accountId: {
     onChange: ({ value }: { value: string }) => string | undefined;
   };
-  chargeId: {
+  paymentId: {
     onChange: ({ value }: { value: string }) => string | undefined;
   };
   amount: {
@@ -34,7 +34,7 @@ export type RefundCreationValidators = {
 
 export interface CreateRefundRequest {
   accountId: string;
-  chargeId: string;
+  paymentId: string;
   amount: number;
   orderNumber?: string;
   reason: RefundReason;

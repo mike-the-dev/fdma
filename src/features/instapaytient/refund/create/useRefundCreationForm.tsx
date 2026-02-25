@@ -15,7 +15,7 @@ import { refundCreationSchema } from "../_shared/refund.schema";
 import {
   validateAccountId,
   validateAmount,
-  validateChargeId,
+  validatePaymentId,
   validateInternalNote,
   validateOrderNumber,
   validateReason,
@@ -45,7 +45,7 @@ export const useRefundCreationForm = (
   const emptyReason: "" | RefundReason = "";
   const defaultValues: RefundCreationFormData = {
     accountId,
-    chargeId: initialChargeId ?? "",
+    paymentId: initialChargeId ?? "",
     orderNumber: initialOrderNumber ?? "",
     reason: emptyReason,
     internalNote: "",
@@ -70,7 +70,7 @@ export const useRefundCreationForm = (
         const amountInCents = Math.round(payload.amount * 100);
         const requestPayload = {
           accountId: normalizedAccountId,
-          chargeId: payload.chargeId,
+          paymentId: payload.paymentId,
           amount: amountInCents,
           orderNumber: payload.orderNumber?.trim() || undefined,
           reason: payload.reason,
@@ -120,8 +120,8 @@ export const useRefundCreationForm = (
     accountId: {
       onChange: ({ value }: { value: string }) => validateAccountId(value),
     },
-    chargeId: {
-      onChange: ({ value }: { value: string }) => validateChargeId(value),
+    paymentId: {
+      onChange: ({ value }: { value: string }) => validatePaymentId(value),
     },
     amount: {
       onChange: ({ value }: { value: string }) => validateAmount(value),
@@ -146,7 +146,7 @@ export const useRefundCreationForm = (
   useEffect(() => {
     form.reset({
       accountId,
-      chargeId: initialChargeId ?? "",
+      paymentId: initialChargeId ?? "",
       orderNumber: initialOrderNumber ?? "",
       reason: emptyReason,
       internalNote: "",

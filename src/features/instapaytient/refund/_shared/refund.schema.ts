@@ -5,12 +5,12 @@ export const refundCreationSchema = z.object({
     .string()
     .trim()
     .min(1, "Account ID is required"),
-  chargeId: z
+  paymentId: z
     .string()
     .trim()
-    .min(1, "Charge ID is required")
+    .min(1, "Payment ID is required")
     .regex(/^(ch_|py_|pi_)/, {
-      message: 'Charge ID must start with "ch_", "py_", or "pi_".',
+      message: 'Payment ID must start with "ch_", "py_", or "pi_".',
     }),
   orderNumber: z
     .string()

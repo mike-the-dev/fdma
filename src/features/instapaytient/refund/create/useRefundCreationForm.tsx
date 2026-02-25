@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 
 import {
   CreateRefundResponse,
+  RefundReason,
   RefundCreationFormData,
   RefundCreationValidators,
 } from "../_shared/refund.types";
@@ -41,19 +42,20 @@ export const useRefundCreationForm = (
   const mutation = useProcessRefund();
   const [refund, setRefund] = useState<CreateRefundResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const emptyReason: "" | RefundReason = "";
+  const defaultValues: RefundCreationFormData = {
+    accountId,
+    chargeId: initialChargeId ?? "",
+    orderNumber: initialOrderNumber ?? "",
+    reason: emptyReason,
+    internalNote: "",
+    amount:
+      typeof initialAmount === "number" && Number.isFinite(initialAmount)
+        ? initialAmount.toFixed(2)
+        : "",
+  };
   const formOpts = formOptions({
-    defaultValues: {
-      accountId,
-      chargeId: initialChargeId ?? "",
-      orderNumber: initialOrderNumber ?? "",
-      reason: "",
-      internalNote: "",
-      amount:
-        typeof initialAmount === "number" && Number.isFinite(initialAmount)
-          ? initialAmount.toFixed(2)
-          : "",
-    },
+    defaultValues,
   });
 
   const form = useForm({
@@ -146,14 +148,14 @@ export const useRefundCreationForm = (
       accountId,
       chargeId: initialChargeId ?? "",
       orderNumber: initialOrderNumber ?? "",
-      reason: "",
+      reason: emptyReason,
       internalNote: "",
       amount:
         typeof initialAmount === "number" && Number.isFinite(initialAmount)
           ? initialAmount.toFixed(2)
           : "",
     });
-  }, [accountId, form, initialAmount, initialChargeId, initialOrderNumber]);
+  }, [accountId, emptyReason, form, initialAmount, initialChargeId, initialOrderNumber]);
 
   return {
     form,

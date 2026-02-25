@@ -150,6 +150,7 @@ export const useAccount = (id: string): UseAccountReturn => {
         accountId: normalizedAccountId,
         chargeId,
         amount: amountInCents,
+        reason: "requested_by_customer",
       });
       console.log(
         "[useAccount - handleRefundTransaction] Refund created:",

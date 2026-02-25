@@ -6,6 +6,15 @@ import { Input } from "@heroui/input";
 import { Spacer } from "@heroui/spacer";
 import { Checkbox } from "@heroui/checkbox";
 import { Divider } from "@heroui/divider";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownSection,
+  DropdownItem,
+} from "@heroui/dropdown";
+
+import { RefundReason } from "../_shared/refund.types";
 
 import { useRefundCreationForm } from "./useRefundCreationForm";
 
@@ -26,7 +35,7 @@ const CreateRefund = ({
   initialOrderNumber,
   onRefundCreated,
 }: CreateRefundProps): React.ReactElement => {
-  const { form, isPending, error, refund, handleFormSubmit } =
+  const { form, validators, isPending, error, refund, handleFormSubmit } =
     useRefundCreationForm(
       accountId,
       initialChargeId,
@@ -44,6 +53,16 @@ const CreateRefund = ({
     typeof initialAmount === "number" ? initialAmount.toFixed(2) : "0.00";
   const displayOrderNumber = initialOrderNumber || "-";
   const displayBusinessName = businessName || "this business";
+  const reasonOptions: Array<{ key: RefundReason; label: string }> = [
+    { key: "duplicate", label: "Duplicate" },
+    { key: "fraudulent", label: "Fraudulent" },
+    { key: "requested_by_customer", label: "Requested by Customer" },
+  ];
+  const reasonLabelByKey: Record<RefundReason, string> = {
+    duplicate: "Duplicate",
+    fraudulent: "Fraudulent",
+    requested_by_customer: "Requested by Customer",
+  };
 
   return (
     <div>
@@ -72,6 +91,62 @@ const CreateRefund = ({
             <p className="text-sm font-medium">${formattedAmount}</p>
           </div>
         </div>
+
+        <Spacer y={4} />
+
+        <form.Field name="reason" validators={validators.reason}>
+          {(field: any) => (
+            <div className="space-y-2">
+              <p className="text-sm text-foreground-500">Reason</p>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button className="w-full justify-between" variant="bordered">
+                    <span>
+                      {field.state.value
+                        ? reasonLabelByKey[field.state.value as RefundReason]
+                        : "Select reason"}
+                    </span>
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Refund reason"
+                  onAction={(key) => field.handleChange(String(key))}
+                >
+                  <DropdownSection title="Reasons">
+                    {reasonOptions.map((option) => (
+                      <DropdownItem key={option.key}>{option.label}</DropdownItem>
+                    ))}
+                  </DropdownSection>
+                </DropdownMenu>
+              </Dropdown>
+              {field.state.meta.errors[0] ? (
+                <p className="text-sm text-danger">{field.state.meta.errors[0]}</p>
+              ) : null}
+            </div>
+          )}
+        </form.Field>
+
+        <Spacer y={4} />
+
+        <form.Field name="internalNote" validators={validators.internalNote}>
+          {(field: any) => (
+            <div className="space-y-2">
+              <p className="text-sm text-foreground-500">
+                Internal Note (Optional Free-Text)
+              </p>
+              <textarea
+                className="w-full rounded-medium border border-default-200 bg-transparent p-3 text-sm outline-none"
+                placeholder="Add internal details (optional)"
+                rows={4}
+                value={field.state.value}
+                onChange={(event) => field.handleChange(event.target.value)}
+              />
+              {field.state.meta.errors[0] ? (
+                <p className="text-sm text-danger">{field.state.meta.errors[0]}</p>
+              ) : null}
+            </div>
+          )}
+        </form.Field>
 
         <Spacer y={4} />
 

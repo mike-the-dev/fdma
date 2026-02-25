@@ -1,10 +1,14 @@
 import Stripe from "stripe";
 
+export type RefundReason = "duplicate" | "fraudulent" | "requested_by_customer";
+
 export type RefundCreationFormData = {
   accountId: string;
   chargeId: string;
   amount: string;
   orderNumber: string;
+  reason: RefundReason | "";
+  internalNote: string;
 };
 
 export type RefundCreationValidators = {
@@ -20,6 +24,12 @@ export type RefundCreationValidators = {
   orderNumber: {
     onChange: ({ value }: { value: string }) => string | undefined;
   };
+  reason: {
+    onChange: ({ value }: { value: string }) => string | undefined;
+  };
+  internalNote: {
+    onChange: ({ value }: { value: string }) => string | undefined;
+  };
 };
 
 export interface CreateRefundRequest {
@@ -27,6 +37,8 @@ export interface CreateRefundRequest {
   chargeId: string;
   amount: number;
   orderNumber?: string;
+  reason: RefundReason;
+  internalNote?: string;
 }
 
 export type CreateRefundResponse = Stripe.Refund;

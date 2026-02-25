@@ -121,13 +121,13 @@ export const useAccount = (id: string): UseAccountReturn => {
       (transaction) => transaction.id === transactionId
     );
     const latestCharge = selectedTransaction?.latest_charge;
-    const chargeId =
+    const paymentId =
       typeof latestCharge === "string"
         ? latestCharge
         : latestCharge?.id;
     const normalizedAccountId = id.startsWith("A#") ? id : `A#${id}`;
 
-    if (!chargeId) {
+    if (!paymentId) {
       console.error(
         "[useAccount - handleRefundTransaction] Missing latest_charge for refund:",
         transactionId
@@ -148,13 +148,13 @@ export const useAccount = (id: string): UseAccountReturn => {
     try {
       await processRefund({
         accountId: normalizedAccountId,
-        chargeId,
+        paymentId,
         amount: amountInCents,
         reason: "requested_by_customer",
       });
       console.log(
         "[useAccount - handleRefundTransaction] Refund created:",
-        { transactionId, chargeId }
+        { transactionId, paymentId }
       );
       addToast({
         title: "Refund Created",

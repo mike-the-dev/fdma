@@ -3,7 +3,6 @@
 import React from "react";
 import { Button } from "@heroui/button";
 import { Kbd } from "@heroui/kbd";
-import { Input } from "@heroui/input";
 import { Spacer } from "@heroui/spacer";
 import { Checkbox } from "@heroui/checkbox";
 import { Divider } from "@heroui/divider";
@@ -36,15 +35,21 @@ const CreateRefund = ({
   initialOrderNumber,
   onRefundCreated,
 }: CreateRefundProps): React.ReactElement => {
-  const { form, validators, isPending, error, refund, handleFormSubmit } =
+  const [isConfirmed, setIsConfirmed] = React.useState<boolean>(false);
+
+  const handleRefundCreated = React.useCallback(async (): Promise<void> => {
+    setIsConfirmed(false);
+    if (onRefundCreated) await onRefundCreated();
+  }, [onRefundCreated]);
+
+  const { form, validators, isPending, error, handleFormSubmit } =
     useRefundCreationForm(
       accountId,
       initialChargeId,
       initialAmount,
       initialOrderNumber,
-      onRefundCreated
+      handleRefundCreated
     );
-  const [isConfirmed, setIsConfirmed] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setIsConfirmed(false);
@@ -176,22 +181,6 @@ const CreateRefund = ({
         <>
           <Spacer y={4} />
           <p className="text-sm text-danger">{error}</p>
-        </>
-      )}
-
-      {refund && (
-        <>
-          <Spacer y={6} />
-          <div className="flex w-full flex-col gap-4 md:flex-row">
-            <div className="flex-1">
-              <p className="text-sm text-foreground-500">Refund ID</p>
-              <Input isReadOnly value={refund.id} />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm text-foreground-500">Status</p>
-              <Input isReadOnly value={refund.status ?? "unknown"} />
-            </div>
-          </div>
         </>
       )}
     </div>

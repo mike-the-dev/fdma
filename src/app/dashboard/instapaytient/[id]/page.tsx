@@ -47,7 +47,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     stripeAccountLoading,
     stripeAccountError,
   } = useAccount(id);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [selectedChargeId, setSelectedChargeId] = useState<string>("");
   const [selectedAmount, setSelectedAmount] = useState<number | undefined>(
     undefined
@@ -256,7 +256,10 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   initialAmount={selectedAmount}
                   initialChargeId={selectedChargeId}
                   initialOrderNumber={selectedOrderNumber}
-                  onRefundCreated={refetchTransactions}
+                  onRefundCreated={async () => {
+                    await refetchTransactions();
+                    onClose();
+                  }}
                 />
               </ModalBody>
             </>

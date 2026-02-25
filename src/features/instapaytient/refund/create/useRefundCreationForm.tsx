@@ -68,21 +68,21 @@ export const useRefundCreationForm = (
           ? payload.accountId
           : `A#${payload.accountId}`;
         const amountInCents = Math.round(payload.amount * 100);
-
-        const response = await mutation.mutateAsync({
+        const requestPayload = {
           accountId: normalizedAccountId,
           chargeId: payload.chargeId,
           amount: amountInCents,
           orderNumber: payload.orderNumber?.trim() || undefined,
           reason: payload.reason,
           internalNote: payload.internalNote?.trim() || undefined,
-        });
+        };
 
-        setRefund(response);
+        console.log("[useRefundCreationForm] Refund request payload:", requestPayload);
+        setRefund(null);
 
         addToast({
-          title: "Refund Created",
-          description: "Refund processed successfully.",
+          title: "Refund Payload Logged",
+          description: "Request payload logged to console for testing.",
           icon: React.createElement(Icon, {
             icon: "lucide:check-circle",
             width: 24,

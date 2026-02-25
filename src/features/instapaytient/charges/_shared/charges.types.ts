@@ -4,9 +4,7 @@ export interface ListChargesQuery {
   stripeAccount: string;
 }
 
-export interface ListChargesResponse {
-  data: Stripe.Charge[];
-}
+export type ListChargesResponse = Stripe.Charge[];
 
 export type Charge = Stripe.Charge;
 

@@ -25,7 +25,7 @@ export const fetchCharges = async (
     )
   );
 
-  return response.data;
+  return response;
 };
 
 // ============================================================================

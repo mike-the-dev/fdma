@@ -267,6 +267,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                     await Promise.all([
                       queryClient.invalidateQueries({ queryKey: ["transactions"] }),
                       queryClient.invalidateQueries({ queryKey: ["charges"] }),
+                      queryClient.invalidateQueries({ queryKey: ["refundContracts"] }),
                     ]);
                     onClose();
                   }}

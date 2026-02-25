@@ -190,13 +190,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         return (
           <Dropdown>
             <DropdownTrigger>
-              <Button
-                isIconOnly
-                size="sm"
-                variant="light"
-                className="mx-auto"
-                isDisabled={disableRefund}
-              >
+              <Button isIconOnly size="sm" variant="light" className="mx-auto">
                 <VerticalDotsIcon className="text-default-500" />
               </Button>
             </DropdownTrigger>
@@ -207,6 +201,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                   description="Initate a new refund contract"
                   shortcut="⌘R"
                   startContent={<CopyDocumentIcon className={iconClasses} />}
+                  isDisabled={disableRefund}
                   onPress={() => onRefund(transaction.id)}
                 >
                   Initiate Refund

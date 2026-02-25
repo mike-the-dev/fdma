@@ -5,6 +5,7 @@ import { Card } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Icon } from "@iconify/react";
 import { Spinner } from "@heroui/spinner";
+import { Tooltip } from "@heroui/tooltip";
 import {
   Table,
   TableHeader,
@@ -34,7 +35,29 @@ const formatDateTime = (value: string): string => {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
 
-  return date.toLocaleString();
+  return date.toLocaleString("en-US");
+};
+
+const formatShortDate = (value: string): string => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return date.toLocaleDateString("en-US");
+};
+
+const truncateValue = (value: string, visibleLength: number): string => {
+  if (!value || value.length <= visibleLength) return value;
+
+  return `${value.slice(0, visibleLength)}...`;
+};
+
+const formatReason = (reason?: string): string => {
+  if (!reason) return "-";
+  if (reason === "requested_by_customer") return "Requested By Customer";
+  if (reason === "duplicate") return "Duplicate";
+  if (reason === "fraudulent") return "Fraudulent";
+
+  return reason;
 };
 
 const RefundContractsTable = ({
@@ -87,9 +110,9 @@ const RefundContractsTable = ({
           <TableColumn key="paymentId">Payment ID</TableColumn>
           <TableColumn key="status">Status</TableColumn>
           <TableColumn key="reason">Reason</TableColumn>
+          <TableColumn key="contractId">Contract ID</TableColumn>
           <TableColumn key="createdAt">Created</TableColumn>
           <TableColumn key="lastUpdated">Updated</TableColumn>
-          <TableColumn key="contractId">Contract ID</TableColumn>
         </TableHeader>
         <TableBody items={contracts}>
           {(contract) => {
@@ -101,9 +124,11 @@ const RefundContractsTable = ({
               <TableRow key={contract.id}>
                 <TableCell>${amount}</TableCell>
                 <TableCell>
-                  <span className="font-mono text-xs text-gray-600">
-                    {contract.paymentId}
-                  </span>
+                  <Tooltip content={contract.paymentId}>
+                    <span className="font-mono text-xs text-gray-600">
+                      {truncateValue(contract.paymentId, 8)}
+                    </span>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
                   <Chip
@@ -114,13 +139,23 @@ const RefundContractsTable = ({
                     {contract.status}
                   </Chip>
                 </TableCell>
-                <TableCell>{contract.reason || "-"}</TableCell>
-                <TableCell>{formatDateTime(contract.createdAt)}</TableCell>
-                <TableCell>{formatDateTime(contract.lastUpdated)}</TableCell>
+                <TableCell>{formatReason(contract.reason)}</TableCell>
                 <TableCell>
-                  <span className="font-mono text-xs text-gray-600">
-                    {contract.id}
-                  </span>
+                  <Tooltip content={contract.id}>
+                    <span className="font-mono text-xs text-gray-600">
+                      {truncateValue(contract.id, 22)}
+                    </span>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip content={formatDateTime(contract.createdAt)}>
+                    <span>{formatShortDate(contract.createdAt)}</span>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip content={formatDateTime(contract.lastUpdated)}>
+                    <span>{formatShortDate(contract.lastUpdated)}</span>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             );

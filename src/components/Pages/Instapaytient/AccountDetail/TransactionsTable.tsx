@@ -196,6 +196,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                 <DropdownItem
                   key="initiate-refund"
                   description="Initate a new refund contract"
+                  shortcut="⌘R"
                   startContent={<CopyDocumentIcon className={iconClasses} />}
                   onPress={() => onRefund(transaction.id)}
                 >

@@ -15,6 +15,7 @@ import {
   validateAccountId,
   validateAmount,
   validateChargeId,
+  validateOrderNumber,
 } from "../_shared/refund.validators";
 import { toRefundError } from "../_shared/refund.errors";
 import { useProcessRefund } from "../refund.service";
@@ -32,6 +33,7 @@ export const useRefundCreationForm = (
   accountId: string,
   initialChargeId?: string,
   initialAmount?: number,
+  initialOrderNumber?: string,
   onRefundCreated?: () => Promise<void> | void
 ): UseRefundCreationFormReturn => {
   const mutation = useProcessRefund();
@@ -42,6 +44,7 @@ export const useRefundCreationForm = (
     defaultValues: {
       accountId,
       chargeId: initialChargeId ?? "",
+      orderNumber: initialOrderNumber ?? "",
       amount:
         typeof initialAmount === "number" && Number.isFinite(initialAmount)
           ? initialAmount.toFixed(2)
@@ -64,6 +67,7 @@ export const useRefundCreationForm = (
           accountId: normalizedAccountId,
           chargeId: payload.chargeId,
           amount: amountInCents,
+          orderNumber: payload.orderNumber?.trim() || undefined,
         });
 
         setRefund(response);
@@ -114,6 +118,9 @@ export const useRefundCreationForm = (
     amount: {
       onChange: ({ value }: { value: string }) => validateAmount(value),
     },
+    orderNumber: {
+      onChange: ({ value }: { value: string }) => validateOrderNumber(value),
+    },
   };
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -126,12 +133,13 @@ export const useRefundCreationForm = (
     form.reset({
       accountId,
       chargeId: initialChargeId ?? "",
+      orderNumber: initialOrderNumber ?? "",
       amount:
         typeof initialAmount === "number" && Number.isFinite(initialAmount)
           ? initialAmount.toFixed(2)
           : "",
     });
-  }, [accountId, form, initialAmount, initialChargeId]);
+  }, [accountId, form, initialAmount, initialChargeId, initialOrderNumber]);
 
   return {
     form,

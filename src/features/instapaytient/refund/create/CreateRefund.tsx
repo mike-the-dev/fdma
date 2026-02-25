@@ -12,6 +12,7 @@ interface CreateRefundProps {
   accountId: string;
   initialChargeId?: string;
   initialAmount?: number;
+  initialOrderNumber?: string;
   onRefundCreated?: () => Promise<void> | void;
 }
 
@@ -19,6 +20,7 @@ const CreateRefund = ({
   accountId,
   initialChargeId,
   initialAmount,
+  initialOrderNumber,
   onRefundCreated,
 }: CreateRefundProps): React.ReactElement => {
   const { form, validators, isPending, error, refund, handleFormSubmit } =
@@ -26,6 +28,7 @@ const CreateRefund = ({
       accountId,
       initialChargeId,
       initialAmount,
+      initialOrderNumber,
       onRefundCreated
     );
 
@@ -64,6 +67,22 @@ const CreateRefund = ({
                   placeholder="ch_..."
                   errorMessage={field.state.meta.errors[0]}
                   isInvalid={!!field.state.meta.errors.length}
+                  isReadOnly
+                  value={field.state.value}
+                  onValueChange={(value) => field.handleChange(value)}
+                />
+              )}
+            </form.Field>
+          </div>
+          <div className="flex-1">
+            <form.Field name="orderNumber" validators={validators.orderNumber}>
+              {(field: any) => (
+                <Input
+                  label="Order Number"
+                  placeholder="Order number"
+                  errorMessage={field.state.meta.errors[0]}
+                  isInvalid={!!field.state.meta.errors.length}
+                  isReadOnly
                   value={field.state.value}
                   onValueChange={(value) => field.handleChange(value)}
                 />
@@ -79,6 +98,7 @@ const CreateRefund = ({
                   type="number"
                   errorMessage={field.state.meta.errors[0]}
                   isInvalid={!!field.state.meta.errors.length}
+                  isReadOnly
                   value={field.state.value}
                   onValueChange={(value) => field.handleChange(value)}
                 />

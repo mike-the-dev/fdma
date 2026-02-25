@@ -10,6 +10,10 @@ export const refundCreationSchema = z.object({
     .trim()
     .min(1, "Charge ID is required")
     .startsWith("ch_", { message: 'Charge ID must start with "ch_".' }),
+  orderNumber: z
+    .string()
+    .trim()
+    .optional(),
   amount: z.coerce
     .number()
     .positive("Amount must be greater than 0"),

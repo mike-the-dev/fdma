@@ -17,10 +17,13 @@ export const fetchAdminRefundContracts = async (
   query: ListAdminRefundContractsQuery
 ): Promise<RefundContractDto[]> => {
   const payload = listAdminRefundContractsQuerySchema.parse(query);
+  const normalizedAccountId = payload.accountId.startsWith("A#")
+    ? payload.accountId
+    : `A#${payload.accountId}`;
 
   return handleRequest<ListRefundContractsResponse>(
     apiClient.get<ListRefundContractsResponse>(
-      `/api/admin/refunds/contracts?accountId=${encodeURIComponent(payload.accountId)}`
+      `/api/admin/refunds/contracts?accountId=${encodeURIComponent(normalizedAccountId)}`
     )
   );
 };
@@ -35,11 +38,17 @@ export const fetchUserRefundContracts = async (): Promise<RefundContractDto[]> =
 // TanStack Query Hooks
 // ============================================================================
 export const useAdminRefundContracts = (accountId?: string) => {
+  const normalizedAccountId = accountId
+    ? accountId.startsWith("A#")
+      ? accountId
+      : `A#${accountId}`
+    : undefined;
+
   return useQuery<RefundContractDto[], Error>({
-    queryKey: ["refundContracts", "admin", accountId],
+    queryKey: ["refundContracts", "admin", normalizedAccountId],
     queryFn: () =>
-      fetchAdminRefundContracts({ accountId: accountId as string }),
-    enabled: !!accountId,
+      fetchAdminRefundContracts({ accountId: normalizedAccountId as string }),
+    enabled: !!normalizedAccountId,
   });
 };
 

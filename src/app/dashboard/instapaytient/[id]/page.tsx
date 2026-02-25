@@ -26,6 +26,7 @@ import { BusinessProfile } from "@/components/Pages/Instapaytient/AccountDetail/
 import { CreateRefund } from "@/features/instapaytient/refund";
 import { ChargesTable } from "@/features/instapaytient/charges";
 import { ChargeMappedDTO } from "@/features/instapaytient/charges/_shared/charges.types";
+import { RefundContractsTable } from "@/features/instapaytient/refundContracts";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -236,7 +237,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                 </div>
               </Tab>
               <Tab key="refund-contracts" title="Refund Contracts">
-                <div className="mt-4" />
+                <div className="mt-4">
+                  <RefundContractsTable accountId={account.id} />
+                </div>
               </Tab>
             </Tabs>
           </div>

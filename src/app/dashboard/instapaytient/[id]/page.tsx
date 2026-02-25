@@ -247,7 +247,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   className="text-xl text-primary-500"
                   icon="lucide:receipt-text"
                 />
-                <span>Initate Refund</span>
+                <span>Initiate Refund Contract</span>
               </ModalHeader>
               <ModalBody className="pb-6">
                 <CreateRefund

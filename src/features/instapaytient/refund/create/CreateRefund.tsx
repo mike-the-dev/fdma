@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Button } from "@heroui/button";
+import { Kbd } from "@heroui/kbd";
 import { Input } from "@heroui/input";
 import { Spacer } from "@heroui/spacer";
 import { Checkbox } from "@heroui/checkbox";
@@ -164,8 +165,9 @@ const CreateRefund = ({
             isDisabled={isPending || !isConfirmed}
             type="submit"
             variant="shadow"
+            endContent={<Kbd keys={["command"]}>Enter</Kbd>}
           >
-            {isPending ? "Initating..." : "Initate Refund"}
+            {isPending ? "Initating..." : "Initiate Refund Contract"}
           </Button>
         </div>
       </form>

@@ -235,6 +235,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   />
                 </div>
               </Tab>
+              <Tab key="refund-contracts" title="Refund Contracts">
+                <div className="mt-4" />
+              </Tab>
             </Tabs>
           </div>
         </Card>

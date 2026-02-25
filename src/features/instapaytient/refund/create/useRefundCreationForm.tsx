@@ -76,13 +76,12 @@ export const useRefundCreationForm = (
           reason: payload.reason,
           internalNote: payload.internalNote?.trim() || undefined,
         };
-
-        console.log("[useRefundCreationForm] Refund request payload:", requestPayload);
-        setRefund(null);
+        const response = await mutation.mutateAsync(requestPayload);
+        setRefund(response);
 
         addToast({
-          title: "Refund Payload Logged",
-          description: "Request payload logged to console for testing.",
+          title: "Refund Initiated",
+          description: "Refund contract request submitted successfully.",
           icon: React.createElement(Icon, {
             icon: "lucide:check-circle",
             width: 24,

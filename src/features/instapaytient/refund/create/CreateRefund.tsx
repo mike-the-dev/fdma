@@ -5,11 +5,13 @@ import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Spacer } from "@heroui/spacer";
+import { Checkbox } from "@heroui/checkbox";
 
 import { useRefundCreationForm } from "./useRefundCreationForm";
 
 interface CreateRefundProps {
   accountId: string;
+  businessName?: string;
   initialChargeId?: string;
   initialAmount?: number;
   initialOrderNumber?: string;
@@ -18,12 +20,13 @@ interface CreateRefundProps {
 
 const CreateRefund = ({
   accountId,
+  businessName,
   initialChargeId,
   initialAmount,
   initialOrderNumber,
   onRefundCreated,
 }: CreateRefundProps): React.ReactElement => {
-  const { form, validators, isPending, error, refund, handleFormSubmit } =
+  const { form, isPending, error, refund, handleFormSubmit } =
     useRefundCreationForm(
       accountId,
       initialChargeId,
@@ -31,6 +34,16 @@ const CreateRefund = ({
       initialOrderNumber,
       onRefundCreated
     );
+  const [isConfirmed, setIsConfirmed] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setIsConfirmed(false);
+  }, [accountId, initialAmount, initialChargeId, initialOrderNumber]);
+
+  const formattedAmount =
+    typeof initialAmount === "number" ? initialAmount.toFixed(2) : "0.00";
+  const displayOrderNumber = initialOrderNumber || "-";
+  const displayBusinessName = businessName || "this business";
 
   return (
     <Card
@@ -39,84 +52,46 @@ const CreateRefund = ({
       shadow="sm"
       style={{ padding: "12px 12px 12px 12px", width: "100%" }}
     >
-      <h3>Refund Creation</h3>
-      <p>Create a refund from an existing Stripe charge.</p>
+      <h3>Refund Confirmation</h3>
+      <p>Review refund details before initiating a refund contract.</p>
       <Spacer y={4} />
 
       <form autoComplete="off" onSubmit={handleFormSubmit}>
-        <div className="flex w-full flex-col gap-4 md:flex-row">
-          <div className="flex-1">
-            <form.Field name="accountId" validators={validators.accountId}>
-              {(field: any) => (
-                <Input
-                  label="Account ID"
-                  errorMessage={field.state.meta.errors[0]}
-                  isInvalid={!!field.state.meta.errors.length}
-                  isReadOnly
-                  value={field.state.value}
-                  onValueChange={(value) => field.handleChange(value)}
-                />
-              )}
-            </form.Field>
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs text-foreground-500">Account ID</p>
+            <p className="text-sm font-medium">{accountId || "-"}</p>
           </div>
-          <div className="flex-1">
-            <form.Field name="chargeId" validators={validators.chargeId}>
-              {(field: any) => (
-                <Input
-                  label="Charge ID"
-                  placeholder="ch_..."
-                  errorMessage={field.state.meta.errors[0]}
-                  isInvalid={!!field.state.meta.errors.length}
-                  isReadOnly
-                  value={field.state.value}
-                  onValueChange={(value) => field.handleChange(value)}
-                />
-              )}
-            </form.Field>
+          <div>
+            <p className="text-xs text-foreground-500">Charge ID</p>
+            <p className="text-sm font-medium">{initialChargeId || "-"}</p>
           </div>
-          <div className="flex-1">
-            <form.Field name="orderNumber" validators={validators.orderNumber}>
-              {(field: any) => (
-                <Input
-                  label="Order Number"
-                  placeholder="Order number"
-                  errorMessage={field.state.meta.errors[0]}
-                  isInvalid={!!field.state.meta.errors.length}
-                  isReadOnly
-                  value={field.state.value}
-                  onValueChange={(value) => field.handleChange(value)}
-                />
-              )}
-            </form.Field>
+          <div>
+            <p className="text-xs text-foreground-500">Order Number</p>
+            <p className="text-sm font-medium">{displayOrderNumber}</p>
           </div>
-          <div className="flex-1">
-            <form.Field name="amount" validators={validators.amount}>
-              {(field: any) => (
-                <Input
-                  label="Amount"
-                  placeholder="0.00"
-                  type="number"
-                  errorMessage={field.state.meta.errors[0]}
-                  isInvalid={!!field.state.meta.errors.length}
-                  isReadOnly
-                  value={field.state.value}
-                  onValueChange={(value) => field.handleChange(value)}
-                />
-              )}
-            </form.Field>
+          <div>
+            <p className="text-xs text-foreground-500">Amount</p>
+            <p className="text-sm font-medium">${formattedAmount}</p>
           </div>
         </div>
+
+        <Spacer y={4} />
+
+        <Checkbox isSelected={isConfirmed} onValueChange={setIsConfirmed}>
+          {`I confirm this data is correct and want to initate a refund contract with the ${displayBusinessName} for amount of $${formattedAmount} of order ${displayOrderNumber}.`}
+        </Checkbox>
 
         <Spacer y={4} />
 
         <div>
           <Button
             color="primary"
-            isDisabled={isPending}
+            isDisabled={isPending || !isConfirmed}
             type="submit"
             variant="shadow"
           >
-            {isPending ? "Creating..." : "Create Refund"}
+            {isPending ? "Initating..." : "Initate Refund"}
           </Button>
         </div>
       </form>

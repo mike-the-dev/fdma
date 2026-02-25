@@ -39,10 +39,14 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           typeof amountLatestCharge === "string"
             ? false
             : !!amountLatestCharge?.refunded;
+        const formattedAmount =
+          typeof transaction.amount === "number"
+            ? transaction.amount.toFixed(2)
+            : "0.00";
 
         return (
           <div className="flex items-center gap-2">
-            <span className="font-medium">${transaction.amount}</span>
+            <span className="font-medium">${formattedAmount}</span>
             <span className="text-gray-500">{transaction.currency}</span>
             <Chip
               color={transaction.status === "succeeded" ? "success" : "default"}
@@ -62,6 +66,8 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         const paymentMethodTypes = transaction.payment_method_types;
         const displayName = paymentMethodTypes?.includes("affirm")
           ? "Affirm"
+          : paymentMethodTypes?.includes("stripe_account")
+            ? "Authorize.net"
           : paymentMethodTypes?.[0] || "-";
         const isAffirm = paymentMethodTypes?.includes("affirm");
 

@@ -23,6 +23,8 @@ import { BankAccountDetails } from "@/components/Pages/Instapaytient/AccountDeta
 import { BankAccountDetailsSkeleton } from "@/components/Pages/Instapaytient/AccountDetail/BankAccountDetailsSkeleton";
 import { BusinessProfile } from "@/components/Pages/Instapaytient/AccountDetail/BusinessProfile";
 import { CreateRefund } from "@/features/instapaytient/refund";
+import { ChargesTable } from "@/features/instapaytient/charges";
+import { ChargeMappedDTO } from "@/features/instapaytient/charges/_shared/charges.types";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -63,6 +65,17 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     setSelectedChargeId(chargeId ?? "");
     setSelectedAmount(selectedTransaction?.amount);
     setSelectedOrderNumber(selectedTransaction?.metadata?.orderNumber ?? "");
+    onOpen();
+  };
+
+  const handleOpenRefundModalFromCharge = (charge: ChargeMappedDTO): void => {
+    const latestCharge = charge.latest_charge;
+    const chargeId =
+      typeof latestCharge === "string" ? latestCharge : latestCharge?.id;
+
+    setSelectedChargeId(chargeId ?? "");
+    setSelectedAmount(charge.amount);
+    setSelectedOrderNumber(charge.metadata?.orderNumber ?? "");
     onOpen();
   };
 
@@ -214,7 +227,12 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                 </div>
               </Tab>
               <Tab key="refunds" title="Authorize.net">
-                {null}
+                <div className="mt-4">
+                  <ChargesTable
+                    stripeAccount={account.payout?.stripeId ?? undefined}
+                    onRefund={handleOpenRefundModalFromCharge}
+                  />
+                </div>
               </Tab>
             </Tabs>
           </div>

@@ -5,6 +5,7 @@ import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Spacer } from "@heroui/spacer";
 import { Checkbox } from "@heroui/checkbox";
+import { Divider } from "@heroui/divider";
 
 import { useRefundCreationForm } from "./useRefundCreationForm";
 
@@ -49,6 +50,8 @@ const CreateRefund = ({
       <h3>Refund Confirmation</h3>
       <p>Review refund details before initiating a refund contract.</p>
       <Spacer y={4} />
+      <Divider />
+      <Spacer y={4} />
 
       <form autoComplete="off" onSubmit={handleFormSubmit}>
         <div className="space-y-3">
@@ -76,6 +79,8 @@ const CreateRefund = ({
           {`I confirm this data is correct and want to initate a refund contract with the ${displayBusinessName} for amount of $${formattedAmount} of order #${displayOrderNumber}.`}
         </Checkbox>
 
+        <Spacer y={4} />
+        <Divider />
         <Spacer y={4} />
 
         <div>

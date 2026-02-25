@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Button } from "@heroui/button";
-import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Spacer } from "@heroui/spacer";
 import { Checkbox } from "@heroui/checkbox";
@@ -46,12 +45,7 @@ const CreateRefund = ({
   const displayBusinessName = businessName || "this business";
 
   return (
-    <Card
-      isBlurred
-      className="border-none bg-background/60 dark:bg-default-100/50"
-      shadow="sm"
-      style={{ padding: "12px 12px 12px 12px", width: "100%" }}
-    >
+    <div>
       <h3>Refund Confirmation</h3>
       <p>Review refund details before initiating a refund contract.</p>
       <Spacer y={4} />
@@ -79,7 +73,7 @@ const CreateRefund = ({
         <Spacer y={4} />
 
         <Checkbox isSelected={isConfirmed} onValueChange={setIsConfirmed}>
-          {`I confirm this data is correct and want to initate a refund contract with the ${displayBusinessName} for amount of $${formattedAmount} of order ${displayOrderNumber}.`}
+          {`I confirm this data is correct and want to initate a refund contract with the ${displayBusinessName} for amount of $${formattedAmount} of order #${displayOrderNumber}.`}
         </Checkbox>
 
         <Spacer y={4} />
@@ -118,7 +112,7 @@ const CreateRefund = ({
           </div>
         </>
       )}
-    </Card>
+    </div>
   );
 };
 

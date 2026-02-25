@@ -19,7 +19,7 @@ export const fetchCharges = async (
   query: ListChargesQuery
 ): Promise<Charge[]> => {
   const payload = listChargesQuerySchema.parse(query);
-  const response = await handleRequest(
+  const response = await handleRequest<ListChargesResponse>(
     apiClient.get<ListChargesResponse>(
       `/api/user/charges?stripeAccount=${encodeURIComponent(payload.stripeAccount)}`
     )
@@ -32,7 +32,7 @@ export const fetchCharges = async (
 // TanStack Query Hooks
 // ============================================================================
 export const useCharges = (stripeAccount?: string) => {
-  return useQuery<ChargeMappedDTO[], Error>({
+  return useQuery<Charge[], Error, ChargeMappedDTO[]>({
     queryKey: ["charges", stripeAccount],
     queryFn: () => fetchCharges({ stripeAccount: stripeAccount as string }),
     enabled: !!stripeAccount,

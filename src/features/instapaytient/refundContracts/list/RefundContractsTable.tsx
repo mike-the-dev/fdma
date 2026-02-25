@@ -13,6 +13,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Selection,
 } from "@heroui/table";
 
 import { RefundContractDto } from "../_shared/refundContracts.types";
@@ -63,6 +64,7 @@ const formatReason = (reason?: string): string => {
 const RefundContractsTable = ({
   accountId,
 }: RefundContractsTableProps): React.ReactElement => {
+  const [selectedKeys, setSelectedKeys] = React.useState<Set<string>>(new Set());
   const {
     data: contracts = [],
     isLoading,
@@ -104,7 +106,16 @@ const RefundContractsTable = ({
 
   return (
     <Card className="overflow-visible shadow-sm">
-      <Table removeWrapper aria-label="Refund contracts table">
+      <Table
+        removeWrapper
+        aria-label="Refund contracts table"
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        onSelectionChange={(keys: Selection) => {
+          if (keys === "all") return;
+          setSelectedKeys(new Set(Array.from(keys).map(String)));
+        }}
+      >
         <TableHeader>
           <TableColumn key="amount">Amount</TableColumn>
           <TableColumn key="paymentId">Payment ID</TableColumn>

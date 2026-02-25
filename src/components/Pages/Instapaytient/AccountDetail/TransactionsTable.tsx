@@ -104,6 +104,12 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           typeof amountLatestCharge === "string"
             ? false
             : !!amountLatestCharge?.refunded;
+        const hasActiveRefundContractForStatus =
+          !!transaction.metadata?.active_refund_contract;
+        const displayStatus =
+          hasActiveRefundContractForStatus && transaction.status === "succeeded"
+            ? "refund contracted"
+            : transaction.status;
         const formattedAmount =
           typeof transaction.amount === "number"
             ? transaction.amount.toFixed(2)
@@ -114,11 +120,11 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
             <span className="font-medium">${formattedAmount}</span>
             <span className="text-gray-500">{transaction.currency}</span>
             <Chip
-              color={transaction.status === "succeeded" ? "success" : "default"}
+              color={displayStatus === "succeeded" ? "success" : "default"}
               size="sm"
               variant="flat"
             >
-              {transaction.status}
+              {displayStatus}
             </Chip>
             {isAmountRefunded ? (
               <Chip color="warning" size="sm" variant="flat">
@@ -172,11 +178,14 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           typeof latestCharge === "string"
             ? latestCharge
             : latestCharge?.id;
+        const hasActiveRefundContractForAction =
+          !!transaction.metadata?.active_refund_contract;
         const isRefunded =
           typeof latestCharge === "string"
             ? false
             : !!latestCharge?.refunded;
-        const disableRefund = !chargeId || isRefunded;
+        const disableRefund =
+          !chargeId || isRefunded || hasActiveRefundContractForAction;
 
         return (
           <Dropdown>

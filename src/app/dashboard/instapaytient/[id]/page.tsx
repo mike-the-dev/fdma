@@ -245,7 +245,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
               <ModalHeader>Create Refund</ModalHeader>
               <ModalBody className="pb-6">
                 <CreateRefund
-                  accountId={id}
+                  accountId={account.id}
                   initialAmount={selectedAmount}
                   initialChargeId={selectedChargeId}
                   initialOrderNumber={selectedOrderNumber}

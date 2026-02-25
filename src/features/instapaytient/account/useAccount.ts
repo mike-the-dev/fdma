@@ -4,10 +4,10 @@ import { addToast } from "@heroui/toast";
 
 import {
   fetchAccountById,
-  fetchTransactionsByStripeAccount,
+  useTransactionsByStripeAccount,
   useStripeAccountById,
 } from "./account.service";
-import { mapAccount, mapTransaction } from "./account.mappers";
+import { mapAccount } from "./account.mappers";
 import { TransactionMappedDTO, StripeAccount } from "./account.schema";
 import { toAccountError } from "./account.errors";
 import { processRefund } from "../refund/refund.service";
@@ -39,13 +39,6 @@ export const useAccount = (id: string): UseAccountReturn => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Transaction state
-  const [transactions, setTransactions] = useState<TransactionMappedDTO[]>([]);
-  const [transactionsLoading, setTransactionsLoading] = useState(false);
-  const [transactionsError, setTransactionsError] = useState<string | null>(
-    null
-  );
-
   // Stripe Account - using React Query
   const stripeAccountId = account?.payout?.stripeId;
   const {
@@ -60,9 +53,28 @@ export const useAccount = (id: string): UseAccountReturn => {
     ? toAccountError(stripeAccountQueryError).message
     : null;
 
+  // Transactions - using React Query
+  const {
+    data: transactions = [],
+    isLoading: transactionsLoading,
+    error: transactionsQueryError,
+    refetch: refetchTransactionsQuery,
+  } = useTransactionsByStripeAccount(
+    stripeAccountId,
+    !authLoading && isAuthenticated
+  );
+
+  const transactionsError = transactionsQueryError
+    ? toAccountError(transactionsQueryError).message
+    : null;
+
   // Wrapper function for refetch to maintain interface
   const refetchStripeAccount = async (): Promise<void> => {
     await refetchStripeAccountQuery();
+  };
+
+  const refetchTransactions = async (): Promise<void> => {
+    await refetchTransactionsQuery();
   };
 
   const fetchAccountDetails = async (): Promise<void> => {
@@ -85,34 +97,6 @@ export const useAccount = (id: string): UseAccountReturn => {
         console.error("[useAccount]", err);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const fetchTransactions = async (): Promise<void> => {
-    if (!account?.payout?.stripeId) return;
-
-    try {
-      setTransactionsLoading(true);
-      setTransactionsError(null);
-
-      const data = await fetchTransactionsByStripeAccount(
-        account.payout.stripeId
-      );
-      const mappedTransactions = data.map(mapTransaction);
-
-      setTransactions(mappedTransactions);
-    } catch (err: unknown) {
-      const mapped = toAccountError(err);
-
-      // TOKEN_EXPIRED handled by global auth (redirect). No local error UI.
-      if (mapped.code === "TOKEN_EXPIRED") return;
-
-      setTransactionsError(mapped.message);
-
-      if (process.env.NODE_ENV !== "production")
-        console.error("[useAccount - fetchTransactions]", err);
-    } finally {
-      setTransactionsLoading(false);
     }
   };
 
@@ -167,7 +151,7 @@ export const useAccount = (id: string): UseAccountReturn => {
         color: "success",
         timeout: 5000,
       });
-      await fetchTransactions();
+      await refetchTransactions();
     } catch (err: unknown) {
       const mapped = toRefundError(err);
 
@@ -194,11 +178,6 @@ export const useAccount = (id: string): UseAccountReturn => {
     if (!authLoading && isAuthenticated && id) fetchAccountDetails();
   }, [authLoading, isAuthenticated, id]);
 
-  useEffect(() => {
-    // Fetch transactions when account data is available and has stripeId
-    if (account?.payout?.stripeId) fetchTransactions();
-  }, [account?.payout?.stripeId]);
-
   return {
     account,
     isLoading,
@@ -207,7 +186,7 @@ export const useAccount = (id: string): UseAccountReturn => {
     transactions,
     transactionsLoading,
     transactionsError,
-    refetchTransactions: fetchTransactions,
+    refetchTransactions,
     handleRefundTransaction,
     stripeAccount: stripeAccount ?? null,
     stripeAccountLoading,

@@ -4,6 +4,7 @@ import React, { use, useState } from "react";
 import { Card, CardBody } from "@heroui/card";
 import { Spinner } from "@heroui/spinner";
 import { Tabs, Tab } from "@heroui/tabs";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Modal,
   ModalBody,
@@ -33,6 +34,7 @@ type PageProps = {
 const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   // Unwrap the params Promise using React.use()
   const { id } = use(params);
+  const queryClient = useQueryClient();
 
   const {
     account,
@@ -42,7 +44,6 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     transactions,
     transactionsLoading,
     transactionsError,
-    refetchTransactions,
     stripeAccount,
     stripeAccountLoading,
     stripeAccountError,
@@ -257,7 +258,10 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   initialChargeId={selectedChargeId}
                   initialOrderNumber={selectedOrderNumber}
                   onRefundCreated={async () => {
-                    await refetchTransactions();
+                    await Promise.all([
+                      queryClient.invalidateQueries({ queryKey: ["transactions"] }),
+                      queryClient.invalidateQueries({ queryKey: ["charges"] }),
+                    ]);
                     onClose();
                   }}
                 />

@@ -1,4 +1,6 @@
 import { Account, Transaction, StripeAccount } from "./account.schema";
+import { mapTransaction } from "./account.mappers";
+import { TransactionMappedDTO } from "./account.schema";
 import { useQuery } from "@tanstack/react-query";
 
 import apiClient from "@/utils/apiClient";
@@ -37,6 +39,19 @@ export const useStripeAccountById = (id?: string) => {
     queryKey: ["stripeAccount", id],
     queryFn: () => fetchStripeAccountById(id!),
     enabled: !!id,
+  });
+};
+
+export const useTransactionsByStripeAccount = (
+  stripeAccount?: string,
+  enabled: boolean = true
+) => {
+  return useQuery<Transaction[], Error, TransactionMappedDTO[]>({
+    queryKey: ["transactions", stripeAccount],
+    queryFn: () => fetchTransactionsByStripeAccount(stripeAccount!),
+    enabled: !!stripeAccount && enabled,
+    select: (transactions: Transaction[]): TransactionMappedDTO[] =>
+      transactions.map(mapTransaction),
   });
 };
 

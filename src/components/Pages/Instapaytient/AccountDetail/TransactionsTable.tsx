@@ -24,6 +24,23 @@ import { TransactionMappedDTO } from "@/features/instapaytient/account/account.s
 
 const iconClasses = "text-xl text-default-500 pointer-events-none shrink-0";
 
+const hasActiveRefundContract = (transaction: TransactionMappedDTO): boolean => {
+  const topLevelMetadata = transaction.metadata;
+  if (topLevelMetadata?.active_refund_contract) return true;
+
+  const latestCharge = transaction.latest_charge;
+  if (typeof latestCharge === "string" || !latestCharge) return false;
+
+  return !!latestCharge.metadata?.active_refund_contract;
+};
+
+const isRefundContracted = (transaction: TransactionMappedDTO): boolean => {
+  return (
+    hasActiveRefundContract(transaction) ||
+    transaction.status === "refund contracted"
+  );
+};
+
 const CopyDocumentIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -104,8 +121,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           typeof amountLatestCharge === "string"
             ? false
             : !!amountLatestCharge?.refunded;
-        const hasActiveRefundContractForStatus =
-          !!transaction.metadata?.active_refund_contract;
+        const hasActiveRefundContractForStatus = isRefundContracted(transaction);
         const displayStatus =
           hasActiveRefundContractForStatus && transaction.status === "succeeded"
             ? "refund contracted"
@@ -178,8 +194,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           typeof latestCharge === "string"
             ? latestCharge
             : latestCharge?.id;
-        const hasActiveRefundContractForAction =
-          !!transaction.metadata?.active_refund_contract;
+        const hasActiveRefundContractForAction = isRefundContracted(transaction);
         const isRefunded =
           typeof latestCharge === "string"
             ? false

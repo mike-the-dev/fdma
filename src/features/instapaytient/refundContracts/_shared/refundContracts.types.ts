@@ -15,6 +15,9 @@ export interface RefundContractDto {
   accountId: string;
   connectedAccountId: string;
   customerId?: string;
+  customerEmail?: string;
+  customerFirstName?: string;
+  customerLastName?: string;
   paymentId: string;
   paymentMethod?: PaymentType;
   orderNumber?: string;

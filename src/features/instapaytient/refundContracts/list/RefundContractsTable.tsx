@@ -133,6 +133,9 @@ const RefundContractsTable = ({
             <TableColumn key="status">Status</TableColumn>
             <TableColumn key="paymentMethod">Payment Method</TableColumn>
             <TableColumn key="orderNumber">Order #</TableColumn>
+            <TableColumn key="customerEmail">Customer Email</TableColumn>
+            <TableColumn key="customerFirstName">Customer First Name</TableColumn>
+            <TableColumn key="customerLastName">Customer Last Name</TableColumn>
             <TableColumn key="reason">Reason</TableColumn>
             <TableColumn key="contractId">Contract ID</TableColumn>
             <TableColumn key="createdAt">Created</TableColumn>
@@ -169,6 +172,13 @@ const RefundContractsTable = ({
                     </span>
                   </TableCell>
                   <TableCell>{contract.orderNumber || "-"}</TableCell>
+                  <TableCell>
+                    <span className="whitespace-nowrap">
+                      {contract.customerEmail || "-"}
+                    </span>
+                  </TableCell>
+                  <TableCell>{contract.customerFirstName || "-"}</TableCell>
+                  <TableCell>{contract.customerLastName || "-"}</TableCell>
                   <TableCell>
                     <span className="whitespace-nowrap">
                       {formatReason(contract.reason)}

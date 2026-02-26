@@ -65,7 +65,7 @@ const formatPaymentMethod = (paymentMethod?: string): string => {
   if (!paymentMethod) return "No Payment Type";
   if (paymentMethod === "affirm") return "Affirm";
   if (paymentMethod === "credit card or debit card")
-    return "Credit Card or Debit Card";
+    return "Authorize.net";
   if (paymentMethod === "no payment type") return "No Payment Type";
 
   return paymentMethod;
@@ -116,77 +116,87 @@ const RefundContractsTable = ({
 
   return (
     <Card className="overflow-visible shadow-sm">
-      <Table
-        removeWrapper
-        aria-label="Refund contracts table"
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
-        onSelectionChange={(keys: Selection) => {
-          if (keys === "all") return;
-          setSelectedKeys(new Set(Array.from(keys).map(String)));
-        }}
-      >
-        <TableHeader>
-          <TableColumn key="amount">Amount</TableColumn>
-          <TableColumn key="paymentId">Payment ID</TableColumn>
-          <TableColumn key="status">Status</TableColumn>
-          <TableColumn key="paymentMethod">Payment Method</TableColumn>
-          <TableColumn key="orderNumber">Order #</TableColumn>
-          <TableColumn key="reason">Reason</TableColumn>
-          <TableColumn key="contractId">Contract ID</TableColumn>
-          <TableColumn key="createdAt">Created</TableColumn>
-          <TableColumn key="lastUpdated">Updated</TableColumn>
-        </TableHeader>
-        <TableBody items={contracts}>
-          {(contract) => {
-            const amount = Number.isFinite(contract.amountToRefund)
-              ? (contract.amountToRefund / 100).toFixed(2)
-              : "0.00";
-
-            return (
-              <TableRow key={contract.id}>
-                <TableCell>${amount}</TableCell>
-                <TableCell>
-                  <Tooltip content={contract.paymentId}>
-                    <span className="font-mono text-xs text-gray-600">
-                      {truncateValue(contract.paymentId, 8)}
-                    </span>
-                  </Tooltip>
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    color={getStatusColor(contract.status)}
-                    size="sm"
-                    variant="flat"
-                  >
-                    {contract.status}
-                  </Chip>
-                </TableCell>
-                <TableCell>{formatPaymentMethod(contract.paymentMethod)}</TableCell>
-                <TableCell>{contract.orderNumber || "-"}</TableCell>
-                <TableCell>{formatReason(contract.reason)}</TableCell>
-                <TableCell>
-                  <Tooltip content={contract.id}>
-                    <span className="font-mono text-xs text-gray-600">
-                      {truncateValue(contract.id, 22)}
-                    </span>
-                  </Tooltip>
-                </TableCell>
-                <TableCell>
-                  <Tooltip content={formatDateTime(contract.createdAt)}>
-                    <span>{formatShortDate(contract.createdAt)}</span>
-                  </Tooltip>
-                </TableCell>
-                <TableCell>
-                  <Tooltip content={formatDateTime(contract.lastUpdated)}>
-                    <span>{formatShortDate(contract.lastUpdated)}</span>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            );
+      <div className="overflow-x-auto">
+        <Table
+          removeWrapper
+          aria-label="Refund contracts table"
+          selectedKeys={selectedKeys}
+          selectionMode="multiple"
+          onSelectionChange={(keys: Selection) => {
+            if (keys === "all") return;
+            setSelectedKeys(new Set(Array.from(keys).map(String)));
           }}
-        </TableBody>
-      </Table>
+        >
+          <TableHeader>
+            <TableColumn key="amount">Amount</TableColumn>
+            <TableColumn key="paymentId">Payment ID</TableColumn>
+            <TableColumn key="status">Status</TableColumn>
+            <TableColumn key="paymentMethod">Payment Method</TableColumn>
+            <TableColumn key="orderNumber">Order #</TableColumn>
+            <TableColumn key="reason">Reason</TableColumn>
+            <TableColumn key="contractId">Contract ID</TableColumn>
+            <TableColumn key="createdAt">Created</TableColumn>
+            <TableColumn key="lastUpdated">Updated</TableColumn>
+          </TableHeader>
+          <TableBody items={contracts}>
+            {(contract) => {
+              const amount = Number.isFinite(contract.amountToRefund)
+                ? (contract.amountToRefund / 100).toFixed(2)
+                : "0.00";
+
+              return (
+                <TableRow key={contract.id}>
+                  <TableCell>${amount}</TableCell>
+                  <TableCell>
+                    <Tooltip content={contract.paymentId}>
+                      <span className="font-mono text-xs text-gray-600">
+                        {truncateValue(contract.paymentId, 8)}
+                      </span>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      color={getStatusColor(contract.status)}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {contract.status}
+                    </Chip>
+                  </TableCell>
+                  <TableCell>
+                    <span className="whitespace-nowrap">
+                      {formatPaymentMethod(contract.paymentMethod)}
+                    </span>
+                  </TableCell>
+                  <TableCell>{contract.orderNumber || "-"}</TableCell>
+                  <TableCell>
+                    <span className="whitespace-nowrap">
+                      {formatReason(contract.reason)}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip content={contract.id}>
+                      <span className="font-mono text-xs text-gray-600">
+                        {truncateValue(contract.id, 22)}
+                      </span>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip content={formatDateTime(contract.createdAt)}>
+                      <span>{formatShortDate(contract.createdAt)}</span>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip content={formatDateTime(contract.lastUpdated)}>
+                      <span>{formatShortDate(contract.lastUpdated)}</span>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              );
+            }}
+          </TableBody>
+        </Table>
+      </div>
     </Card>
   );
 };

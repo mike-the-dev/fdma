@@ -35,10 +35,7 @@ const hasActiveRefundContract = (transaction: TransactionMappedDTO): boolean => 
 };
 
 const isRefundContracted = (transaction: TransactionMappedDTO): boolean => {
-  return (
-    hasActiveRefundContract(transaction) ||
-    transaction.status === "refund contracted"
-  );
+  return hasActiveRefundContract(transaction);
 };
 
 const CopyDocumentIcon = (props: React.SVGProps<SVGSVGElement>) => {

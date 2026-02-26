@@ -59,6 +59,11 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentType>(
     "no payment type"
   );
+  const [selectedCustomerEmail, setSelectedCustomerEmail] = useState<string>("");
+  const [selectedCustomerFirstName, setSelectedCustomerFirstName] =
+    useState<string>("");
+  const [selectedCustomerLastName, setSelectedCustomerLastName] =
+    useState<string>("");
 
   const mapPaymentMethodFromTypes = (
     paymentMethodTypes?: string[]
@@ -71,6 +76,14 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     return "no payment type";
   };
 
+  const splitName = (fullName?: string | null) => {
+    const trimmed = fullName?.trim();
+    if (!trimmed) return { firstName: "", lastName: "" };
+
+    const [firstName, ...rest] = trimmed.split(/\s+/);
+    return { firstName: firstName || "", lastName: rest.join(" ") || "" };
+  };
+
   const handleOpenRefundModal = (transactionId: string): void => {
     const selectedTransaction = transactions.find(
       (transaction) => transaction.id === transactionId
@@ -78,13 +91,24 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     const latestCharge = selectedTransaction?.latest_charge;
     const chargeId =
       typeof latestCharge === "string" ? latestCharge : latestCharge?.id;
+    const metadata = selectedTransaction?.metadata || {};
+    const billingEmail =
+      typeof latestCharge === "object" ? latestCharge?.billing_details?.email : "";
+    const billingName =
+      typeof latestCharge === "object" ? latestCharge?.billing_details?.name : "";
+    const nameParts = splitName(billingName);
 
     setSelectedChargeId(chargeId ?? "");
     setSelectedAmount(selectedTransaction?.amount);
-    setSelectedOrderNumber(selectedTransaction?.metadata?.orderNumber ?? "");
+    setSelectedOrderNumber(metadata.orderNumber ?? "");
     setSelectedPaymentMethod(
       mapPaymentMethodFromTypes(selectedTransaction?.payment_method_types)
     );
+    setSelectedCustomerEmail(metadata.customerEmail ?? billingEmail ?? "");
+    setSelectedCustomerFirstName(
+      metadata.customerFirstName ?? nameParts.firstName
+    );
+    setSelectedCustomerLastName(metadata.customerLastName ?? nameParts.lastName);
     onOpen();
   };
 
@@ -92,11 +116,20 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     const latestCharge = charge.latest_charge;
     const chargeId =
       typeof latestCharge === "string" ? latestCharge : latestCharge?.id;
+    const metadata = charge.metadata || {};
+    const billingEmail = latestCharge?.billing_details?.email;
+    const billingName = latestCharge?.billing_details?.name;
+    const nameParts = splitName(billingName);
 
     setSelectedChargeId(chargeId ?? "");
     setSelectedAmount(charge.amount);
-    setSelectedOrderNumber(charge.metadata?.orderNumber ?? "");
+    setSelectedOrderNumber(metadata.orderNumber ?? "");
     setSelectedPaymentMethod(mapPaymentMethodFromTypes(charge.payment_method_types));
+    setSelectedCustomerEmail(metadata.customerEmail ?? billingEmail ?? "");
+    setSelectedCustomerFirstName(
+      metadata.customerFirstName ?? nameParts.firstName
+    );
+    setSelectedCustomerLastName(metadata.customerLastName ?? nameParts.lastName);
     onOpen();
   };
 
@@ -282,6 +315,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   initialAmount={selectedAmount}
                   initialChargeId={selectedChargeId}
                   initialPaymentMethod={selectedPaymentMethod}
+                  initialCustomerEmail={selectedCustomerEmail}
+                  initialCustomerFirstName={selectedCustomerFirstName}
+                  initialCustomerLastName={selectedCustomerLastName}
                   initialOrderNumber={selectedOrderNumber}
                   onRefundCreated={async () => {
                     await Promise.all([

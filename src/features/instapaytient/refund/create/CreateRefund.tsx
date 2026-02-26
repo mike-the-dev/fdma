@@ -23,6 +23,9 @@ interface CreateRefundProps {
   businessName?: string;
   initialChargeId?: string;
   initialPaymentMethod?: PaymentType;
+  initialCustomerEmail?: string;
+  initialCustomerFirstName?: string;
+  initialCustomerLastName?: string;
   initialAmount?: number;
   initialOrderNumber?: string;
   onRefundCreated?: () => Promise<void> | void;
@@ -33,6 +36,9 @@ const CreateRefund = ({
   businessName,
   initialChargeId,
   initialPaymentMethod,
+  initialCustomerEmail,
+  initialCustomerFirstName,
+  initialCustomerLastName,
   initialAmount,
   initialOrderNumber,
   onRefundCreated,
@@ -49,6 +55,9 @@ const CreateRefund = ({
       accountId,
       initialChargeId,
       initialPaymentMethod,
+      initialCustomerEmail,
+      initialCustomerFirstName,
+      initialCustomerLastName,
       initialAmount,
       initialOrderNumber,
       handleRefundCreated
@@ -60,6 +69,9 @@ const CreateRefund = ({
     accountId,
     initialAmount,
     initialChargeId,
+    initialCustomerEmail,
+    initialCustomerFirstName,
+    initialCustomerLastName,
     initialOrderNumber,
     initialPaymentMethod,
   ]);
@@ -68,6 +80,9 @@ const CreateRefund = ({
     typeof initialAmount === "number" ? initialAmount.toFixed(2) : "0.00";
   const displayOrderNumber = initialOrderNumber || "-";
   const displayPaymentMethod = initialPaymentMethod || "no payment type";
+  const displayCustomerEmail = initialCustomerEmail || "-";
+  const displayCustomerFirstName = initialCustomerFirstName || "-";
+  const displayCustomerLastName = initialCustomerLastName || "-";
   const displayBusinessName = businessName || "this business";
   const reasonOptions: Array<{ key: RefundReason; label: string }> = [
     { key: "duplicate", label: "Duplicate" },
@@ -105,6 +120,18 @@ const CreateRefund = ({
           <div>
             <p className="text-xs text-foreground-500">Payment Method</p>
             <p className="text-sm font-medium">{displayPaymentMethod}</p>
+          </div>
+          <div>
+            <p className="text-xs text-foreground-500">Customer Email</p>
+            <p className="text-sm font-medium">{displayCustomerEmail}</p>
+          </div>
+          <div>
+            <p className="text-xs text-foreground-500">Customer First Name</p>
+            <p className="text-sm font-medium">{displayCustomerFirstName}</p>
+          </div>
+          <div>
+            <p className="text-xs text-foreground-500">Customer Last Name</p>
+            <p className="text-sm font-medium">{displayCustomerLastName}</p>
           </div>
           <div>
             <p className="text-xs text-foreground-500">Amount</p>

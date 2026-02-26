@@ -11,6 +11,9 @@ export type RefundCreationFormData = {
   accountId: string;
   paymentId: string;
   paymentMethod: PaymentType;
+  customerEmail: string;
+  customerFirstName: string;
+  customerLastName: string;
   amount: string;
   orderNumber: string;
   reason: RefundReason | "";
@@ -22,6 +25,15 @@ export type RefundCreationValidators = {
     onChange: ({ value }: { value: string }) => string | undefined;
   };
   paymentId: {
+    onChange: ({ value }: { value: string }) => string | undefined;
+  };
+  customerEmail: {
+    onChange: ({ value }: { value: string }) => string | undefined;
+  };
+  customerFirstName: {
+    onChange: ({ value }: { value: string }) => string | undefined;
+  };
+  customerLastName: {
     onChange: ({ value }: { value: string }) => string | undefined;
   };
   amount: {
@@ -42,6 +54,9 @@ export interface CreateRefundRequest {
   accountId: string;
   paymentId: string;
   paymentMethod?: PaymentType;
+  customerEmail?: string;
+  customerFirstName?: string;
+  customerLastName?: string;
   amount: number;
   orderNumber?: string;
   reason: RefundReason;

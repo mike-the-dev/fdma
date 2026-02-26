@@ -5,6 +5,9 @@ const validateField = (
     | "accountId"
     | "paymentId"
     | "paymentMethod"
+    | "customerEmail"
+    | "customerFirstName"
+    | "customerLastName"
     | "amount"
     | "orderNumber"
     | "reason"
@@ -16,6 +19,12 @@ const validateField = (
     paymentId: field === "paymentId" ? value : "ch_1234567890",
     paymentMethod:
       field === "paymentMethod" ? value : "no payment type",
+    customerEmail:
+      field === "customerEmail" ? value : "test@example.com",
+    customerFirstName:
+      field === "customerFirstName" ? value : "Test",
+    customerLastName:
+      field === "customerLastName" ? value : "User",
     orderNumber: field === "orderNumber" ? value : "ORDER-123",
     reason: field === "reason" ? value : "requested_by_customer",
     internalNote: field === "internalNote" ? value : "",
@@ -34,6 +43,15 @@ export const validateAccountId = (value: string): string | undefined =>
 
 export const validatePaymentId = (value: string): string | undefined =>
   validateField("paymentId", value);
+
+export const validateCustomerEmail = (value: string): string | undefined =>
+  validateField("customerEmail", value);
+
+export const validateCustomerFirstName = (value: string): string | undefined =>
+  validateField("customerFirstName", value);
+
+export const validateCustomerLastName = (value: string): string | undefined =>
+  validateField("customerLastName", value);
 
 export const validateAmount = (value: string): string | undefined =>
   validateField("amount", value);

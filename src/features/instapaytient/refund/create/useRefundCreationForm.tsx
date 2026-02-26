@@ -16,6 +16,9 @@ import { refundCreationSchema } from "../_shared/refund.schema";
 import {
   validateAccountId,
   validateAmount,
+  validateCustomerEmail,
+  validateCustomerFirstName,
+  validateCustomerLastName,
   validatePaymentId,
   validateInternalNote,
   validateOrderNumber,
@@ -37,6 +40,9 @@ export const useRefundCreationForm = (
   accountId: string,
   initialChargeId?: string,
   initialPaymentMethod?: PaymentType,
+  initialCustomerEmail?: string,
+  initialCustomerFirstName?: string,
+  initialCustomerLastName?: string,
   initialAmount?: number,
   initialOrderNumber?: string,
   onRefundCreated?: () => Promise<void> | void
@@ -49,6 +55,9 @@ export const useRefundCreationForm = (
     accountId,
     paymentId: initialChargeId ?? "",
     paymentMethod: initialPaymentMethod ?? "no payment type",
+    customerEmail: initialCustomerEmail ?? "",
+    customerFirstName: initialCustomerFirstName ?? "",
+    customerLastName: initialCustomerLastName ?? "",
     orderNumber: initialOrderNumber ?? "",
     reason: emptyReason,
     internalNote: "",
@@ -75,6 +84,9 @@ export const useRefundCreationForm = (
           accountId: normalizedAccountId,
           paymentId: payload.paymentId,
           paymentMethod: payload.paymentMethod,
+          customerEmail: payload.customerEmail,
+          customerFirstName: payload.customerFirstName,
+          customerLastName: payload.customerLastName,
           amount: amountInCents,
           orderNumber: payload.orderNumber?.trim() || undefined,
           reason: payload.reason,
@@ -126,6 +138,17 @@ export const useRefundCreationForm = (
     paymentId: {
       onChange: ({ value }: { value: string }) => validatePaymentId(value),
     },
+    customerEmail: {
+      onChange: ({ value }: { value: string }) => validateCustomerEmail(value),
+    },
+    customerFirstName: {
+      onChange: ({ value }: { value: string }) =>
+        validateCustomerFirstName(value),
+    },
+    customerLastName: {
+      onChange: ({ value }: { value: string }) =>
+        validateCustomerLastName(value),
+    },
     amount: {
       onChange: ({ value }: { value: string }) => validateAmount(value),
     },
@@ -151,6 +174,9 @@ export const useRefundCreationForm = (
       accountId,
       paymentId: initialChargeId ?? "",
       paymentMethod: initialPaymentMethod ?? "no payment type",
+      customerEmail: initialCustomerEmail ?? "",
+      customerFirstName: initialCustomerFirstName ?? "",
+      customerLastName: initialCustomerLastName ?? "",
       orderNumber: initialOrderNumber ?? "",
       reason: emptyReason,
       internalNote: "",
@@ -165,6 +191,9 @@ export const useRefundCreationForm = (
     form,
     initialAmount,
     initialChargeId,
+    initialCustomerEmail,
+    initialCustomerFirstName,
+    initialCustomerLastName,
     initialOrderNumber,
     initialPaymentMethod,
   ]);

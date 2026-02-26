@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+const emptyToUndefined = (value: unknown) => {
+  if (typeof value !== "string") return value;
+  const trimmed = value.trim();
+  return trimmed.length === 0 ? undefined : trimmed;
+};
+
 export const refundCreationSchema = z.object({
   accountId: z
     .string()
@@ -20,6 +26,30 @@ export const refundCreationSchema = z.object({
       }
     )
     .optional(),
+  customerEmail: z.preprocess(
+    emptyToUndefined,
+    z
+      .string()
+      .trim()
+      .email("Customer email must be a valid email.")
+      .optional()
+  ),
+  customerFirstName: z.preprocess(
+    emptyToUndefined,
+    z
+      .string()
+      .trim()
+      .min(1, "Customer first name must not be empty.")
+      .optional()
+  ),
+  customerLastName: z.preprocess(
+    emptyToUndefined,
+    z
+      .string()
+      .trim()
+      .min(1, "Customer last name must not be empty.")
+      .optional()
+  ),
   orderNumber: z
     .string()
     .trim()

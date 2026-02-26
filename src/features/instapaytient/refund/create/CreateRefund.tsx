@@ -14,7 +14,7 @@ import {
   DropdownItem,
 } from "@heroui/dropdown";
 
-import { RefundReason } from "../_shared/refund.types";
+import { PaymentType, RefundReason } from "../_shared/refund.types";
 
 import { useRefundCreationForm } from "./useRefundCreationForm";
 
@@ -22,6 +22,7 @@ interface CreateRefundProps {
   accountId: string;
   businessName?: string;
   initialChargeId?: string;
+  initialPaymentMethod?: PaymentType;
   initialAmount?: number;
   initialOrderNumber?: string;
   onRefundCreated?: () => Promise<void> | void;
@@ -31,6 +32,7 @@ const CreateRefund = ({
   accountId,
   businessName,
   initialChargeId,
+  initialPaymentMethod,
   initialAmount,
   initialOrderNumber,
   onRefundCreated,
@@ -46,6 +48,7 @@ const CreateRefund = ({
     useRefundCreationForm(
       accountId,
       initialChargeId,
+      initialPaymentMethod,
       initialAmount,
       initialOrderNumber,
       handleRefundCreated
@@ -53,11 +56,18 @@ const CreateRefund = ({
 
   React.useEffect(() => {
     setIsConfirmed(false);
-  }, [accountId, initialAmount, initialChargeId, initialOrderNumber]);
+  }, [
+    accountId,
+    initialAmount,
+    initialChargeId,
+    initialOrderNumber,
+    initialPaymentMethod,
+  ]);
 
   const formattedAmount =
     typeof initialAmount === "number" ? initialAmount.toFixed(2) : "0.00";
   const displayOrderNumber = initialOrderNumber || "-";
+  const displayPaymentMethod = initialPaymentMethod || "no payment type";
   const displayBusinessName = businessName || "this business";
   const reasonOptions: Array<{ key: RefundReason; label: string }> = [
     { key: "duplicate", label: "Duplicate" },
@@ -91,6 +101,10 @@ const CreateRefund = ({
           <div>
             <p className="text-xs text-foreground-500">Order Number</p>
             <p className="text-sm font-medium">{displayOrderNumber}</p>
+          </div>
+          <div>
+            <p className="text-xs text-foreground-500">Payment Method</p>
+            <p className="text-sm font-medium">{displayPaymentMethod}</p>
           </div>
           <div>
             <p className="text-xs text-foreground-500">Amount</p>

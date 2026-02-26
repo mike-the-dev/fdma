@@ -61,6 +61,16 @@ const formatReason = (reason?: string): string => {
   return reason;
 };
 
+const formatPaymentMethod = (paymentMethod?: string): string => {
+  if (!paymentMethod) return "No Payment Type";
+  if (paymentMethod === "affirm") return "Affirm";
+  if (paymentMethod === "credit card or debit card")
+    return "Credit Card or Debit Card";
+  if (paymentMethod === "no payment type") return "No Payment Type";
+
+  return paymentMethod;
+};
+
 const RefundContractsTable = ({
   accountId,
 }: RefundContractsTableProps): React.ReactElement => {
@@ -120,6 +130,8 @@ const RefundContractsTable = ({
           <TableColumn key="amount">Amount</TableColumn>
           <TableColumn key="paymentId">Payment ID</TableColumn>
           <TableColumn key="status">Status</TableColumn>
+          <TableColumn key="paymentMethod">Payment Method</TableColumn>
+          <TableColumn key="orderNumber">Order #</TableColumn>
           <TableColumn key="reason">Reason</TableColumn>
           <TableColumn key="contractId">Contract ID</TableColumn>
           <TableColumn key="createdAt">Created</TableColumn>
@@ -150,6 +162,8 @@ const RefundContractsTable = ({
                     {contract.status}
                   </Chip>
                 </TableCell>
+                <TableCell>{formatPaymentMethod(contract.paymentMethod)}</TableCell>
+                <TableCell>{contract.orderNumber || "-"}</TableCell>
                 <TableCell>{formatReason(contract.reason)}</TableCell>
                 <TableCell>
                   <Tooltip content={contract.id}>

@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 
 import {
   CreateRefundResponse,
+  PaymentType,
   RefundReason,
   RefundCreationFormData,
   RefundCreationValidators,
@@ -35,6 +36,7 @@ export interface UseRefundCreationFormReturn {
 export const useRefundCreationForm = (
   accountId: string,
   initialChargeId?: string,
+  initialPaymentMethod?: PaymentType,
   initialAmount?: number,
   initialOrderNumber?: string,
   onRefundCreated?: () => Promise<void> | void
@@ -46,6 +48,7 @@ export const useRefundCreationForm = (
   const defaultValues: RefundCreationFormData = {
     accountId,
     paymentId: initialChargeId ?? "",
+    paymentMethod: initialPaymentMethod ?? "no payment type",
     orderNumber: initialOrderNumber ?? "",
     reason: emptyReason,
     internalNote: "",
@@ -71,6 +74,7 @@ export const useRefundCreationForm = (
         const requestPayload = {
           accountId: normalizedAccountId,
           paymentId: payload.paymentId,
+          paymentMethod: payload.paymentMethod,
           amount: amountInCents,
           orderNumber: payload.orderNumber?.trim() || undefined,
           reason: payload.reason,
@@ -146,6 +150,7 @@ export const useRefundCreationForm = (
     form.reset({
       accountId,
       paymentId: initialChargeId ?? "",
+      paymentMethod: initialPaymentMethod ?? "no payment type",
       orderNumber: initialOrderNumber ?? "",
       reason: emptyReason,
       internalNote: "",
@@ -154,7 +159,15 @@ export const useRefundCreationForm = (
           ? initialAmount.toFixed(2)
           : "",
     });
-  }, [accountId, emptyReason, form, initialAmount, initialChargeId, initialOrderNumber]);
+  }, [
+    accountId,
+    emptyReason,
+    form,
+    initialAmount,
+    initialChargeId,
+    initialOrderNumber,
+    initialPaymentMethod,
+  ]);
 
   return {
     form,

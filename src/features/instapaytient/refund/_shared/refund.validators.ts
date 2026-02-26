@@ -4,6 +4,7 @@ const validateField = (
   field:
     | "accountId"
     | "paymentId"
+    | "paymentMethod"
     | "amount"
     | "orderNumber"
     | "reason"
@@ -13,6 +14,8 @@ const validateField = (
   const result = refundCreationSchema.safeParse({
     accountId: field === "accountId" ? value : "A#placeholder",
     paymentId: field === "paymentId" ? value : "ch_1234567890",
+    paymentMethod:
+      field === "paymentMethod" ? value : "no payment type",
     orderNumber: field === "orderNumber" ? value : "ORDER-123",
     reason: field === "reason" ? value : "requested_by_customer",
     internalNote: field === "internalNote" ? value : "",

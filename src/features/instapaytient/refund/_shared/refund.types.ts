@@ -1,10 +1,16 @@
 import Stripe from "stripe";
 
+export type PaymentType =
+  | "credit card or debit card"
+  | "affirm"
+  | "no payment type";
+
 export type RefundReason = "duplicate" | "fraudulent" | "requested_by_customer";
 
 export type RefundCreationFormData = {
   accountId: string;
   paymentId: string;
+  paymentMethod: PaymentType;
   amount: string;
   orderNumber: string;
   reason: RefundReason | "";
@@ -35,6 +41,7 @@ export type RefundCreationValidators = {
 export interface CreateRefundRequest {
   accountId: string;
   paymentId: string;
+  paymentMethod?: PaymentType;
   amount: number;
   orderNumber?: string;
   reason: RefundReason;

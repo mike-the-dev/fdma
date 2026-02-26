@@ -27,6 +27,7 @@ import { CreateRefund } from "@/features/instapaytient/refund";
 import { ChargesTable } from "@/features/instapaytient/charges";
 import { ChargeMappedDTO } from "@/features/instapaytient/charges/_shared/charges.types";
 import { RefundContractsTable } from "@/features/instapaytient/refundContracts";
+import { PaymentType } from "@/features/instapaytient/refund/_shared/refund.types";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -55,6 +56,20 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     undefined
   );
   const [selectedOrderNumber, setSelectedOrderNumber] = useState<string>("");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentType>(
+    "no payment type"
+  );
+
+  const mapPaymentMethodFromTypes = (
+    paymentMethodTypes?: string[]
+  ): PaymentType => {
+    if (!paymentMethodTypes || paymentMethodTypes.length === 0)
+      return "no payment type";
+    if (paymentMethodTypes.includes("affirm")) return "affirm";
+    if (paymentMethodTypes.includes("stripe_account"))
+      return "credit card or debit card";
+    return "no payment type";
+  };
 
   const handleOpenRefundModal = (transactionId: string): void => {
     const selectedTransaction = transactions.find(
@@ -67,6 +82,9 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     setSelectedChargeId(chargeId ?? "");
     setSelectedAmount(selectedTransaction?.amount);
     setSelectedOrderNumber(selectedTransaction?.metadata?.orderNumber ?? "");
+    setSelectedPaymentMethod(
+      mapPaymentMethodFromTypes(selectedTransaction?.payment_method_types)
+    );
     onOpen();
   };
 
@@ -78,6 +96,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     setSelectedChargeId(chargeId ?? "");
     setSelectedAmount(charge.amount);
     setSelectedOrderNumber(charge.metadata?.orderNumber ?? "");
+    setSelectedPaymentMethod(mapPaymentMethodFromTypes(charge.payment_method_types));
     onOpen();
   };
 
@@ -262,6 +281,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   businessName={account.company || account.name}
                   initialAmount={selectedAmount}
                   initialChargeId={selectedChargeId}
+                  initialPaymentMethod={selectedPaymentMethod}
                   initialOrderNumber={selectedOrderNumber}
                   onRefundCreated={async () => {
                     await Promise.all([

@@ -5,12 +5,19 @@ export type RefundContractStatus =
   | "COMPLETED"
   | "FAILED";
 
+export type PaymentType =
+  | "credit card or debit card"
+  | "affirm"
+  | "no payment type";
+
 export interface RefundContractDto {
   id: string;
   accountId: string;
   connectedAccountId: string;
   customerId?: string;
   paymentId: string;
+  paymentMethod?: PaymentType;
+  orderNumber?: string;
   amountToRefund: number;
   currency: string;
   status: RefundContractStatus;
@@ -18,6 +25,7 @@ export interface RefundContractDto {
   stripeTransferId?: string;
   stripeRefundId?: string;
   reason?: string;
+  internalNote?: string;
   createdByAdmin?: string;
   createdAt: string;
   lastUpdated: string;

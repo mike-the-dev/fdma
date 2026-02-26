@@ -12,6 +12,14 @@ export const refundCreationSchema = z.object({
     .regex(/^(ch_|py_|pi_)/, {
       message: 'Payment ID must start with "ch_", "py_", or "pi_".',
     }),
+  paymentMethod: z
+    .enum(
+      ["credit card or debit card", "affirm", "no payment type"],
+      {
+        message: "Payment method is invalid.",
+      }
+    )
+    .optional(),
   orderNumber: z
     .string()
     .trim()

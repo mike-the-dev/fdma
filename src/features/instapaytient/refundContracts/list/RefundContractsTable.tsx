@@ -65,7 +65,7 @@ const formatPaymentMethod = (paymentMethod?: string): string => {
   if (!paymentMethod) return "No Payment Type";
   if (paymentMethod === "affirm") return "Affirm";
   if (paymentMethod === "credit card or debit card")
-    return "Authorize.net";
+    return "Credit Card or Debit Card";
   if (paymentMethod === "no payment type") return "No Payment Type";
 
   return paymentMethod;

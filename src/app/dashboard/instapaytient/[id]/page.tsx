@@ -89,8 +89,8 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
       (transaction) => transaction.id === transactionId
     );
     const latestCharge = selectedTransaction?.latest_charge;
-    const chargeId =
-      typeof latestCharge === "string" ? latestCharge : latestCharge?.id;
+    // For Affirm rows, contract creation should reference the PaymentIntent ID.
+    const paymentId = selectedTransaction?.id;
     const metadata = selectedTransaction?.metadata || {};
     const billingEmail =
       typeof latestCharge === "object" ? latestCharge?.billing_details?.email : "";
@@ -98,7 +98,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
       typeof latestCharge === "object" ? latestCharge?.billing_details?.name : "";
     const nameParts = splitName(billingName);
 
-    setSelectedChargeId(chargeId ?? "");
+    setSelectedChargeId(paymentId ?? "");
     setSelectedAmount(selectedTransaction?.amount);
     setSelectedOrderNumber(metadata.orderNumber ?? "");
     setSelectedPaymentMethod(

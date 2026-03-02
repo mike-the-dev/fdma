@@ -34,15 +34,16 @@ export const useAccountUserCreationForm = (
   onUserCreated?: () => Promise<void> | void
 ): UseAccountUserCreationFormReturn => {
   const mutation = useCreateAccountUser();
+  const defaultValues: AccountUserCreationFormData = {
+    emailAddress: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    role: "",
+  };
 
   const formOpts = formOptions({
-    defaultValues: {
-      emailAddress: "",
-      password: "",
-      firstName: "",
-      lastName: "",
-      role: "",
-    },
+    defaultValues,
   });
 
   const form = useForm({

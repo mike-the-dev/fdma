@@ -2,6 +2,13 @@
 
 import React, { use, useState } from "react";
 import { Card, CardBody } from "@heroui/card";
+import { Button, ButtonGroup } from "@heroui/button";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/dropdown";
 import { Spinner } from "@heroui/spinner";
 import { Tabs, Tab } from "@heroui/tabs";
 import { useQueryClient } from "@tanstack/react-query";
@@ -28,6 +35,10 @@ import { ChargesTable } from "@/features/instapaytient/charges";
 import { ChargeMappedDTO } from "@/features/instapaytient/charges/_shared/charges.types";
 import { RefundContractsTable } from "@/features/instapaytient/refundContracts";
 import { PaymentType } from "@/features/instapaytient/refund/_shared/refund.types";
+import {
+  CreateAccountUser,
+  AccountUsersTable,
+} from "@/features/instapaytient/accountUsers";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -51,6 +62,17 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     stripeAccountError,
   } = useAccount(id);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isAddUserModalOpen,
+    onOpen: onAddUserModalOpen,
+    onClose: onAddUserModalClose,
+    onOpenChange: onAddUserModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isViewUsersModalOpen,
+    onOpen: onViewUsersModalOpen,
+    onOpenChange: onViewUsersModalOpenChange,
+  } = useDisclosure();
   const [selectedChargeId, setSelectedChargeId] = useState<string>("");
   const [selectedAmount, setSelectedAmount] = useState<number | undefined>(
     undefined
@@ -131,6 +153,10 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     );
     setSelectedCustomerLastName(metadata.customerLastName ?? nameParts.lastName);
     onOpen();
+  };
+
+  const handleAddUserAction = (key: React.Key): void => {
+    if (key === "view_users") onViewUsersModalOpen();
   };
 
   // Readiness data
@@ -220,10 +246,76 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
           shadow="sm"
           style={{ padding: "12px 12px 12px 12px", width: "100%" }}
         >
-          <h1 className="mb-2 text-2xl font-semibold text-white">
-            Account Details
-          </h1>
-          <p className="mb-6 text-gray-500">View and manage manage account.</p>
+          <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <h1 className="mb-2 text-2xl font-semibold text-white">
+                Account Details
+              </h1>
+              <p className="text-gray-500">View and manage manage account.</p>
+            </div>
+            <div className="flex gap-2">
+              {/* <Button
+                color="default"
+                startContent={<Icon icon="logos:slack-icon" width={18} />}
+                variant="flat"
+              >
+                Share to Slack
+              </Button> */}
+              <ButtonGroup>
+                <Button
+                  color="primary"
+                  startContent={<Icon icon="lucide:user-plus" width={18} />}
+                  onPress={onAddUserModalOpen}
+                >
+                  Add User
+                </Button>
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <Button isIconOnly color="primary" variant="flat">
+                      <Icon icon="lucide:chevron-down" width={18} />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Add user actions"
+                    onAction={handleAddUserAction}
+                  >
+                    <DropdownItem
+                      key="view_users"
+                      startContent={<Icon icon="lucide:users" width={16} />}
+                    >
+                      View Users
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </ButtonGroup>
+              <ButtonGroup>
+                <Button
+                  color="default"
+                  startContent={<Icon icon="lucide:settings" width={18} />}
+                  variant="flat"
+                >
+                  Settings
+                </Button>
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <Button isIconOnly color="default" variant="flat">
+                      <Icon icon="lucide:chevron-down" width={18} />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Settings actions">
+                    <DropdownItem
+                      key="disable_account"
+                      className="text-danger"
+                      color="danger"
+                      startContent={<Icon icon="lucide:user-x" width={16} />}
+                    >
+                      Disable Account
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </ButtonGroup>
+            </div>
+          </div>
 
           <AccountDetails account={account} />
 
@@ -328,6 +420,50 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                     onClose();
                   }}
                 />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isAddUserModalOpen}
+        onOpenChange={onAddUserModalOpenChange}
+        size="lg"
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex items-center gap-2">
+                <Icon
+                  className="text-xl text-primary-500"
+                  icon="lucide:user-plus"
+                />
+                <span>Add User</span>
+              </ModalHeader>
+              <ModalBody className="pb-6">
+                <CreateAccountUser
+                  accountId={account.id}
+                  onUserCreated={onAddUserModalClose}
+                />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isViewUsersModalOpen}
+        onOpenChange={onViewUsersModalOpenChange}
+        size="3xl"
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex items-center gap-2">
+                <Icon className="text-xl text-primary-500" icon="lucide:users" />
+                <span>View Users</span>
+              </ModalHeader>
+              <ModalBody className="pb-6">
+                <AccountUsersTable accountId={account.id} />
               </ModalBody>
             </>
           )}

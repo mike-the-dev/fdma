@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Icon } from "@iconify/react";
 import { addToast } from "@heroui/toast";
 
 import {
-  fetchAccountById,
+  useAccountById,
   useTransactionsByStripeAccount,
   useStripeAccountById,
 } from "./account.service";
-import { mapAccount } from "./account.mappers";
 import { TransactionMappedDTO, StripeAccount } from "./account.schema";
 import { toAccountError } from "./account.errors";
 import { processRefund } from "../refund/refund.service";
@@ -34,10 +33,15 @@ interface UseAccountReturn {
 
 export const useAccount = (id: string): UseAccountReturn => {
   const { isAuthenticated, isLoading: authLoading } = useAuthContext();
-  // Account state
-  const [account, setAccount] = useState<AccountInstapaytient | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const accountQueryEnabled = !authLoading && isAuthenticated && !!id;
+  const {
+    data: accountData,
+    isLoading,
+    error: accountQueryError,
+    refetch: refetchAccountQuery,
+  } = useAccountById(id, accountQueryEnabled);
+  const account = accountData ?? null;
+  const error = accountQueryError ? toAccountError(accountQueryError).message : null;
 
   // Stripe Account - using React Query
   const stripeAccountId = account?.payout?.stripeId;
@@ -77,27 +81,8 @@ export const useAccount = (id: string): UseAccountReturn => {
     await refetchTransactionsQuery();
   };
 
-  const fetchAccountDetails = async (): Promise<void> => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const data = await fetchAccountById(id);
-
-      setAccount(mapAccount(data));
-    } catch (err: unknown) {
-      const mapped = toAccountError(err);
-
-      // TOKEN_EXPIRED handled by global auth (redirect). No local error UI.
-      if (mapped.code === "TOKEN_EXPIRED") return;
-
-      setError(mapped.message);
-
-      if (process.env.NODE_ENV !== "production")
-        console.error("[useAccount]", err);
-    } finally {
-      setIsLoading(false);
-    }
+  const refetch = async (): Promise<void> => {
+    await refetchAccountQuery();
   };
 
   const handleRefundTransaction = async (transactionId: string): Promise<void> => {
@@ -172,17 +157,11 @@ export const useAccount = (id: string): UseAccountReturn => {
     }
   };
 
-
-  useEffect(() => {
-    // Only fetch account details when authentication is complete and user is authenticated
-    if (!authLoading && isAuthenticated && id) fetchAccountDetails();
-  }, [authLoading, isAuthenticated, id]);
-
   return {
     account,
     isLoading,
     error,
-    refetch: fetchAccountDetails,
+    refetch,
     transactions,
     transactionsLoading,
     transactionsError,

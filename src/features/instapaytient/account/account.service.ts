@@ -1,5 +1,5 @@
 import { Account, Transaction, StripeAccount } from "./account.schema";
-import { mapTransaction } from "./account.mappers";
+import { mapAccount, mapTransaction } from "./account.mappers";
 import { TransactionMappedDTO } from "./account.schema";
 import { useQuery } from "@tanstack/react-query";
 
@@ -34,6 +34,15 @@ export const fetchStripeAccountById = async (
 // ============================================================================
 // TanStack Query Hooks
 // ============================================================================
+export const useAccountById = (id?: string, enabled: boolean = true) => {
+  return useQuery<Account, Error>({
+    queryKey: ["account", id],
+    queryFn: () => fetchAccountById(id!),
+    enabled: !!id && enabled,
+    select: (account: Account): Account => mapAccount(account),
+  });
+};
+
 export const useStripeAccountById = (id?: string) => {
   return useQuery<StripeAccount, Error>({
     queryKey: ["stripeAccount", id],

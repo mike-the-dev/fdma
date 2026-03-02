@@ -39,6 +39,7 @@ import {
   CreateAccountUser,
   AccountUsersTable,
 } from "@/features/instapaytient/accountUsers";
+import { AccountSettingsPanel } from "@/features/instapaytient/accountSettings";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -73,10 +74,17 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
     onOpen: onViewUsersModalOpen,
     onOpenChange: onViewUsersModalOpenChange,
   } = useDisclosure();
+  const {
+    isOpen: isSettingsModalOpen,
+    onOpen: onSettingsModalOpen,
+    onOpenChange: onSettingsModalOpenChange,
+  } = useDisclosure();
   const [selectedChargeId, setSelectedChargeId] = useState<string>("");
   const [selectedAmount, setSelectedAmount] = useState<number | undefined>(
     undefined
   );
+  const [selectedSettingsTab, setSelectedSettingsTab] =
+    useState<string>("access");
   const [selectedOrderNumber, setSelectedOrderNumber] = useState<string>("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentType>(
     "no payment type"
@@ -157,6 +165,15 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
 
   const handleAddUserAction = (key: React.Key): void => {
     if (key === "view_users") onViewUsersModalOpen();
+  };
+
+  const handleOpenSettingsModal = (tab: string = "access"): void => {
+    setSelectedSettingsTab(tab);
+    onSettingsModalOpen();
+  };
+
+  const handleSettingsAction = (key: React.Key): void => {
+    if (key === "disable_account") handleOpenSettingsModal("access");
   };
 
   // Readiness data
@@ -293,6 +310,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   color="default"
                   startContent={<Icon icon="lucide:settings" width={18} />}
                   variant="flat"
+                  onPress={() => handleOpenSettingsModal("access")}
                 >
                   Settings
                 </Button>
@@ -302,7 +320,10 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                       <Icon icon="lucide:chevron-down" width={18} />
                     </Button>
                   </DropdownTrigger>
-                  <DropdownMenu aria-label="Settings actions">
+                  <DropdownMenu
+                    aria-label="Settings actions"
+                    onAction={handleSettingsAction}
+                  >
                     <DropdownItem
                       key="disable_account"
                       className="text-danger"
@@ -464,6 +485,30 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
               </ModalHeader>
               <ModalBody className="pb-6">
                 <AccountUsersTable accountId={account.id} />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isSettingsModalOpen}
+        onOpenChange={onSettingsModalOpenChange}
+        size="4xl"
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex items-center gap-2">
+                <Icon className="text-xl text-primary-500" icon="lucide:settings" />
+                <span>Account Settings</span>
+              </ModalHeader>
+              <ModalBody className="pb-6">
+                <AccountSettingsPanel
+                  accountId={account.id}
+                  selectedKey={selectedSettingsTab}
+                  onSelectionChange={setSelectedSettingsTab}
+                  status={account.status}
+                />
               </ModalBody>
             </>
           )}

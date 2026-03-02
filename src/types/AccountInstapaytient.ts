@@ -1,3 +1,17 @@
+export type AccountAnalyticsTargets = {
+  avg_spent_cents: number;
+  subscription_rate_percent: number;
+  repeat_rate_percent: number;
+  retention_rate_percent: number;
+};
+
+export type AccountStatus = {
+  isActive: boolean;
+  code: string;
+  message: string;
+  updatedAt: string;
+};
+
 export type AccountInstapaytient = {
   id: string;
   name: string;
@@ -12,6 +26,8 @@ export type AccountInstapaytient = {
     totalPayoutAmount: number;
     instantPayoutEnabled: boolean;
   } | null;
+  analyticsTargets?: AccountAnalyticsTargets;
+  status?: AccountStatus;
 };
 
 export type AccountInstapaytientHttpResponse = {

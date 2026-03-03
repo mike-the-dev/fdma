@@ -13,6 +13,8 @@ import {
 } from "@heroui/table";
 import { Button } from "@heroui/button";
 import { useDisclosure } from "@heroui/modal";
+import { User } from "@heroui/user";
+import { Tooltip } from "@heroui/tooltip";
 
 import ModalInstapaytient from "../ModalInstapaytient";
 
@@ -23,16 +25,16 @@ const columns: {
   label: string;
 }[] = [
   {
-    key: "company",
-    label: "COMPANY",
-  },
-  {
-    key: "name",
-    label: "NAME",
+    key: "business",
+    label: "BUSINESS",
   },
   {
     key: "state",
     label: "STATE",
+  },
+  {
+    key: "status",
+    label: "STATUS",
   },
   {
     key: "id",
@@ -142,11 +144,55 @@ const Table: React.FC<any> = (props: TableProps): React.ReactElement => {
               onClick={handleRowClick(item)}
             >
               {(columnKey) => {
+                if (columnKey === "business") {
+                  return (
+                    <TableCell>
+                      <Tooltip content={item.name} showArrow={true}>
+                        <User
+                          avatarProps={{
+                            radius: "full",
+                            size: "sm",
+                            name: item.name,
+                          }}
+                          classNames={{
+                            description: "text-default-500",
+                          }}
+                          description={item.name}
+                          name={item.company}
+                        >
+                          {item.name}
+                        </User>
+                      </Tooltip>
+                    </TableCell>
+                  );
+                }
+
                 if (columnKey === "take") {
                   // Handle take from nested payout object
                   const takeValue = item.payout?.take || 0;
 
                   return <TableCell>{takeValue}%</TableCell>;
+                }
+
+                if (columnKey === "status") {
+                  const isActive = Boolean(item.status?.isActive);
+                  const label = isActive ? "Active" : "Inactive";
+
+                  return (
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block rounded-full"
+                          style={{
+                            width: "8px",
+                            height: "8px",
+                            backgroundColor: isActive ? "#17C964" : "#F31260",
+                          }}
+                        />
+                        <span>{label}</span>
+                      </div>
+                    </TableCell>
+                  );
                 }
 
                 if (columnKey === "stripeID") {

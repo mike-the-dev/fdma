@@ -29,9 +29,14 @@ export const useUpdateAccountStatus = () => {
         ? payload.accountId
         : `A#${payload.accountId}`;
 
-      await queryClient.invalidateQueries({
-        queryKey: ["account", normalizedAccountId],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["account", normalizedAccountId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["account", payload.accountId],
+        }),
+      ]);
     },
   });
 };

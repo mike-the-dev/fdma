@@ -2,6 +2,7 @@
 
 import "../globals.css";
 import { useAuthContext } from "@/context/AuthContext";
+import DeskScrollReset from "./DeskScrollReset";
 
 interface DashboardLayout {
   children: React.ReactNode;
@@ -19,5 +20,15 @@ export default function DashboardLayout(
   }
 
   // User is authenticated or loading, render dashboard
-  return <>{props.children}</>;
+  return (
+    <div className="desk-area flex min-h-screen max-h-screen">
+      <main
+        id="desk-scroll-container"
+        className="flex-1 overflow-auto max-h-screen"
+      >
+        <DeskScrollReset containerId="desk-scroll-container" />
+        {props.children}
+      </main>
+    </div>
+  );
 }

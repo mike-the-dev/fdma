@@ -5,6 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import apiClient from "@/utils/apiClient";
 
+const normalizeAccountId = (id?: string): string | undefined => {
+  if (!id) return id;
+  return id.startsWith("A#") ? id : `A#${id}`;
+};
+
 export const fetchAccountById = async (id: string): Promise<Account> => {
   const res = await apiClient.get<Account>(`/api/user/account/${id}`);
 
@@ -35,8 +40,10 @@ export const fetchStripeAccountById = async (
 // TanStack Query Hooks
 // ============================================================================
 export const useAccountById = (id?: string, enabled: boolean = true) => {
+  const normalizedId = normalizeAccountId(id);
+
   return useQuery<Account, Error>({
-    queryKey: ["account", id],
+    queryKey: ["account", normalizedId],
     queryFn: () => fetchAccountById(id!),
     enabled: !!id && enabled,
     select: (account: Account): Account => mapAccount(account),

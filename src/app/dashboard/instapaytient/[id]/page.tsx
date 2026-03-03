@@ -508,6 +508,7 @@ const InstapaytientDetailPage = ({ params }: PageProps): React.ReactElement => {
                   selectedKey={selectedSettingsTab}
                   onSelectionChange={setSelectedSettingsTab}
                   status={account.status}
+                  onStatusUpdated={refetch}
                 />
               </ModalBody>
             </>
